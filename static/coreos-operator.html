@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>coreos-operator.org.temp</title>
+<!-- 2020-02-29 Sat 08:10 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">coreos-operator.org.temp</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Operator 是什么</a></li>
+<li><a href="#sec-2">2. 一</a></li>
+<li><a href="#sec-3">3. 二</a></li>
+<li><a href="#sec-4">4. 三</a></li>
+<li><a href="#sec-5">5. 四</a></li>
+<li><a href="#sec-6">6. 五</a></li>
+<li><a href="#sec-7">7. 六</a></li>
+<li><a href="#sec-8">8. 七</a></li>
+<li><a href="#sec-9">9. 参考资料</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Operator 是什么</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+如果你还没有看过 coreos 的 operator，可以到 <a href="https://coreos.com/operators/">这里</a> 进行一个短暂的阅读
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> 一</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+目前的 operator 是一个处于实验性、尚不成熟的运维经验流程化的方法论
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> 二</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+operator 在文档中描述的能力:
+打包、部署、管理 kubernetes 应用
+</p>
+
+<p>
+在文档中列出了几个项目:
+</p>
+<ul class="org-ul">
+<li><a href="https://github.com/coreos/etcd-operator/">etcd-operator</a>
+</li>
+<li><a href="https://rook.io/">rook</a>
+</li>
+<li><a href="https://github.com/coreos/prometheus-operator/">prometheus</a>
+</li>
+<li><a href="https://github.com/hashicorp/vault">vault</a>  
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> 三</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+拿 etcd-operator 来说，他实际上做了什么呢
+</p>
+
+<p>
+1.输入 版本与集群规模创建/删除一个 etcd 集群
+</p>
+
+<p>
+2.调整一个集群的大小
+</p>
+
+<p>
+3.在 pod 意外丢失时重现创建
+</p>
+
+<p>
+4.oprator 在被删除后的恢复 (与 4 相同)
+</p>
+
+<p>
+5.升级 etcd 的版本
+</p>
+
+<p>
+6.备份和恢复 etcd 集群
+</p>
+
+<p>
+看起来是符合 operator 中描述的能力,但实际呢
+</p>
+
+<p>
+实际上他仅能满足字面上的最小能力
+</p>
+
+<p>
+如果我需要的的是仅在特定几台机器(小于集群规模且无统一标签)上的 etcd 集群呢？
+</p>
+
+<p>
+如果我要在更换 etcd 的证书呢
+</p>
+
+<p>
+如果我要将备份的数据存储到非 aws 的存储呢
+</p>
+
+<p>
+有太多他做不到的事情了 
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> 四</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+可能会有人认为,太多的自定义需求只要实现一个符合自己需求的 operator 不就可以了吗？
+</p>
+
+<p>
+那么思考下面几个问题
+</p>
+
+<p>
+1.谁来写这个 operator
+</p>
+
+<p>
+2.写好了 operator 之后就能满足未来所有的需求吗
+</p>
+
+<p>
+3.这个 operator 如何进行交接
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> 五</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+假设有这样一个人，有着丰富的运维经验，又愿意遵循着这样的规范来完成一个 operator
+</p>
+
+<p>
+在一个人可以将运维经验抽象成一个 operator 这么长的时间内，他连一个用来简化操作的的脚本都没有写过吗？
+</p>
+
+<p>
+当他学习了 operator 的 sdk 然后，将自己平时使用的脚本中的逻辑以 operator 的方式放到了集群中
+</p>
+
+<p>
+新来的同事问他，这个服务该怎么运维啊
+</p>
+
+<p>
+他会说
+</p>
+
+<p>
+A.你看一下这个服务 operator 的使用文档
+</p>
+
+<p>
+B.你要先明白这个服务的配置文件该怎么写
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> 六</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+operator 最大的矛盾是减少运维学习成本与保障服务稳定必须足够了解之间的矛盾
+</p>
+
+<p>
+开发人员应该对写的代码负责，同样的是运维人员也要对维护的服务负责
+</p>
+
+<p>
+operator 在以一种开发人员的视角做运维人员的工具
+</p>
+
+<p>
+它是开发人员心中臆想的美好工具，妄图以程序来运维程序
+</p>
+
+<p>
+这是在对与程序或系统足够的熟悉下，形成的盲目判断
+</p>
+
+<p>
+运维人员的价值很多时候体现在预想之外的情况下作出最正确的决定
+</p>
+
+<p>
+重要的决定需要人来作为最后一道关隘
+</p>
+
+<p>
+也许它想构建心中的理想国，但它不能要求整个世界都能认同苏格拉底的观点
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> 七</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+有时间搞这些有的没的，不如多加两个监控告警实在
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-9" class="outline-2">
+<h2 id="sec-9"><span class="section-number-2">9</span> 参考资料</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+<a href="https://coreos.com/operators/">https://coreos.com/operators/</a>
+</p>
+
+<p>
+<a href="https://coreos.com/operators/prometheus/docs/latest/">https://coreos.com/operators/prometheus/docs/latest/</a>
+</p>
+
+<p>
+<a href="https://coreos.com/blog/the-prometheus-operator.html">https://coreos.com/blog/the-prometheus-operator.html</a>
+</p>
+
+<p>
+<a href="https://coreos.com/operators/etcd/docs/latest/">https://coreos.com/operators/etcd/docs/latest/</a>
+</p>
+
+<p>
+<a href="https://github.com/coreos/etcd-operator/">https://github.com/coreos/etcd-operator/</a>
+</p>
+
+<p>
+<a href="https://github.com/operator-framework/operator-sdk">https://github.com/operator-framework/operator-sdk</a>
+</p>
+
+<p>
+<a href="https://github.com/operator-framework/operator-lifecycle-manager">https://github.com/operator-framework/operator-lifecycle-manager</a>
+</p>
+
+<p>
+<a href="https://github.com/operator-framework/getting-started">https://github.com/operator-framework/getting-started</a>
+</p>
+
+<p>
+<a href="https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md">https://github.com/operator-framework/operator-sdk/blob/master/doc/user-guide.md</a>
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2020-02-29 Sat 08:10</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.2 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
