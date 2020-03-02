@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>How the flask generate pin</title>
+<!-- 2020-03-02 Mon 10:44 -->
+<meta  charset="utf-8">
+<meta  name="generator" content="Org-mode">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">How the flask generate pin</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Flask 的 debug 模式</a></li>
+<li><a href="#sec-2">2. PIN 的产生</a>
+<ul>
+<li><a href="#sec-2-1">2.1. probably_public_bits</a>
+<ul>
+<li><a href="#sec-2-1-1">2.1.1. username</a></li>
+<li><a href="#sec-2-1-2">2.1.2. modname</a></li>
+<li><a href="#sec-2-1-3">2.1.3. app class name</a></li>
+<li><a href="#sec-2-1-4">2.1.4. file path</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-2">2.2. private_bit</a>
+<ul>
+<li><a href="#sec-2-2-1">2.2.1. uuid node</a></li>
+<li><a href="#sec-2-2-2">2.2.2. machine id</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-3">2.3. cookie name</a></li>
+<li><a href="#sec-2-4">2.4. pin num</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. PIN 的存储与检查</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Flask 的 debug 模式</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+写过 Flask 的人都知道，只要在 run 的参数中增加一个 debug=True 的参数就可以打开 Flask 的 debug 模式
+</p>
+
+<p>
+debug 模式下出现错误会返回一个错误界面，在这里可以输入在启动时产生的 PIN 码执行很多操作,弹个 shell 什么的
+</p>
+
+<p>
+但是 PIN 码输入 10 次错误后就会导致无法再使用，直到重启 server
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> PIN 的产生</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+注意: 本文内容仅对 linux 环境负责
+</p>
+<blockquote>
+<p>
+代码参考 werkzeug/debug/__init__.py get_pin_and_cookie_name(app)
+</p>
+</blockquote>
+
+<p>
+Flask 中 PIN 是九位数字每三位以 "-" 分割
+</p>
+
+<p>
+PIN 是将几个数值拼接在一起然后做一次 md5
+</p>
+
+<p>
+数值分为两种 probably_public_bits 与 private_bit
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> probably_public_bits</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+这几个个信息为了保证 cookie 的可靠
+</p>
+</div>
+
+<div id="outline-container-sec-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> username</h4>
+<div class="outline-text-4" id="text-2-1-1">
+<p>
+username 使用了 getpass.getuser()
+</p>
+
+<p>
+getuser 会从 LOGNAME USER LNAME USERNAME 这个几个环境变量中依次选择
+</p>
+
+<p>
+都没有的话会尝试使用当前的 uid 进行查找当前的用户名
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-2" class="outline-4">
+<h4 id="sec-2-1-2"><span class="section-number-4">2.1.2</span> modname</h4>
+<div class="outline-text-4" id="text-2-1-2">
+<p>
+modname 十分简单
+</p>
+
+<pre class="example">
+getattr(app, "__module__", app.__class__.__module__)
+</pre>
+
+<p>
+这里面的 app 就是在 Flask 启动时传递的那个通常名称为 "app" 的对象
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-3" class="outline-4">
+<h4 id="sec-2-1-3"><span class="section-number-4">2.1.3</span> app class name</h4>
+<div class="outline-text-4" id="text-2-1-3">
+<pre class="example">
+getattr(app, "__name__", app.__class__.__name__)
+</pre>
+</div>
+</div>
+
+<div id="outline-container-sec-2-1-4" class="outline-4">
+<h4 id="sec-2-1-4"><span class="section-number-4">2.1.4</span> file path</h4>
+<div class="outline-text-4" id="text-2-1-4">
+<pre class="example">
+mod = sys.modules.get(modname)
+getattr(mod, "__file__", None)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> private_bit</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+这个两个值为了保证安全
+</p>
+</div>
+
+<div id="outline-container-sec-2-2-1" class="outline-4">
+<h4 id="sec-2-2-1"><span class="section-number-4">2.2.1</span> uuid node</h4>
+<div class="outline-text-4" id="text-2-2-1">
+<pre class="example">
+uuid.getnode()
+</pre>
+
+<p>
+getnode 通过硬件地址来生成一个 48 bit 的整数
+</p>
+
+<p>
+对于 unix 来说会从 dll(ctypes) ifconfig(ifconfig -av) arp(arp -an) lanscan(lanscan -ai) netstat (netstat -ia)中依次尝试生成
+</p>
+
+<p>
+原理是通过各种方式获取到 server 的 mac 地址
+</p>
+
+<p>
+如果都不能生成就会在 (0, 1&lt;&lt;48L) 间随机生成一个数然后与 0x010000000000L 进行一次或操作再返回
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2-2" class="outline-4">
+<h4 id="sec-2-2-2"><span class="section-number-4">2.2.2</span> machine id</h4>
+<div class="outline-text-4" id="text-2-2-2">
+<p>
+machine id 分为 boot 信息与 cgroup 信息
+</p>
+
+<p>
+boot 信息会依次尝试读 /etc/machine-id  与 /proc/sys/kernel/random/boot_id 这两个文件
+</p>
+
+<p>
+只要读取到了数据，第一部分就确定下来，都没有读到那么这部分数据就是空的
+</p>
+
+<p>
+cgroup 信息会先读 /proc/self/cgroup
+</p>
+
+<p>
+cgroup 信息就是 第一行以 "/"分割的后面的部分
+</p>
+<pre class="example">
+f.readline().strip().rpartition(b"/")[2]
+</pre>
+
+<p>
+将两部分信息进行拼接就形成了 machine id
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> cookie name</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+将拿到的 6 个信息依次进行拼接然后在尾部再拼接一个 b"cookiesalt" 进行一次 md5 后取 16 进制的前 20 位
+</p>
+
+<p>
+在前面加上 "__wzd" cookie 的名字就生成好了
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> pin num</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+将上一步生成的字符串(没有 __wzd)后拼接 b"pinsalt" 后做一次 md5 
+</p>
+
+<p>
+将获得的十六进制数转为十进制然后取前九位就是我们要的 PIN
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> PIN 的存储与检查</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+PIN 值存储到 cookie 中又经过了一点处理，总不能明文保存
+</p>
+<pre class="example">
+"%s|%s" % (int(time.time()), hash_pin(self.pin))
+</pre>
+
+<div class="org-src-container">
+
+<pre class="src src-python"><span style="font-weight: bold;">def</span> <span style="font-weight: bold;">hash_pin</span>(pin):
+    <span style="font-weight: bold;">if</span> <span style="font-weight: bold;">isinstance</span>(pin, text_type):
+        <span style="font-weight: bold; font-style: italic;">pin</span> = pin.encode(<span style="font-style: italic;">"utf-8"</span>, <span style="font-style: italic;">"replace"</span>)
+    <span style="font-weight: bold;">return</span> hashlib.md5(pin + b<span style="font-style: italic;">"shittysalt"</span>).hexdigest()[:12]
+</pre>
+</div>
+
+<p>
+这里的 pin 是带横线的 <b>*</b>-***-*** 的结构
+</p>
+
+<p>
+在检查 cookie 时会分别对两部分检查
+</p>
+
+<p>
+前一部分检查时间是否超过了 7 天，第二部分检查 pin 的正确性
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2020-03-02 Mon 10:44</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.2 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
