@@ -73,14 +73,13 @@ li {
 .column1 {
   width: 31%;
   float: left;
+  border-right: solid 1px;
 }
 
 /* long term action items */
 .column2 {
   width: 31%;
   float: left;
-  border-left: solid 1px;
-  border-right: solid 1px;
   margin: 0px 10px 0px 10px;
   padding: 0px 10px 0px 10px;
 }
@@ -89,7 +88,11 @@ li {
 .column3 {
   width: 31%;
   float: left;
+  border-left: solid 1px;
+  margin: 0px 10px 10px 10px;
+  padding: 0px 10px 0px 10px;
 }
+
 
 /* rest */
 .rest {
