@@ -1,22 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<!-- 2021-06-22 Tue 11:16 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Map Mutex and Sync.Map</title>
-<!-- 2021-01-10 Sun 16:12 -->
-<meta  charset="utf-8">
-<meta  name="generator" content="Org-mode">
+<meta name="generator" content="Org mode">
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
-  .title  { text-align: center; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
   .todo   { font-family: monospace; color: red; }
-  .done   { color: green; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
   .tag    { background-color: #eee; font-family: monospace;
             padding: 2px; font-size: 80%; font-weight: normal; }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
-  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
   .underline { text-decoration: underline; }
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
@@ -30,7 +37,7 @@
   }
   pre.src {
     position: relative;
-    overflow: visible;
+    overflow: auto;
     padding-top: 1.2em;
   }
   pre.src:before {
@@ -42,31 +49,128 @@
     padding: 3px;
     border: 1px solid black;
   }
-  pre.src:hover:before { display: inline;}
-  pre.src-sh:before    { content: 'sh'; }
-  pre.src-bash:before  { content: 'sh'; }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
   pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-R:before     { content: 'R'; }
-  pre.src-perl:before  { content: 'Perl'; }
-  pre.src-java:before  { content: 'Java'; }
-  pre.src-sql:before   { content: 'SQL'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
 
   table { border-collapse:collapse; }
   caption.t-above { caption-side: top; }
   caption.t-bottom { caption-side: bottom; }
   td, th { vertical-align:top;  }
-  th.right  { text-align: center;  }
-  th.left   { text-align: center;   }
-  th.center { text-align: center; }
-  td.right  { text-align: right;  }
-  td.left   { text-align: left;   }
-  td.center { text-align: center; }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
   dt { font-weight: bold; }
-  .footpara:nth-child(2) { display: inline; }
-  .footpara { display: block; }
+  .footpara { display: inline; }
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -83,54 +187,31 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
 <script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
 </script>
 </head>
 <body>
@@ -140,45 +221,45 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1. Go 中的 map</a></li>
-<li><a href="#sec-2">2. 并发的使用 Map</a>
+<li><a href="#orgbe0d3cb">1. Go 中的 map</a></li>
+<li><a href="#orgcad0125">2. 并发的使用 Map</a>
 <ul>
-<li><a href="#sec-2-1">2.1. 手动的加锁</a></li>
-<li><a href="#sec-2-2">2.2. sync 包中的 Map</a></li>
+<li><a href="#orgfb343d9">2.1. 手动的加锁</a></li>
+<li><a href="#orgbc73033">2.2. sync 包中的 Map</a></li>
 </ul>
 </li>
-<li><a href="#sec-3">3. sync Map 的实现</a>
+<li><a href="#org27e57cc">3. sync Map 的实现</a>
 <ul>
-<li><a href="#sec-3-1">3.1. Double Check</a></li>
-<li><a href="#sec-3-2">3.2. Compare And Swap</a></li>
-<li><a href="#sec-3-3">3.3. Map 的数据结构</a></li>
-<li><a href="#sec-3-4">3.4. Store</a>
+<li><a href="#org56a55e1">3.1. Double Check</a></li>
+<li><a href="#org6511915">3.2. Compare And Swap</a></li>
+<li><a href="#org9e7583d">3.3. Map 的数据结构</a></li>
+<li><a href="#orgddaf788">3.4. Store</a>
 <ul>
-<li><a href="#sec-3-4-1">3.4.1. trystore</a></li>
+<li><a href="#org3bee7aa">3.4.1. trystore</a></li>
 </ul>
 </li>
-<li><a href="#sec-3-5">3.5. Load</a>
+<li><a href="#org1378399">3.5. Load</a>
 <ul>
-<li><a href="#sec-3-5-1">3.5.1. load</a></li>
-<li><a href="#sec-3-5-2">3.5.2. missLocked</a></li>
+<li><a href="#orgbe5f8f5">3.5.1. load</a></li>
+<li><a href="#org2410004">3.5.2. missLocked</a></li>
 </ul>
 </li>
-<li><a href="#sec-3-6">3.6. Delete &amp;&amp; LoadAndDelete</a>
+<li><a href="#org20af79d">3.6. Delete &amp;&amp; LoadAndDelete</a>
 <ul>
-<li><a href="#sec-3-6-1">3.6.1. delete</a></li>
+<li><a href="#org8279c65">3.6.1. delete</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#sec-4">4. 什么场景下用 sync.Map</a></li>
+<li><a href="#orgc6fe38f">4. 什么场景下用 sync.Map</a></li>
 </ul>
 </div>
 </div>
 <pre class="example">
 本文参照 go 版本为 1.15.1
 </pre>
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> Go 中的 map</h2>
+<div id="outline-container-orgbe0d3cb" class="outline-2">
+<h2 id="orgbe0d3cb"><span class="section-number-2">1.</span> Go 中的 map</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Go 中的 Map 是非线程安全的
@@ -193,31 +274,30 @@ Go 中的 Map 是非线程安全的
 </p>
 
 
-<div class="figure">
+<div id="org8360818" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50579390966_ef88d8e011_h.jpg" alt="50579390966_ef88d8e011_h.jpg">
 </p>
 </div>
 
 
-<div class="figure">
+<div id="orgb12c27f" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50579410831_7c698871a7_h.jpg" alt="50579410831_7c698871a7_h.jpg">
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> 并发的使用 Map</h2>
+<div id="outline-container-orgcad0125" class="outline-2">
+<h2 id="orgcad0125"><span class="section-number-2">2.</span> 并发的使用 Map</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 目前有两种方式来使用
 </p>
 </div>
-<div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1"><span class="section-number-3">2.1</span> 手动的加锁</h3>
+<div id="outline-container-orgfb343d9" class="outline-3">
+<h3 id="orgfb343d9"><span class="section-number-3">2.1.</span> 手动的加锁</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
-
 <pre class="src src-go">var aa = struct {
 sync.RWMutex
 m map[string]int
@@ -226,21 +306,21 @@ m map[string]int
 </div>
 
 
-<div class="figure">
+<div id="orgb7781cd" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50578701183_f2653fd878_h.jpg" alt="50578701183_f2653fd878_h.jpg">
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-sec-2-2" class="outline-3">
-<h3 id="sec-2-2"><span class="section-number-3">2.2</span> sync 包中的 Map</h3>
+<div id="outline-container-orgbc73033" class="outline-3">
+<h3 id="orgbc73033"><span class="section-number-3">2.2.</span> sync 包中的 Map</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 sync 包中提供了 Map 这样一个数据结构可以直接使用，但是使用方式与 map 略有差别
 </p>
 
 
-<div class="figure">
+<div id="org3d132b4" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50579410826_dfe094f81e_h.jpg" alt="50579410826_dfe094f81e_h.jpg">
 </p>
 </div>
@@ -248,15 +328,15 @@ sync 包中提供了 Map 这样一个数据结构可以直接使用，但是使�
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> sync Map 的实现</h2>
+<div id="outline-container-org27e57cc" class="outline-2">
+<h2 id="org27e57cc"><span class="section-number-2">3.</span> sync Map 的实现</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 在看 sync Map 的具体实现前首先需要做一点准备工作
 </p>
 </div>
-<div id="outline-container-sec-3-1" class="outline-3">
-<h3 id="sec-3-1"><span class="section-number-3">3.1</span> Double Check</h3>
+<div id="outline-container-org56a55e1" class="outline-3">
+<h3 id="org56a55e1"><span class="section-number-3">3.1.</span> Double Check</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 双检查为了避免程序在加锁的过程中出现准备锁住的数据已经被其他线程更改的情况。
@@ -267,8 +347,8 @@ sync 包中提供了 Map 这样一个数据结构可以直接使用，但是使�
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-2" class="outline-3">
-<h3 id="sec-3-2"><span class="section-number-3">3.2</span> Compare And Swap</h3>
+<div id="outline-container-org6511915" class="outline-3">
+<h3 id="org6511915"><span class="section-number-3">3.2.</span> Compare And Swap</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 CAS 是一种原子操作，目的是为了在多线程中实现不被打断的数据交换操作，
@@ -294,7 +374,6 @@ CAS 是一种原子操作，目的是为了在多线程中实现不被打断的�
 go 中 CAS 操作的逻辑简化为代码
 </p>
 <div class="org-src-container">
-
 <pre class="src src-go">if *addr == old {
 	*addr = new
 	return true
@@ -304,11 +383,11 @@ return false
 </div>
 </div>
 </div>
-<div id="outline-container-sec-3-3" class="outline-3">
-<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Map 的数据结构</h3>
+<div id="outline-container-org9e7583d" class="outline-3">
+<h3 id="org9e7583d"><span class="section-number-3">3.3.</span> Map 的数据结构</h3>
 <div class="outline-text-3" id="text-3-3">
 
-<div class="figure">
+<div id="orge3e9773" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50583018561_b421884717_z.jpg" alt="50583018561_b421884717_z.jpg">
 </p>
 </div>
@@ -316,39 +395,38 @@ return false
 
 
 <colgroup>
-<col  class="left">
+<col  class="org-left">
 
-<col  class="left">
+<col  class="org-left">
 </colgroup>
 <tbody>
 <tr>
-<td class="left">mu</td>
-<td class="left">是一个锁用来在处理 dirty 中数据是保证安全</td>
+<td class="org-left">mu</td>
+<td class="org-left">是一个锁用来在处理 dirty 中数据是保证安全</td>
 </tr>
 
 <tr>
-<td class="left">read</td>
-<td class="left">实际上是一个保存 readOnly 结构的 atomic.Value,用来只读</td>
+<td class="org-left">read</td>
+<td class="org-left">实际上是一个保存 readOnly 结构的 atomic.Value,用来只读</td>
 </tr>
 
 <tr>
-<td class="left">dirty</td>
-<td class="left">是一个 map 大部分操作都是在 dirty 上进行，map 的值是一个指针</td>
+<td class="org-left">dirty</td>
+<td class="org-left">是一个 map 大部分操作都是在 dirty 上进行，map 的值是一个指针</td>
 </tr>
 
 <tr>
-<td class="left">misses</td>
-<td class="left">用来计数，当 miss 数量大于一定的值时将 dirty 变为 read</td>
+<td class="org-left">misses</td>
+<td class="org-left">用来计数，当 miss 数量大于一定的值时将 dirty 变为 read</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-<div id="outline-container-sec-3-4" class="outline-3">
-<h3 id="sec-3-4"><span class="section-number-3">3.4</span> Store</h3>
+<div id="outline-container-orgddaf788" class="outline-3">
+<h3 id="orgddaf788"><span class="section-number-3">3.4.</span> Store</h3>
 <div class="outline-text-3" id="text-3-4">
 <div class="org-src-container">
-
 <pre class="src src-go">func (m *Map) Store(key, value interface{})
 </pre>
 </div>
@@ -385,11 +463,10 @@ return false
 7.解锁，存储的过程结束
 </p>
 </div>
-<div id="outline-container-sec-3-4-1" class="outline-4">
-<h4 id="sec-3-4-1"><span class="section-number-4">3.4.1</span> trystore</h4>
+<div id="outline-container-org3bee7aa" class="outline-4">
+<h4 id="org3bee7aa"><span class="section-number-4">3.4.1.</span> trystore</h4>
 <div class="outline-text-4" id="text-3-4-1">
 <div class="org-src-container">
-
 <pre class="src src-go">func (e *entry) tryStore(i *interface{}) bool
 </pre>
 </div>
@@ -403,11 +480,10 @@ trystore 判断 entry 是否已经被删除了，如果被删除了就返回 fal
 </div>
 </div>
 </div>
-<div id="outline-container-sec-3-5" class="outline-3">
-<h3 id="sec-3-5"><span class="section-number-3">3.5</span> Load</h3>
+<div id="outline-container-org1378399" class="outline-3">
+<h3 id="org1378399"><span class="section-number-3">3.5.</span> Load</h3>
 <div class="outline-text-3" id="text-3-5">
 <div class="org-src-container">
-
 <pre class="src src-go">func (m *Map) Load(key interface{}) (value interface{}, ok bool)
 </pre>
 </div>
@@ -435,12 +511,11 @@ Load 这个函数较为简单，所以我们关注一下是如何取走，以及
 5.解锁返回取到的值或者是 nil
 </p>
 </div>
-<div id="outline-container-sec-3-5-1" class="outline-4">
-<h4 id="sec-3-5-1"><span class="section-number-4">3.5.1</span> load</h4>
+<div id="outline-container-orgbe5f8f5" class="outline-4">
+<h4 id="orgbe5f8f5"><span class="section-number-4">3.5.1.</span> load</h4>
 <div class="outline-text-4" id="text-3-5-1">
 <div class="org-src-container">
-
-<pre class="src src-go">func (e *entry) load() (value interface{}, ok bool)
+<pre class="src src-go">func (e *entry) load() (value interface{}, ok bool) 
 </pre>
 </div>
 <p>
@@ -449,8 +524,8 @@ load 操作实际上是 atomic 包中的 LoadPointer，从 Loadpointer 中拿到
 </p>
 </div>
 </div>
-<div id="outline-container-sec-3-5-2" class="outline-4">
-<h4 id="sec-3-5-2"><span class="section-number-4">3.5.2</span> missLocked</h4>
+<div id="outline-container-org2410004" class="outline-4">
+<h4 id="org2410004"><span class="section-number-4">3.5.2.</span> missLocked</h4>
 <div class="outline-text-4" id="text-3-5-2">
 <p>
 misses 这个值决定了什么时候 dirty 变为 read，无论是否读到都会触发一次，官方说这是为了减少 dirty 提升为 read 的步骤
@@ -470,11 +545,10 @@ misses 这个值决定了什么时候 dirty 变为 read，无论是否读到都�
 </div>
 </div>
 </div>
-<div id="outline-container-sec-3-6" class="outline-3">
-<h3 id="sec-3-6"><span class="section-number-3">3.6</span> Delete &amp;&amp; LoadAndDelete</h3>
+<div id="outline-container-org20af79d" class="outline-3">
+<h3 id="org20af79d"><span class="section-number-3">3.6.</span> Delete &amp;&amp; LoadAndDelete</h3>
 <div class="outline-text-3" id="text-3-6">
 <div class="org-src-container">
-
 <pre class="src src-go">func (m *Map) LoadAndDelete(key interface{}) (value interface{}, loaded bool)
 func (m *Map) Delete(key interface{})
 </pre>
@@ -499,11 +573,10 @@ delete 与 loadAndDelete 逻辑是完全相同的，只是 delete 没有返回�
 4.如果 read dirty 都不存在返回 nil
 </p>
 </div>
-<div id="outline-container-sec-3-6-1" class="outline-4">
-<h4 id="sec-3-6-1"><span class="section-number-4">3.6.1</span> delete</h4>
+<div id="outline-container-org8279c65" class="outline-4">
+<h4 id="org8279c65"><span class="section-number-4">3.6.1.</span> delete</h4>
 <div class="outline-text-4" id="text-3-6-1">
 <div class="org-src-container">
-
 <pre class="src src-go">func (e *entry) delete() (value interface{}, ok bool)
 </pre>
 </div>
@@ -515,8 +588,8 @@ delete 操作和 trystore 操作相差不多，只不过在 CAS 的过程里将�
 </div>
 </div>
 
-<div id="outline-container-sec-4" class="outline-2">
-<h2 id="sec-4"><span class="section-number-2">4</span> 什么场景下用 sync.Map</h2>
+<div id="outline-container-orgc6fe38f" class="outline-2">
+<h2 id="orgc6fe38f"><span class="section-number-2">4.</span> 什么场景下用 sync.Map</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 1.如果 Map 是一个写一次但是会读很多次时
@@ -529,9 +602,8 @@ delete 操作和 trystore 操作相差不多，只不过在 CAS 的过程里将�
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-01-10 Sun 16:12</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.2 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
-<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+<p class="date">Created: 2021-06-22 Tue 11:16</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
 </html>

@@ -1,22 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<!-- 2021-06-22 Tue 11:16 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>kubernetes eventf</title>
-<!-- 2021-01-10 Sun 16:12 -->
-<meta  charset="utf-8">
-<meta  name="generator" content="Org-mode">
+<meta name="generator" content="Org mode">
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
-  .title  { text-align: center; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
   .todo   { font-family: monospace; color: red; }
-  .done   { color: green; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
   .tag    { background-color: #eee; font-family: monospace;
             padding: 2px; font-size: 80%; font-weight: normal; }
   .timestamp { color: #bebebe; }
   .timestamp-kwd { color: #5f9ea0; }
-  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
   .underline { text-decoration: underline; }
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
@@ -30,7 +37,7 @@
   }
   pre.src {
     position: relative;
-    overflow: visible;
+    overflow: auto;
     padding-top: 1.2em;
   }
   pre.src:before {
@@ -42,31 +49,128 @@
     padding: 3px;
     border: 1px solid black;
   }
-  pre.src:hover:before { display: inline;}
-  pre.src-sh:before    { content: 'sh'; }
-  pre.src-bash:before  { content: 'sh'; }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
   pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-R:before     { content: 'R'; }
-  pre.src-perl:before  { content: 'Perl'; }
-  pre.src-java:before  { content: 'Java'; }
-  pre.src-sql:before   { content: 'SQL'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
 
   table { border-collapse:collapse; }
   caption.t-above { caption-side: top; }
   caption.t-bottom { caption-side: bottom; }
   td, th { vertical-align:top;  }
-  th.right  { text-align: center;  }
-  th.left   { text-align: center;   }
-  th.center { text-align: center; }
-  td.right  { text-align: right;  }
-  td.left   { text-align: left;   }
-  td.center { text-align: center; }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
   dt { font-weight: bold; }
-  .footpara:nth-child(2) { display: inline; }
-  .footpara { display: block; }
+  .footpara { display: inline; }
   .footdef  { margin-bottom: 1em; }
   .figure { padding: 1em; }
   .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
   .inlinetask {
     padding: 10px;
     border: 2px solid gray;
@@ -83,54 +187,31 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
 <script type="text/javascript">
-/*
-@licstart  The following is the entire license notice for the
-JavaScript code in this tag.
-
-Copyright (C) 2012-2013 Free Software Foundation, Inc.
-
-The JavaScript code in this tag is free software: you can
-redistribute it and/or modify it under the terms of the GNU
-General Public License (GNU GPL) as published by the Free Software
-Foundation, either version 3 of the License, or (at your option)
-any later version.  The code is distributed WITHOUT ANY WARRANTY;
-without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
-
-As additional permission under GNU GPL version 3 section 7, you
-may distribute non-source (e.g., minimized or compacted) forms of
-that code without the copy of the GNU GPL normally required by
-section 4, provided you include this license notice and a URL
-through which recipients can access the Corresponding Source.
-
-
-@licend  The above is the entire license notice
-for the JavaScript code in this tag.
-*/
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
 <!--/*--><![CDATA[/*><!--*/
- function CodeHighlightOn(elem, id)
- {
-   var target = document.getElementById(id);
-   if(null != target) {
-     elem.cacheClassElem = elem.className;
-     elem.cacheClassTarget = target.className;
-     target.className = "code-highlighted";
-     elem.className   = "code-highlighted";
-   }
- }
- function CodeHighlightOff(elem, id)
- {
-   var target = document.getElementById(id);
-   if(elem.cacheClassElem)
-     elem.className = elem.cacheClassElem;
-   if(elem.cacheClassTarget)
-     target.className = elem.cacheClassTarget;
- }
-/*]]>*///-->
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
 </script>
 </head>
 <body>
@@ -140,20 +221,20 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#sec-1">1. 前言</a></li>
-<li><a href="#sec-2">2. 代码参考</a></li>
-<li><a href="#sec-3">3. 代码详解</a>
+<li><a href="#org576e8cc">1. 前言</a></li>
+<li><a href="#orga2633cd">2. 代码参考</a></li>
+<li><a href="#org2faece3">3. 代码详解</a>
 <ul>
-<li><a href="#sec-3-1">3.1. 结构定义</a></li>
-<li><a href="#sec-3-2">3.2. 实际使用时的流程</a></li>
-<li><a href="#sec-3-3">3.3. Event 在 kubelet 内部的工作流程</a></li>
+<li><a href="#org1715ada">3.1. 结构定义</a></li>
+<li><a href="#orgded5020">3.2. 实际使用时的流程</a></li>
+<li><a href="#orga9de149">3.3. Event 在 kubelet 内部的工作流程</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1"><span class="section-number-2">1</span> 前言</h2>
+<div id="outline-container-org576e8cc" class="outline-2">
+<h2 id="org576e8cc"><span class="section-number-2">1.</span> 前言</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 k8s 是如何记录事件的
@@ -165,8 +246,8 @@ k8s 是如何记录事件的
 </div>
 </div>
 
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2"><span class="section-number-2">2</span> 代码参考</h2>
+<div id="outline-container-orga2633cd" class="outline-2">
+<h2 id="orga2633cd"><span class="section-number-2">2.</span> 代码参考</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 v1.14-alpha.2
@@ -175,18 +256,19 @@ k8s.io/kubernetes/staging/src/k8s.io/client-go/tools/record/
 </div>
 </div>
 
-<div id="outline-container-sec-3" class="outline-2">
-<h2 id="sec-3"><span class="section-number-2">3</span> 代码详解</h2>
+<div id="outline-container-org2faece3" class="outline-2">
+<h2 id="org2faece3"><span class="section-number-2">3.</span> 代码详解</h2>
 <div class="outline-text-2" id="text-3">
-</div><div id="outline-container-sec-3-1" class="outline-3">
-<h3 id="sec-3-1"><span class="section-number-3">3.1</span> 结构定义</h3>
+</div>
+<div id="outline-container-org1715ada" class="outline-3">
+<h3 id="org1715ada"><span class="section-number-3">3.1.</span> 结构定义</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 在 event.go 中定义了 Eventsink EventRecorder EventBroadcaster 这三个接口
 </p>
 
 
-<div class="figure">
+<div id="org2628533" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4877/46069316025_23614aab6f_b.jpg" alt="46069316025_23614aab6f_b.jpg">
 </p>
 </div>
@@ -205,7 +287,7 @@ eventBroadcasterImpl 和 recorderImpl 这两个结构体
 </p>
 
 
-<div class="figure">
+<div id="org9786d0f" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7812/46983275531_452a0d2cc4_b.jpg" alt="46983275531_452a0d2cc4_b.jpg">
 </p>
 </div>
@@ -215,15 +297,15 @@ eventBroadcasterImpl 和 recorderImpl 这两个结构体
 </p>
 
 
-<div class="figure">
+<div id="orgd595f6d" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7905/46983276761_dd2c85dc18_b.jpg" alt="46983276761_dd2c85dc18_b.jpg">
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-sec-3-2" class="outline-3">
-<h3 id="sec-3-2"><span class="section-number-3">3.2</span> 实际使用时的流程</h3>
+<div id="outline-container-orgded5020" class="outline-3">
+<h3 id="orgded5020"><span class="section-number-3">3.2.</span> 实际使用时的流程</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 在 kubelet 启动时逐层调用 
@@ -246,7 +328,7 @@ Newkubeletcommand =&gt; Run =&gt; run
 </p>
 
 
-<div class="figure">
+<div id="orga879458" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7808/46983277121_0963f0632e_b.jpg" alt="46983277121_0963f0632e_b.jpg">
 </p>
 </div>
@@ -264,15 +346,15 @@ Newkubeletcommand =&gt; Run =&gt; run
 </p>
 
 
-<div class="figure">
+<div id="org7ff9119" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7891/46983277591_248991453b_b.jpg" alt="46983277591_248991453b_b.jpg">
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-sec-3-3" class="outline-3">
-<h3 id="sec-3-3"><span class="section-number-3">3.3</span> Event 在 kubelet 内部的工作流程</h3>
+<div id="outline-container-orga9de149" class="outline-3">
+<h3 id="orga9de149"><span class="section-number-3">3.3.</span> Event 在 kubelet 内部的工作流程</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 内部的工作流程发生在初始化 eventBroadcasterImpl 的时候
@@ -303,7 +385,7 @@ Broadcaster 开了一个 goroutine 用来将对应的所有的 Broadcasterwatche
 </p>
 
 
-<div class="figure">
+<div id="org0a52dc2" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7915/46983278181_d6ff5f4bee_b.jpg" alt="46983278181_d6ff5f4bee_b.jpg">
 </p>
 </div>
@@ -313,7 +395,7 @@ m.loop  m.distribute 定义如下
 </p>
 
 
-<div class="figure">
+<div id="org4ba5b72" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4841/46983278471_2d7df634ce_b.jpg" alt="46983278471_2d7df634ce_b.jpg">
 </p>
 </div>
@@ -323,7 +405,7 @@ m.distributing.Add 定义如下
 </p>
 
 
-<div class="figure">
+<div id="org524b3bc" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4861/46983278741_6109587fb3_b.jpg" alt="46983278741_6109587fb3_b.jpg">
 </p>
 </div>
@@ -344,9 +426,8 @@ m.distributing.Add 用于将 Broadcaster 加入到队列当中
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-01-10 Sun 16:12</p>
-<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.2 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
-<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+<p class="date">Created: 2021-06-22 Tue 11:16</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
 </html>

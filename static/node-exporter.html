@@ -4,7 +4,7 @@
 <!-- 2021-06-22 Tue 11:16 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>GO Faiss Library</title>
+<title>Prometheus Node Exporter</title>
 <meta name="generator" content="Org mode">
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
@@ -216,114 +216,74 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">GO Faiss Library</h1>
+<h1 class="title">Prometheus Node Exporter</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org8d600be">1. Faiss</a></li>
-<li><a href="#orgf3e8953">2. 安装与编译 Faiss</a></li>
-<li><a href="#orged2d1d8">3. 使用 Go 操作 Faiss</a>
-<ul>
-<li><a href="#org3516cb7">3.1. 生成向量</a></li>
-<li><a href="#orgbe37e8a">3.2. 创建索引</a></li>
-<li><a href="#org910ca1b">3.3. 将向量插入到索引中</a></li>
-<li><a href="#org4c641c9">3.4. 生成搜索用的向量并进行查找</a></li>
-</ul>
-</li>
-<li><a href="#org7268654">4. go-faiss 原理</a></li>
+<li><a href="#orge202041">1. Prometheus Node Exporter</a></li>
+<li><a href="#org3e189e4">2. Collector 的工作原理</a></li>
+<li><a href="#orgd726c27">3. Node Exporter 对照表</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org8d600be" class="outline-2">
-<h2 id="org8d600be"><span class="section-number-2">1.</span> Faiss</h2>
+<div id="outline-container-orge202041" class="outline-2">
+<h2 id="orge202041"><span class="section-number-2">1.</span> Prometheus Node Exporter</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-Faiss 是一个用来做做向量聚类与相似性搜索的 C++ 的库,官方有 C++ 与 Python 两种使用方式
+本文使用代码: 83dd27b
+</p>
+
+<p>
+node exporter 的启动参数有很多,都是在启动时注入进去,方便控制哪些 collector 启用,哪些 collector 不启用.
+主要逻辑在 collector.go L:60  registerCollector 这个函数中
+</p>
+
+<div class="org-src-container">
+<pre class="src src-go">func registerCollector(collector string, isDefaultEnabled bool, factory func(logger log.Logger) (Collector, error)) {
+	var helpDefaultState string
+	if isDefaultEnabled {
+		helpDefaultState = "enabled"
+	} else {
+		helpDefaultState = "disabled"
+	}
+
+	flagName := fmt.Sprintf("collector.%s", collector)
+	flagHelp := fmt.Sprintf("Enable the %s collector (default: %s).", collector, helpDefaultState)
+	defaultValue := fmt.Sprintf("%v", isDefaultEnabled)
+
+	flag := kingpin.Flag(flagName, flagHelp).Default(defaultValue).Action(collectorFlagAction(collector)).Bool()
+	collectorState[collector] = flag
+
+	factories[collector] = factory
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org3e189e4" class="outline-2">
+<h2 id="org3e189e4"><span class="section-number-2">2.</span> Collector 的工作原理</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+collector 通过读系统中的信息来然后包装成 prometheus 可以读的格式.所以本质上就是一个读文件然后接受请求的 web server
+</p>
+
+<p>
+主要是读取 /proc 与 /sys 下的信息
+</p>
+
+<p>
+总的来说 node exporter 是一个功能很简单同时也很稳定的程序
 </p>
 </div>
 </div>
-<div id="outline-container-orgf3e8953" class="outline-2">
-<h2 id="orgf3e8953"><span class="section-number-2">2.</span> 安装与编译 Faiss</h2>
-<div class="outline-text-2" id="text-2">
-<div class="org-src-container">
-<pre class="src src-sh">git clone https://github.com/facebookresearch/faiss.git &amp;&amp; checkout -b v1.6.3
-./configure &amp;&amp; make &amp;&amp; make install
-<span style="font-weight: bold;">cd</span> faiss/c_api &amp;&amp; make
-mv libfaiss_c.so /usr/local/bin
-</pre>
-</div>
-</div>
-</div>
 
-<div id="outline-container-orged2d1d8" class="outline-2">
-<h2 id="orged2d1d8"><span class="section-number-2">3.</span> 使用 Go 操作 Faiss</h2>
+<div id="outline-container-orgd726c27" class="outline-2">
+<h2 id="orgd726c27"><span class="section-number-2">3.</span> Node Exporter 对照表</h2>
 <div class="outline-text-2" id="text-3">
-<div class="org-src-container">
-<pre class="src src-go">import "github.com/41tair/go-faiss/faiss"
-</pre>
-</div>
-</div>
-<div id="outline-container-org3516cb7" class="outline-3">
-<h3 id="org3516cb7"><span class="section-number-3">3.1.</span> 生成向量</h3>
-<div class="outline-text-3" id="text-3-1">
-<div class="org-src-container">
-<pre class="src src-go">dimension := 128
-datasize := 100
-v := faiss.GenVectors(datasize, dimension)
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-orgbe37e8a" class="outline-3">
-<h3 id="orgbe37e8a"><span class="section-number-3">3.2.</span> 创建索引</h3>
-<div class="outline-text-3" id="text-3-2">
-<div class="org-src-container">
-<pre class="src src-go">index := &amp;faiss.Index{
-		Dimension:   dimension,
-		Description: "IDMap,Flat",
-		MetricType:  faiss.L2{},
-	}
-i, _ := index.Create()
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-org910ca1b" class="outline-3">
-<h3 id="org910ca1b"><span class="section-number-3">3.3.</span> 将向量插入到索引中</h3>
-<div class="outline-text-3" id="text-3-3">
-<div class="org-src-container">
-<pre class="src src-go">ids := faiss.GenIDs(datasize)
-err := faiss.InsertVectors(v, i, dimension, ids)
-if err != nil {
-    fmt.Println(err)
-}
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-org4c641c9" class="outline-3">
-<h3 id="org4c641c9"><span class="section-number-3">3.4.</span> 生成搜索用的向量并进行查找</h3>
-<div class="outline-text-3" id="text-3-4">
-<div class="org-src-container">
-<pre class="src src-go">v2 := faiss.GenVectors(10, dimension)
-resIDs := make([]int32, 10*1000*100)
-resDistances := make([]float32, 10*1000*100)
-res := faiss.SearchVectors(v2, i, 1000, 10, resIDs, resDistances)
-for _, v := range res {
-    fmt.Printf("ID: %v Distance: %v \n", v.ID, v.Distance)
-}
-</pre>
-</div>
-</div>
-</div>
-</div>
-
-<div id="outline-container-org7268654" class="outline-2">
-<h2 id="org7268654"><span class="section-number-2">4.</span> go-faiss 原理</h2>
-<div class="outline-text-2" id="text-4">
 <p>
-go -&gt; cgo -&gt; *.h -&gt; *.c -&gt; *.so
+<a href="https://songjiayang.gitbooks.io/prometheus/content/exporter/nodeexporter.html">直接看这个</a>
 </p>
 </div>
 </div>
