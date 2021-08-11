@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-07-07 Wed 07:38 -->
+<!-- 2021-08-11 Wed 07:10 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Map Mutex and Sync.Map</title>
@@ -221,45 +221,45 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org0b8a975">1. Go 中的 map</a></li>
-<li><a href="#org80f3de9">2. 并发的使用 Map</a>
+<li><a href="#orge6a0f2e">1. Go 中的 map</a></li>
+<li><a href="#orgd03c385">2. 并发的使用 Map</a>
 <ul>
-<li><a href="#org3f7393a">2.1. 手动的加锁</a></li>
-<li><a href="#org7a65f36">2.2. sync 包中的 Map</a></li>
+<li><a href="#org818e480">2.1. 手动的加锁</a></li>
+<li><a href="#org2e92655">2.2. sync 包中的 Map</a></li>
 </ul>
 </li>
-<li><a href="#org98446ab">3. sync Map 的实现</a>
+<li><a href="#org3744d6a">3. sync Map 的实现</a>
 <ul>
-<li><a href="#orgf7e5e7d">3.1. Double Check</a></li>
-<li><a href="#org20448be">3.2. Compare And Swap</a></li>
-<li><a href="#orga098601">3.3. Map 的数据结构</a></li>
-<li><a href="#org1d46826">3.4. Store</a>
+<li><a href="#org903c3b9">3.1. Double Check</a></li>
+<li><a href="#org9e89f29">3.2. Compare And Swap</a></li>
+<li><a href="#org473dca0">3.3. Map 的数据结构</a></li>
+<li><a href="#org9c62646">3.4. Store</a>
 <ul>
-<li><a href="#orgedf027a">3.4.1. trystore</a></li>
+<li><a href="#org2a382fa">3.4.1. trystore</a></li>
 </ul>
 </li>
-<li><a href="#org984c9a9">3.5. Load</a>
+<li><a href="#org32650f7">3.5. Load</a>
 <ul>
-<li><a href="#orgdd91442">3.5.1. load</a></li>
-<li><a href="#orgdbd6d16">3.5.2. missLocked</a></li>
+<li><a href="#orgb87dc17">3.5.1. load</a></li>
+<li><a href="#org04e14cc">3.5.2. missLocked</a></li>
 </ul>
 </li>
-<li><a href="#org5d3ff3e">3.6. Delete &amp;&amp; LoadAndDelete</a>
+<li><a href="#org9ad2762">3.6. Delete &amp;&amp; LoadAndDelete</a>
 <ul>
-<li><a href="#orgf950938">3.6.1. delete</a></li>
+<li><a href="#org25b12d5">3.6.1. delete</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgf29d558">4. 什么场景下用 sync.Map</a></li>
+<li><a href="#org3aa36e4">4. 什么场景下用 sync.Map</a></li>
 </ul>
 </div>
 </div>
 <pre class="example">
 本文参照 go 版本为 1.15.1
 </pre>
-<div id="outline-container-org0b8a975" class="outline-2">
-<h2 id="org0b8a975"><span class="section-number-2">1.</span> Go 中的 map</h2>
+<div id="outline-container-orge6a0f2e" class="outline-2">
+<h2 id="orge6a0f2e"><span class="section-number-2">1.</span> Go 中的 map</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Go 中的 Map 是非线程安全的
@@ -274,28 +274,28 @@ Go 中的 Map 是非线程安全的
 </p>
 
 
-<div id="org3311e5c" class="figure">
+<div id="org5a16d4e" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50579390966_ef88d8e011_h.jpg" alt="50579390966_ef88d8e011_h.jpg">
 </p>
 </div>
 
 
-<div id="orgd539727" class="figure">
+<div id="orgbf08dae" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50579410831_7c698871a7_h.jpg" alt="50579410831_7c698871a7_h.jpg">
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org80f3de9" class="outline-2">
-<h2 id="org80f3de9"><span class="section-number-2">2.</span> 并发的使用 Map</h2>
+<div id="outline-container-orgd03c385" class="outline-2">
+<h2 id="orgd03c385"><span class="section-number-2">2.</span> 并发的使用 Map</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 目前有两种方式来使用
 </p>
 </div>
-<div id="outline-container-org3f7393a" class="outline-3">
-<h3 id="org3f7393a"><span class="section-number-3">2.1.</span> 手动的加锁</h3>
+<div id="outline-container-org818e480" class="outline-3">
+<h3 id="org818e480"><span class="section-number-3">2.1.</span> 手动的加锁</h3>
 <div class="outline-text-3" id="text-2-1">
 <div class="org-src-container">
 <pre class="src src-go">var aa = struct {
@@ -306,21 +306,21 @@ m map[string]int
 </div>
 
 
-<div id="orgf960373" class="figure">
+<div id="orgd16c49f" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50578701183_f2653fd878_h.jpg" alt="50578701183_f2653fd878_h.jpg">
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org7a65f36" class="outline-3">
-<h3 id="org7a65f36"><span class="section-number-3">2.2.</span> sync 包中的 Map</h3>
+<div id="outline-container-org2e92655" class="outline-3">
+<h3 id="org2e92655"><span class="section-number-3">2.2.</span> sync 包中的 Map</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 sync 包中提供了 Map 这样一个数据结构可以直接使用，但是使用方式与 map 略有差别
 </p>
 
 
-<div id="org6d29f90" class="figure">
+<div id="org0b6ed74" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50579410826_dfe094f81e_h.jpg" alt="50579410826_dfe094f81e_h.jpg">
 </p>
 </div>
@@ -328,15 +328,15 @@ sync 包中提供了 Map 这样一个数据结构可以直接使用，但是使�
 </div>
 </div>
 
-<div id="outline-container-org98446ab" class="outline-2">
-<h2 id="org98446ab"><span class="section-number-2">3.</span> sync Map 的实现</h2>
+<div id="outline-container-org3744d6a" class="outline-2">
+<h2 id="org3744d6a"><span class="section-number-2">3.</span> sync Map 的实现</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 在看 sync Map 的具体实现前首先需要做一点准备工作
 </p>
 </div>
-<div id="outline-container-orgf7e5e7d" class="outline-3">
-<h3 id="orgf7e5e7d"><span class="section-number-3">3.1.</span> Double Check</h3>
+<div id="outline-container-org903c3b9" class="outline-3">
+<h3 id="org903c3b9"><span class="section-number-3">3.1.</span> Double Check</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 双检查为了避免程序在加锁的过程中出现准备锁住的数据已经被其他线程更改的情况。
@@ -347,8 +347,8 @@ sync 包中提供了 Map 这样一个数据结构可以直接使用，但是使�
 </p>
 </div>
 </div>
-<div id="outline-container-org20448be" class="outline-3">
-<h3 id="org20448be"><span class="section-number-3">3.2.</span> Compare And Swap</h3>
+<div id="outline-container-org9e89f29" class="outline-3">
+<h3 id="org9e89f29"><span class="section-number-3">3.2.</span> Compare And Swap</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 CAS 是一种原子操作，目的是为了在多线程中实现不被打断的数据交换操作，
@@ -383,11 +383,11 @@ return false
 </div>
 </div>
 </div>
-<div id="outline-container-orga098601" class="outline-3">
-<h3 id="orga098601"><span class="section-number-3">3.3.</span> Map 的数据结构</h3>
+<div id="outline-container-org473dca0" class="outline-3">
+<h3 id="org473dca0"><span class="section-number-3">3.3.</span> Map 的数据结构</h3>
 <div class="outline-text-3" id="text-3-3">
 
-<div id="org3a9f39a" class="figure">
+<div id="orgd932b79" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50583018561_b421884717_z.jpg" alt="50583018561_b421884717_z.jpg">
 </p>
 </div>
@@ -423,8 +423,8 @@ return false
 </table>
 </div>
 </div>
-<div id="outline-container-org1d46826" class="outline-3">
-<h3 id="org1d46826"><span class="section-number-3">3.4.</span> Store</h3>
+<div id="outline-container-org9c62646" class="outline-3">
+<h3 id="org9c62646"><span class="section-number-3">3.4.</span> Store</h3>
 <div class="outline-text-3" id="text-3-4">
 <div class="org-src-container">
 <pre class="src src-go">func (m *Map) Store(key, value interface{})
@@ -463,8 +463,8 @@ return false
 7.解锁，存储的过程结束
 </p>
 </div>
-<div id="outline-container-orgedf027a" class="outline-4">
-<h4 id="orgedf027a"><span class="section-number-4">3.4.1.</span> trystore</h4>
+<div id="outline-container-org2a382fa" class="outline-4">
+<h4 id="org2a382fa"><span class="section-number-4">3.4.1.</span> trystore</h4>
 <div class="outline-text-4" id="text-3-4-1">
 <div class="org-src-container">
 <pre class="src src-go">func (e *entry) tryStore(i *interface{}) bool
@@ -480,8 +480,8 @@ trystore 判断 entry 是否已经被删除了，如果被删除了就返回 fal
 </div>
 </div>
 </div>
-<div id="outline-container-org984c9a9" class="outline-3">
-<h3 id="org984c9a9"><span class="section-number-3">3.5.</span> Load</h3>
+<div id="outline-container-org32650f7" class="outline-3">
+<h3 id="org32650f7"><span class="section-number-3">3.5.</span> Load</h3>
 <div class="outline-text-3" id="text-3-5">
 <div class="org-src-container">
 <pre class="src src-go">func (m *Map) Load(key interface{}) (value interface{}, ok bool)
@@ -511,8 +511,8 @@ Load 这个函数较为简单，所以我们关注一下是如何取走，以及
 5.解锁返回取到的值或者是 nil
 </p>
 </div>
-<div id="outline-container-orgdd91442" class="outline-4">
-<h4 id="orgdd91442"><span class="section-number-4">3.5.1.</span> load</h4>
+<div id="outline-container-orgb87dc17" class="outline-4">
+<h4 id="orgb87dc17"><span class="section-number-4">3.5.1.</span> load</h4>
 <div class="outline-text-4" id="text-3-5-1">
 <div class="org-src-container">
 <pre class="src src-go">func (e *entry) load() (value interface{}, ok bool) 
@@ -524,8 +524,8 @@ load 操作实际上是 atomic 包中的 LoadPointer，从 Loadpointer 中拿到
 </p>
 </div>
 </div>
-<div id="outline-container-orgdbd6d16" class="outline-4">
-<h4 id="orgdbd6d16"><span class="section-number-4">3.5.2.</span> missLocked</h4>
+<div id="outline-container-org04e14cc" class="outline-4">
+<h4 id="org04e14cc"><span class="section-number-4">3.5.2.</span> missLocked</h4>
 <div class="outline-text-4" id="text-3-5-2">
 <p>
 misses 这个值决定了什么时候 dirty 变为 read，无论是否读到都会触发一次，官方说这是为了减少 dirty 提升为 read 的步骤
@@ -545,8 +545,8 @@ misses 这个值决定了什么时候 dirty 变为 read，无论是否读到都�
 </div>
 </div>
 </div>
-<div id="outline-container-org5d3ff3e" class="outline-3">
-<h3 id="org5d3ff3e"><span class="section-number-3">3.6.</span> Delete &amp;&amp; LoadAndDelete</h3>
+<div id="outline-container-org9ad2762" class="outline-3">
+<h3 id="org9ad2762"><span class="section-number-3">3.6.</span> Delete &amp;&amp; LoadAndDelete</h3>
 <div class="outline-text-3" id="text-3-6">
 <div class="org-src-container">
 <pre class="src src-go">func (m *Map) LoadAndDelete(key interface{}) (value interface{}, loaded bool)
@@ -573,8 +573,8 @@ delete 与 loadAndDelete 逻辑是完全相同的，只是 delete 没有返回�
 4.如果 read dirty 都不存在返回 nil
 </p>
 </div>
-<div id="outline-container-orgf950938" class="outline-4">
-<h4 id="orgf950938"><span class="section-number-4">3.6.1.</span> delete</h4>
+<div id="outline-container-org25b12d5" class="outline-4">
+<h4 id="org25b12d5"><span class="section-number-4">3.6.1.</span> delete</h4>
 <div class="outline-text-4" id="text-3-6-1">
 <div class="org-src-container">
 <pre class="src src-go">func (e *entry) delete() (value interface{}, ok bool)
@@ -588,8 +588,8 @@ delete 操作和 trystore 操作相差不多，只不过在 CAS 的过程里将�
 </div>
 </div>
 
-<div id="outline-container-orgf29d558" class="outline-2">
-<h2 id="orgf29d558"><span class="section-number-2">4.</span> 什么场景下用 sync.Map</h2>
+<div id="outline-container-org3aa36e4" class="outline-2">
+<h2 id="org3aa36e4"><span class="section-number-2">4.</span> 什么场景下用 sync.Map</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 1.如果 Map 是一个写一次但是会读很多次时
@@ -602,7 +602,7 @@ delete 操作和 trystore 操作相差不多，只不过在 CAS 的过程里将�
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-07-07 Wed 07:38</p>
+<p class="date">Created: 2021-08-11 Wed 07:10</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
