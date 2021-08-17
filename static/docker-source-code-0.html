@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-08-17 Tue 09:45 -->
+<!-- 2021-08-17 Tue 09:44 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>How to write a simple k8s operator</title>
+<title>Docker source code(0)</title>
 <meta name="generator" content="Org mode">
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
@@ -216,274 +216,100 @@
 </head>
 <body>
 <div id="content">
-<h1 class="title">How to write a simple k8s operator</h1>
+<h1 class="title">Docker source code(0)</h1>
 <div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orge3baf69">1. 写在前面</a></li>
-<li><a href="#orga4d4d09">2. CustomResource 与 Operator</a>
-<ul>
-<li><a href="#orgdeb6c8c">2.1. 为什么 Operator 离不开 CustomResource</a></li>
-</ul>
-</li>
-<li><a href="#org8e0bcf8">3. 如何实现一个自定义的资源</a>
-<ul>
-<li><a href="#orgd529929">3.1. CRD</a></li>
-<li><a href="#orgc57ffa7">3.2. AA (Aggregated API)</a></li>
-</ul>
-</li>
-<li><a href="#org990744b">4. 在集群中创建一个 milvus</a></li>
-<li><a href="#orge11d544">5. 如何实现一个 Operator</a></li>
+<li><a href="#orgd35770b">1. 概述</a></li>
+<li><a href="#orga7cac56">2. 基础知识</a></li>
+<li><a href="#orgbcdd695">3. 目录</a></li>
 </ul>
 </div>
 </div>
-<pre class="example">
-本文参照 k8s 版本为 v.1.18
-</pre>
 
-<div id="outline-container-orge3baf69" class="outline-2">
-<h2 id="orge3baf69"><span class="section-number-2">1.</span> 写在前面</h2>
+<div id="outline-container-orgd35770b" class="outline-2">
+<h2 id="orgd35770b"><span class="section-number-2">1.</span> 概述</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-关于 operator 几年前已经在一篇博客中批判过了，但是到了如今 Operator 可以称的上百花齐放，脚手架都开始整上了。
+由于种种原因 Docker 的代码被放在不同的仓库中,看 Docker 代码第一件事情就是要找对仓库, 才能顺藤摸瓜把代码看完
 </p>
 
 <p>
-首先 Kubernetes 不是银弹，Operator 就更不是了。并不是什么东西火，什么东西就牛逼。很多人怎么就不明白这个道理呢？
+主要看几个仓库:
 </p>
-
-<p>
-现在你一个项目没有个 Operator 都不好意思说自己是“云原生”。
-</p>
-
-<p>
-呕，不好意思。现在云原生 PTSD，呕。
-</p>
-
-<p>
-重复一下观点，Operator 是锦上的那朵花，不是救急的那口粮。
-</p>
-
-<p>
-您要是没落的贵族，到死都要秉着气节，当我没说。
-</p>
-
-<p>
-接下来就看看这朵花怎么绣。
-</p>
-</div>
-</div>
-
-<div id="outline-container-orga4d4d09" class="outline-2">
-<h2 id="orga4d4d09"><span class="section-number-2">2.</span> CustomResource 与 Operator</h2>
-<div class="outline-text-2" id="text-2">
-<p>
-自定义资源是 k8s API 的扩展，通过自定义资源可以使用 k8s api 来控制自己的服务
-</p>
-
-<p>
-Operator 最早是 coreOS 提出的一种模式，通过代码的方式来简单的运维服务
-</p>
-</div>
-
-<div id="outline-container-orgdeb6c8c" class="outline-3">
-<h3 id="orgdeb6c8c"><span class="section-number-3">2.1.</span> 为什么 Operator 离不开 CustomResource</h3>
-<div class="outline-text-3" id="text-2-1">
-<p>
-Operators are software extensions to Kubernetes that make use of custom resources to manage applications and their components.
-</p>
-
-<p>
-CustomResource 是 Operator 用来与 k8s 沟通的桥梁
-</p>
-</div>
-</div>
-</div>
-
-<div id="outline-container-org8e0bcf8" class="outline-2">
-<h2 id="org8e0bcf8"><span class="section-number-2">3.</span> 如何实现一个自定义的资源</h2>
-<div class="outline-text-2" id="text-3">
-<p>
-实现一个自定义的资源有两种方式
-</p>
-</div>
-<div id="outline-container-orgd529929" class="outline-3">
-<h3 id="orgd529929"><span class="section-number-3">3.1.</span> CRD</h3>
-<div class="outline-text-3" id="text-3-1">
-<p>
-下方是通过 yaml 创建的 CRD 
-</p>
-<div class="org-src-container">
-<pre class="src src-yaml">apiVersion: apiextensions.k8s.io/v1
-kind: CustomResourceDefinition
-metadata:
-  # name must match the spec fields below, and be in the form: &lt;plural&gt;.&lt;group&gt;
-  name: milvuses.zilliz.com
-spec:
-  # group name to use for REST API: /apis/&lt;group&gt;/&lt;version&gt;
-  group: zilliz.com
-  # list of versions supported by this CustomResourceDefinition
-  versions:
-    - name: v1
-      # Each version can be enabled/disabled by Served flag.
-      served: true
-      # One and only one version must be marked as the storage version.
-      storage: true
-      schema:
-	openAPIV3Schema:
-	  type: object
-	  properties:
-	    spec:
-	      type: object
-	      properties:
-		milvusSpec:
-		  type: string
-		image:
-		  type: string
-		replicas:
-		  type: integer
-  # either Namespaced or Cluster
-  scope: Namespaced
-  names:
-    # plural name to be used in the URL: /apis/&lt;group&gt;/&lt;version&gt;/&lt;plural&gt;
-    plural: milvuses
-    # singular name to be used as an alias on the CLI and for display
-    singular: milvus
-    # kind is normally the CamelCased singular type. Your resource manifests use this.
-    kind: Milvus
-    # shortNames allow shorter string to match your resource on the CLI
-    shortNames:
-    - mi
-
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-orgc57ffa7" class="outline-3">
-<h3 id="orgc57ffa7"><span class="section-number-3">3.2.</span> AA (Aggregated API)</h3>
-<div class="outline-text-3" id="text-3-2">
-<p>
-CRD 是将资源注册到 k8s 当中，AA 则是将自定义的资源放到自己实现的 API Server 中
-</p>
-
-<p>
-AA 必须使用 go 开发，并且提供相应的镜像
-</p>
-
-<p>
-AA 可以提供更丰富的功能，可以看作独立实现的 API 服务，提供更丰富的功能：如改变存储方式、提供更多命令的支持、不同的协议
-</p>
-</div>
-</div>
-</div>
-<div id="outline-container-org990744b" class="outline-2">
-<h2 id="org990744b"><span class="section-number-2">4.</span> 在集群中创建一个 milvus</h2>
-<div class="outline-text-2" id="text-4">
-<div class="org-src-container">
-<pre class="src src-yaml">apiVersion: "zilliz.com/v1"
-kind: Milvus
-metadata:
-  name: milvus-crd-test
-spec:
-  milvusSpec: "this is milvus spec"
-  image: milvusdb/milvus
-</pre>
-</div>
-</div>
-</div>
-
-<div id="outline-container-orge11d544" class="outline-2">
-<h2 id="orge11d544"><span class="section-number-2">5.</span> 如何实现一个 Operator</h2>
-<div class="outline-text-2" id="text-5">
-<p>
-在实现一个 operator 之前先想一个问题，这个 operator 的功能，这一次我们要做的是最简单的一个功能
-</p>
-
-<p>
-当创建了一个 milvus 资源的时候，在默认的 namespace 下启动一个 milvus 实例
-</p>
-
-<p>
-实现一个 Operator 有两种方式
-</p>
-
 <ol class="org-ol">
-<li>使用框架如 kubebuilder operator-framework</li>
-
-<li>使用 dynamicClient 写一个</li>
+<li><a href="https://github.com/docker/cli">https://github.com/docker/cli</a></li>
+<li><a href="https://github.com/moby/moby">https://github.com/moby/moby</a></li>
+<li><a href="https://github.com/containerd/containerd">https://github.com/containerd/containerd</a></li>
+<li><a href="https://github.com/opencontainers/runc">https://github.com/opencontainers/runc</a></li>
+<li><a href="https://github.com/opencontainers/runtime-spec">https://github.com/opencontainers/runtime-spec</a></li>
 </ol>
 
-<p>
-先说为什么有两种方式:
-由于 k8s 官方钦点的 go-client 中如果想要识别自定义资源，有两种方式：
-1.按照格式来生成一堆代码与结构，并将资源注册到 apiserver。这种方式需要生成很多代码,现有的框架也都是为了这种模式服务的
-2.使用 dynamicClient 可以最快速度的调试代码,因为 dynamicClient 本质上是对 k8s REST client 的封装
-</p>
 
 <p>
-关于 kubebuilder 框架之类的内容会在之后讲到，这里来讲如何实现一个最小的 operator 详细代码可以参考 <a href="https://github.com/41tair/milvus-operator-example">https://github.com/41tair/milvus-operator-example</a>
+通过 container 的创建简单理解这几个仓库之间的调用流程 cli-&gt;dockerd-&gt;containerd-&gt;runc
 </p>
 
-<p>
-1.从 k8s 集群中获取到 CR 的信息
-</p>
-<div class="org-src-container">
-<pre class="src src-go">func milvusGVR() schema.GroupVersionResource{
-	return schema.GroupVersionResource{
-		Group: "zilliz.com",
-		Version: "v1",
-		Resource: "milvuses",
-	}
-}
+<table>
 
-func milvusList(client dynamic.Interface) []unstructured.Unstructured{
-	milvusInstances, _ := client.Resource(milvusGVR()).Namespace("default").List(context.TODO(), metav1.ListOptions{})
-	return milvusInstances.Items
-}
 
-</pre>
+<colgroup>
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">cli</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">dockerd</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">containerd</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">runc</td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>
-2.从 k8s 集群中获取到当前的 pod
-</p>
-<div class="org-src-container">
-<pre class="src src-go">func milvusPods(client *kubernetes.Clientset) []v1.Pod{
-	pods, _ := client.CoreV1().Pods("default").List(context.TODO(), metav1.ListOptions{})
-	return pods.Items
-}
-
-</pre>
 </div>
 
-<p>
-3.在启动时开启循环定时进行比对并创建没有被创建的 pod
-</p>
-<div class="org-src-container">
-<pre class="src src-go">func mainLoop(clientset *kubernetes.Clientset, milvusList []unstructured.Unstructured, pods []v1.Pod) {
-	var waitForCreate []MilvusIns
-	for _, milvus := range milvusList {
-		name := milvus.Object["metadata"].(map[string]interface{})["name"].(string)
-		image := milvus.Object["spec"].(map[string]interface{})["image"].(string)
-		if existInPods(name, pods) != true {
-			waitForCreate = append(waitForCreate, MilvusIns{
-				Name: name,
-				Image: image,
-			})
-		}
-	}
-	for _, m := range waitForCreate {
-		createMilvusPod(clientset, m.Name, m.Image)
-	}
 
-}
-</pre>
+<div id="outline-container-orga7cac56" class="outline-2">
+<h2 id="orga7cac56"><span class="section-number-2">2.</span> 基础知识</h2>
+<div class="outline-text-2" id="text-2">
+<ol class="org-ol">
+<li>go 基础语法</li>
+<li>操作系统基础</li>
+<li>网络基础</li>
+</ol>
 </div>
+</div>
+
+
+<div id="outline-container-orgbcdd695" class="outline-2">
+<h2 id="orgbcdd695"><span class="section-number-2">3.</span> 目录</h2>
+<div class="outline-text-2" id="text-3">
+<ol class="org-ol">
+<li>Container</li>
+<li>Image</li>
+<li>Image-build</li>
+<li>Network</li>
+<li>Volume</li>
+<li>Compose</li>
+</ol>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-08-17 Tue 09:45</p>
+<p class="date">Created: 2021-08-17 Tue 09:44</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
