@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-08-20 Fri 09:50 -->
+<!-- 2021-08-23 Mon 09:22 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Prometheus Node Exporter</title>
@@ -221,14 +221,14 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org46efd42">1. Prometheus Node Exporter</a></li>
-<li><a href="#org1dd40e9">2. Collector 的工作原理</a></li>
-<li><a href="#org24ae457">3. Node Exporter 对照表</a></li>
+<li><a href="#org5334d52">1. Prometheus Node Exporter</a></li>
+<li><a href="#orgfd38ed4">2. Collector 的工作原理</a></li>
+<li><a href="#org335ddfe">3. Node Exporter 对照表</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org46efd42" class="outline-2">
-<h2 id="org46efd42"><span class="section-number-2">1.</span> Prometheus Node Exporter</h2>
+<div id="outline-container-org5334d52" class="outline-2">
+<h2 id="org5334d52"><span class="section-number-2">1.</span> Prometheus Node Exporter</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 本文使用代码: 83dd27b
@@ -262,8 +262,8 @@ node exporter 的启动参数有很多,都是在启动时注入进去,方便控�
 </div>
 </div>
 
-<div id="outline-container-org1dd40e9" class="outline-2">
-<h2 id="org1dd40e9"><span class="section-number-2">2.</span> Collector 的工作原理</h2>
+<div id="outline-container-orgfd38ed4" class="outline-2">
+<h2 id="orgfd38ed4"><span class="section-number-2">2.</span> Collector 的工作原理</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 collector 通过读系统中的信息来然后包装成 prometheus 可以读的格式.所以本质上就是一个读文件然后接受请求的 web server
@@ -279,8 +279,8 @@ collector 通过读系统中的信息来然后包装成 prometheus 可以读的�
 </div>
 </div>
 
-<div id="outline-container-org24ae457" class="outline-2">
-<h2 id="org24ae457"><span class="section-number-2">3.</span> Node Exporter 对照表</h2>
+<div id="outline-container-org335ddfe" class="outline-2">
+<h2 id="org335ddfe"><span class="section-number-2">3.</span> Node Exporter 对照表</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 <a href="https://songjiayang.gitbooks.io/prometheus/content/exporter/nodeexporter.html">直接看这个</a>
@@ -289,7 +289,7 @@ collector 通过读系统中的信息来然后包装成 prometheus 可以读的�
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-08-20 Fri 09:50</p>
+<p class="date">Created: 2021-08-23 Mon 09:22</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
