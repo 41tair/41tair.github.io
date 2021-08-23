@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-08-23 Mon 09:27 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docker source code(1)</title>
+<meta name="generator" content="Org mode">
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Docker source code(1)</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org0b7462a">1. Container</a>
+<ul>
+<li><a href="#orgf1ae307">1.1. Overview</a></li>
+<li><a href="#org165bf24">1.2. Commands</a></li>
+<li><a href="#org9785e22">1.3. Code</a>
+<ul>
+<li><a href="#orgf3b2e55">1.3.1. Run</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<p>
+Attention: 本篇博客并未排版
+</p>
+<div id="outline-container-org0b7462a" class="outline-2">
+<h2 id="org0b7462a"><span class="section-number-2">1.</span> Container</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+这里我们说的 container 特指 docker container,而不是 容器技术
+container 是 docker 中最基础也是最重要的部分。
+</p>
+</div>
+<div id="outline-container-orgf1ae307" class="outline-3">
+<h3 id="orgf1ae307"><span class="section-number-3">1.1.</span> Overview</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+在看代码之前先思考一个问题，容器的本质是什么？
+进程
+那么可以得出下面这些推论
+</p>
+<ul class="org-ul">
+<li>/proc 下可见</li>
+<li>可以看到进程树</li>
+<li>有独立编号</li>
+<li>可以通过 cgroups 进行控制</li>
+<li>存在 fd 的限制</li>
+<li>可以找到对应的文件</li>
+</ul>
+<p>
+以我的机器上的一个容器为例
+5b32218c2319   prom/prometheus              "/bin/prometheus &#x2013;c…"   8 weeks ago    Up 8 weeks    9090/tcp                                                        local-prom-grafana_prom_1
+</p>
+
+<p>
+ps aux 可以看到一个所有者为 nobody PID 为 25159 的进程,启动命令是 /bin/prometheus &#x2013;config.file=/etc/prometheus/prometheus.yml
+</p>
+
+<p>
+nobody   25159  0.0  0.0 1111376 36708 ?       Ssl  6月22  47:42 /bin/prometheus &#x2013;config.file=/etc/prometheus/prometheus.yml
+</p>
+
+<p>
+为什么是 nobody, 而不是 root 或是 systemd 呢
+</p>
+
+<p>
+使用 docker inspect 5b32218c2319 来一探究竟
+</p>
+<blockquote>
+<p>
+[
+    {
+        "Id": "5b32218c23191287b1adb088fe59f5b792f1a56c5ea573781d4dedeb5ae5a976",
+        "Created": "2021-06-22T07:38:02.879078424Z",
+        "Path": "/bin/prometheus",
+        "Args": [
+            "&#x2013;config.file=/etc/prometheus/prometheus.yml"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 25159,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2021-06-22T07:38:11.737343877Z",
+            "FinishedAt": "2021-06-22T07:38:07.451557257Z"
+        },
+        "Image": "sha256:86ea6f86fc5758ae3568788c5b8c581878afa4ac91ace469fc42da21cb6b298b",
+        "ResolvConfPath": "/var/lib/docker/containers/5b32218c23191287b1adb088fe59f5b792f1a56c5ea573781d4dedeb5ae5a976/resolv.conf",
+        "HostnamePath": "/var/lib/docker/containers/5b32218c23191287b1adb088fe59f5b792f1a56c5ea573781d4dedeb5ae5a976/hostname",
+        "HostsPath": "/var/lib/docker/containers/5b32218c23191287b1adb088fe59f5b792f1a56c5ea573781d4dedeb5ae5a976/hosts",
+        "LogPath": "/var/lib/docker/containers/5b32218c23191287b1adb088fe59f5b792f1a56c5ea573781d4dedeb5ae5a976/5b32218c23191287b1adb088fe59f5b792f1a56c5ea573781d4dedeb5ae5a976-json.log",
+        "Name": "/local-prom-grafana_prom_1",
+        "RestartCount": 0,
+        "Driver": "overlay2",
+        "Platform": "linux",
+        "MountLabel": "",
+        "ProcessLabel": "",
+        "AppArmorProfile": "docker-default",
+        "ExecIDs": null,
+        "HostConfig": {
+            "Binds": [
+                "/etc/timezone:/etc/timezone:ro",
+                "/etc/localtime:/etc/localtime:ro",
+                "/home/e00380/Documents/docs/local-prom-grafana/prometheus.yml:/etc/prometheus/prometheus.yml:rw",
+                "3fd7e7710f242846f57cbfe2a0918d6d96971714b171cb5693160bcea56458bb:/prometheus:rw"
+            ],
+            "ContainerIDFile": "",
+            "LogConfig": {
+                "Type": "json-file",
+                "Config": {}
+            },
+            "NetworkMode": "local-prom-grafana_monitoring",
+            "PortBindings": {},
+            "RestartPolicy": {
+                "Name": "always",
+                "MaximumRetryCount": 0
+            },
+            "AutoRemove": false,
+            "VolumeDriver": "",
+            "VolumesFrom": [],
+            "CapAdd": null,
+            "CapDrop": null,
+            "CgroupnsMode": "host",
+            "Dns": null,
+            "DnsOptions": null,
+            "DnsSearch": null,
+            "ExtraHosts": null,
+            "GroupAdd": null,
+            "IpcMode": "private",
+            "Cgroup": "",
+            "Links": null,
+            "OomScoreAdj": 0,
+            "PidMode": "",
+            "Privileged": false,
+            "PublishAllPorts": false,
+            "ReadonlyRootfs": false,
+            "SecurityOpt": null,
+            "UTSMode": "",
+            "UsernsMode": "",
+            "ShmSize": 67108864,
+            "Runtime": "runc",
+            "ConsoleSize": [
+                0,
+                0
+            ],
+            "Isolation": "",
+            "CpuShares": 0,
+            "Memory": 0,
+            "NanoCpus": 0,
+            "CgroupParent": "",
+            "BlkioWeight": 0,
+            "BlkioWeightDevice": null,
+            "BlkioDeviceReadBps": null,
+            "BlkioDeviceWriteBps": null,
+            "BlkioDeviceReadIOps": null,
+            "BlkioDeviceWriteIOps": null,
+            "CpuPeriod": 0,
+            "CpuQuota": 0,
+            "CpuRealtimePeriod": 0,
+            "CpuRealtimeRuntime": 0,
+            "CpusetCpus": "",
+            "CpusetMems": "",
+            "Devices": null,
+            "DeviceCgroupRules": null,
+            "DeviceRequests": null,
+            "KernelMemory": 0,
+            "KernelMemoryTCP": 0,
+            "MemoryReservation": 0,
+            "MemorySwap": 0,
+            "MemorySwappiness": null,
+            "OomKillDisable": false,
+            "PidsLimit": null,
+            "Ulimits": null,
+            "CpuCount": 0,
+            "CpuPercent": 0,
+            "IOMaximumIOps": 0,
+            "IOMaximumBandwidth": 0,
+            "MaskedPaths": [
+                "/proc/asound",
+                "/proc/acpi",
+                "/proc/kcore",
+                "/proc/keys",
+                "/proc/latency_stats",
+                "/proc/timer_list",
+                "/proc/timer_stats",
+                "/proc/sched_debug",
+                "/proc/scsi",
+                "/sys/firmware"
+            ],
+            "ReadonlyPaths": [
+                "/proc/bus",
+                "/proc/fs",
+                "/proc/irq",
+                "/proc/sys",
+                "/proc/sysrq-trigger"
+            ]
+        },
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/e0221cef8d1e4b91b5aed0b63b1ca770e4527e8e1d7de18babc756610585a395-init/diff:/var/lib/docker/overlay2/d1be20143728ae9f036d4b91bae7271929f94d32421be97b88ea7a6102d49557/diff:/var/lib/docker/overlay2/b9ab02a7d998b495d6a5334fa15ac04dbaf00162986bcc72886c20cf5dfebd6b/diff:/var/lib/docker/overlay2/6bcec15653c8a9300b8f37c5d2c959eb836dd516ff27e3bb5e270b9857034e9c/diff:/var/lib/docker/overlay2/0553b8e64c5545f57665cfa714ade4117f93031e6b5cde06d0d02d26e9ac5ddf/diff:/var/lib/docker/overlay2/e3e1e896b8305a7f49a1650dc5c8dbce028fcc05fc508605796c128ade6b8aa7/diff:/var/lib/docker/overlay2/e5554d5e5a28a29851bc7393a8058a5c94a902942de9d831622e0e5bb1fb7cbb/diff:/var/lib/docker/overlay2/bf6eaeab71fdf40605a0bb5908823474081cd9489b94f8cd7636d565c1e4d900/diff:/var/lib/docker/overlay2/ee54f5928904b5513765a7fbe6ec0974c939bf2cadf3d2996cea123b59d6cc21/diff:/var/lib/docker/overlay2/f1d207c111c501d2c97829d3018d5a8d1cac613dea2e04fa642fbbe32e5c41f6/diff:/var/lib/docker/overlay2/b85ff0a1d705d0e94fb933f00b0768f94640b2f7b04f980a1afbd2ba3af10e28/diff:/var/lib/docker/overlay2/6813088c76ebe40d3ece4d78e95f9a03579efca8b17a34556d887d81afc5012c/diff:/var/lib/docker/overlay2/f3214b15997b7f8a939e31c77b4139e0ca785af68cac540f7c4968887b1ffed1/diff",
+                "MergedDir": "/var/lib/docker/overlay2/e0221cef8d1e4b91b5aed0b63b1ca770e4527e8e1d7de18babc756610585a395/merged",
+                "UpperDir": "/var/lib/docker/overlay2/e0221cef8d1e4b91b5aed0b63b1ca770e4527e8e1d7de18babc756610585a395/diff",
+                "WorkDir": "/var/lib/docker/overlay2/e0221cef8d1e4b91b5aed0b63b1ca770e4527e8e1d7de18babc756610585a395/work"
+            },
+            "Name": "overlay2"
+        },
+        "Mounts": [
+            {
+                "Type": "bind",
+                "Source": "/etc/timezone",
+                "Destination": "/etc/timezone",
+                "Mode": "ro",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/etc/localtime",
+                "Destination": "/etc/localtime",
+                "Mode": "ro",
+                "RW": false,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "bind",
+                "Source": "/home/e00380/Documents/docs/local-prom-grafana/prometheus.yml",
+                "Destination": "/etc/prometheus/prometheus.yml",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": "rprivate"
+            },
+            {
+                "Type": "volume",
+                "Name": "3fd7e7710f242846f57cbfe2a0918d6d96971714b171cb5693160bcea56458bb",
+                "Source": "/var/lib/docker/volumes/3fd7e7710f242846f57cbfe2a0918d6d96971714b171cb5693160bcea56458bb/_data",
+                "Destination": "/prometheus",
+                "Driver": "local",
+                "Mode": "rw",
+                "RW": true,
+                "Propagation": ""
+            }
+        ],
+        "Config": {
+            "Hostname": "5b32218c2319",
+            "Domainname": "",
+            "User": "nobody",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "9090/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "affinity:container==8b99c88b1d0463e47803db6b37bbaf184b2bba1b5b6272500b9b3fab528956dd",
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Cmd": [
+                "&#x2013;config.file=/etc/prometheus/prometheus.yml"
+            ],
+            "Image": "prom/prometheus",
+            "Volumes": {
+                "/etc/localtime": {},
+                "/etc/prometheus/prometheus.yml": {},
+                "/etc/timezone": {},
+                "/prometheus": {}
+            },
+            "WorkingDir": "/prometheus",
+            "Entrypoint": [
+                "/bin/prometheus"
+            ],
+            "OnBuild": null,
+            "Labels": {
+                "com.docker.compose.config-hash": "a378f1ee411a46a6432b2bfd46cc2f8d5d5316ee4a4a74be2feec0c9b9749079",
+                "com.docker.compose.container-number": "1",
+                "com.docker.compose.oneoff": "False",
+                "com.docker.compose.project": "local-prom-grafana",
+                "com.docker.compose.project.config_files": "docker-compose.yml",
+                "com.docker.compose.project.working_dir": "/home/e00380/Documents/docs/local-prom-grafana",
+                "com.docker.compose.service": "prom",
+                "com.docker.compose.version": "1.29.2",
+                "maintainer": "The Prometheus Authors &lt;prometheus-developers@googlegroups.com&gt;"
+            }
+        },
+        "NetworkSettings": {
+            "Bridge": "",
+            "SandboxID": "f5afe415343543bdd806b3212528121cf989ee7faa909372a80cb1ac0e67a52b",
+            "HairpinMode": false,
+            "LinkLocalIPv6Address": "",
+            "LinkLocalIPv6PrefixLen": 0,
+            "Ports": {
+                "9090/tcp": null
+            },
+            "SandboxKey": "/var/run/docker/netns/f5afe4153435",
+            "SecondaryIPAddresses": null,
+            "SecondaryIPv6Addresses": null,
+            "EndpointID": "",
+            "Gateway": "",
+            "GlobalIPv6Address": "",
+            "GlobalIPv6PrefixLen": 0,
+            "IPAddress": "",
+            "IPPrefixLen": 0,
+            "IPv6Gateway": "",
+            "MacAddress": "",
+            "Networks": {
+                "local-prom-grafana_monitoring": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": [
+                        "5b32218c2319",
+                        "prom"
+                    ],
+                    "NetworkID": "c63eaeda17f36b7d432fac74428fd6114685ed64d891ba800294ab850f43a929",
+                    "EndpointID": "8fa8a1d7c147f4fe71d29c8290b6edacd4f416cf57417891b7c9d4869b8b8b75",
+                    "Gateway": "172.19.0.1",
+                    "IPAddress": "172.19.0.3",
+                    "IPPrefixLen": 16,
+                    "IPv6Gateway": "",
+                    "GlobalIPv6Address": "",
+                    "GlobalIPv6PrefixLen": 0,
+                    "MacAddress": "02:42:ac:13:00:03",
+                    "DriverOpts": null
+                }
+            }
+        }
+    }
+]
+</p>
+</blockquote>
+<p>
+docker inspect 展示的信息非常多, 我们直接找我们想要的信息,可以看到在 Config 中用户被指定为 nobody, 同时启动命令与参数也与容器的启动命令相同
+</p>
+
+<p>
+于是带着更多的信息去寻找
+进入到 /proc/25159 下,可以看到非常多的文件,现在先不需要理解具体每个文件的意思。
+</p>
+
+<p>
+先进入到 root 下, 你会发现这个目录与容器内的目录一摸一样
+</p>
+
+<p>
+我们用 ls -al root 看一下这个目录的详细信息
+</p>
+
+<p>
+lrwxrwxrwx 1 nobody nogroup 0 8月  17 16:31 root -&gt; /
+</p>
+
+<p>
+root 目录竟然是一个链接,这个链接最终指向的是 /, 这个地方就很奇怪,这个链接明明是指向根目录的一个链接,进去之后为什么是容器内部文件?
+因为 /proc 下的链接不遵循符号链接的常规语义,简单来说这个东西就是给 chroot 用的。
+</p>
+
+<p>
+可以直接使用命令 chroot &#x2013;userspec 99:99 ./root sh 
+</p>
+
+<p>
+ns 这个目录的信息就是进程的 namespace 的全部内容
+或者直接用 lsns 也可以看到
+</p>
+
+<p>
+接下来看 /var/lib/docker/containers/5b32218c23191287b1adb088fe59f5b792f1a56c5ea573781d4dedeb5ae5a976 这个目录下的东西
+这串长长的 id 就是容器的真实 id,平时指挥显示前面的一小部分
+</p>
+
+<p>
+ls 
+5b32218c23191287b1adb088fe59f5b792f1a56c5ea573781d4dedeb5ae5a976-json.log  checkpoints  config.v2.json  hostconfig.json  hostname  hosts  mounts  resolv.conf  resolv.conf.hash
+</p>
+
+<p>
+这里面的文件就保存着容器的各种信息
+</p>
+
+<p>
+<i>var/run/docker/containerd</i>
+</p>
+
+<p>
+chroot 说完了那 cgroup 的信息在哪? /sys/fs/cgroup/cpuset/docker/5b32218c23191287b1adb088fe59f5b792f1a56c5ea573781d4dedeb5ae5a976 下拥有所有的 cgroup 信息
+</p>
+</div>
+</div>
+
+<div id="outline-container-org165bf24" class="outline-3">
+<h3 id="org165bf24"><span class="section-number-3">1.2.</span> Commands</h3>
+<div class="outline-text-3" id="text-1-2">
+<p>
+ attach      Attach local standard input, output, and error streams to a running container
+ commit      Create a new image from a container's changes
+ cp          Copy files/folders between a container and the local filesystem
+ create      Create a new container
+ diff        Inspect changes to files or directories on a container's filesystem
+ exec        Run a command in a running container
+ export      Export a container's filesystem as a tar archive
+ inspect     Display detailed information on one or more containers
+ kill        Kill one or more running containers
+ logs        Fetch the logs of a container
+ ls          List containers
+ pause       Pause all processes within one or more containers
+ port        List port mappings or a specific mapping for the container
+ prune       Remove all stopped containers
+ rename      Rename a container
+ restart     Restart one or more containers
+ rm          Remove one or more containers
+ run         Run a command in a new container
+ start       Start one or more stopped containers
+ stats       Display a live stream of container(s) resource usage statistics
+ stop        Stop one or more running containers
+ top         Display the running processes of a container
+ unpause     Unpause all processes within one or more containers
+ update      Update configuration of one or more containers
+ wait        Block until one or more containers stop, then print their exit codes
+这些是 docker 和容器相关的命令接下来会逐一的看他们是怎么实现的
+</p>
+</div>
+</div>
+<div id="outline-container-org9785e22" class="outline-3">
+<h3 id="org9785e22"><span class="section-number-3">1.3.</span> Code</h3>
+<div class="outline-text-3" id="text-1-3">
+</div>
+<div id="outline-container-orgf3b2e55" class="outline-4">
+<h4 id="orgf3b2e55"><span class="section-number-4">1.3.1.</span> Run</h4>
+<div class="outline-text-4" id="text-1-3-1">
+<p>
+我们以最简单的启动命令为例 docker run busybox
+注: 在这个章节中所有涉及到 checkpoint 的内容均不会进行详细的说明
+首先是 cli
+cli/command/container/run.go
+从 L:53 开始可以看到 docker run 的参数,特有的参数在 New**Command 中指定,通用的参数在
+cli/command/container/opts.go 中通过 addFlags 加入到 cmd 中
+</p>
+
+<p>
+接下来在 L:69 runRun 函数开始将命令行参数解析成 containerConfig 然后执行 runContainer 
+</p>
+
+<p>
+L:94 runContainer 通过 dockerCli.Client() 发送创建 container 的请求给 dockerd 然后等待返回
+</p>
+
+<p>
+具体的逻辑在 cli/command/container/create.go L:192 createContainer 
+创建容器的大体可以分为几个重要部分
+</p>
+<ol class="org-ol">
+<li>创建 container id 文件, 这个文件可以通过 &#x2013;cidfile 指定</li>
+<li>解析 docker 镜像,包括检查 sha256 检查是否 tag,以及镜像仓库是否受信</li>
+<li>检查配置来确定是否需要拉去镜像</li>
+<li>然后将请求发送给 dockerd</li>
+</ol>
+
+<p>
+这时我们来看 dockerd 的代码, 在 docker/client/container_creater.go L:23 可以看到 ContainerCreate
+的函数体。整个 cli 下的代码都大同小异
+</p>
+<ol class="org-ol">
+<li>检查 API 版本与 client 版本是否匹配</li>
+<li>对输入参数进行检查</li>
+<li>包装好参数然后发送给对应的 REST API 例如 create container 就是发送给 /containers/create</li>
+<li>接收返回并将返回结果 Decode 成为特定格式的结构体返回</li>
+</ol>
+
+<p>
+那发送给 /containers/create 的 body 长什么样子
+</p>
+<pre class="example">
+configWrapper {
+     Config: config
+     HostConfig: hostconfig
+     NetworkingConfig: networkingConfig
+}
+</pre>
+<p>
+与 cli 中 parse 得到的数据结构是基本相同的
+docker run busybox 得到的实际结构
+</p>
+<pre class="example">
+config:
+{Hostname: "",
+Domainname: "",
+User: "",
+AttachStdin: false,
+AttachStdout: true,
+AttachStderr: true,
+ExposedPorts: github.com/docker/cli/vendor/github.com/docker/go-connections/nat.PortSet [],
+Tty: false,
+OpenStdin: false,
+StdinOnce: false,
+Env: []string len: 0, cap: 0, nil,
+Cmd: github.com/docker/cli/vendor/github.com/docker/docker/api/types/strslice.StrSlice len: 0, cap: 0, nil,
+Healthcheck: *github.com/docker/cli/vendor/github.com/docker/docker/api/types/container.HealthConfig nil,
+ArgsEscaped: false,
+Image: "busybox",
+Volumes: map[string]struct {} [],
+WorkingDir: "",
+Entrypoint: github.com/docker/cli/vendor/github.com/docker/docker/api/types/strslice.StrSlice len: 0, cap: 0, nil,
+NetworkDisabled: false,
+MacAddress: "",
+OnBuild: []string len: 0, cap: 0, nil,
+Labels: map[string]string [],
+StopSignal: "",
+StopTimeout: *int nil,
+Shell: github.com/docker/cli/vendor/github.com/docker/docker/api/types/strslice.StrSlice len: 0, cap: 0, nil,}
+
+Hostconfig:
+{
+	Binds: []string len: 0, cap: 0, nil,
+	ContainerIDFile: "",
+	LogConfig: github.com/docker/cli/vendor/github.com/docker/docker/api/types/container.LogConfig {
+		Type: "",
+		Config: map[string]string [],},
+	NetworkMode: "default",
+	PortBindings: github.com/docker/cli/vendor/github.com/docker/go-connections/nat.PortMap [],
+	RestartPolicy: github.com/docker/cli/vendor/github.com/docker/docker/api/types/container.RestartPolicy {Name: "no", MaximumRetryCount: 0},
+	AutoRemove: false,
+	VolumeDriver: "",
+	VolumesFrom: []string len: 0, cap: 0, nil,
+	CapAdd: github.com/docker/cli/vendor/github.com/docker/docker/api/types/strslice.StrSlice len: 0, cap: 0, nil,
+	CapDrop: github.com/docker/cli/vendor/github.com/docker/docker/api/types/strslice.StrSlice len: 0, cap: 0, nil,
+	CgroupnsMode: "",
+	DNS: []string len: 0, cap: 0, [],
+	DNSOptions: []string len: 0, cap: 0, [],
+	DNSSearch: []string len: 0, cap: 0, [],
+	ExtraHosts: []string len: 0, cap: 0, nil,
+	GroupAdd: []string len: 0, cap: 0, nil,
+	IpcMode: "",
+	Cgroup: "",
+	Links: []string len: 0, cap: 0, nil,
+	OomScoreAdj: 0,
+	PidMode: "",
+	Privileged: false,
+	PublishAllPorts: false,
+	ReadonlyRootfs: false,
+	SecurityOpt: []string len: 0, cap: 0, nil,
+	StorageOpt: map[string]string [],
+	Tmpfs: map[string]string [],
+	UTSMode: "",
+	UsernsMode: "",
+	ShmSize: 0,
+	Sysctls: map[string]string [],
+	Runtime: "",
+	ConsoleSize: [2]uint [0,0],
+	Isolation: "",
+	Resources: github.com/docker/cli/vendor/github.com/docker/docker/api/types/container.Resources {
+		CPUShares: 0,
+		Memory: 0,
+		NanoCPUs: 0,
+		CgroupParent: "",
+		BlkioWeight: 0,
+		BlkioWeightDevice: []*github.com/docker/cli/vendor/github.com/docker/docker/api/types/blkiodev.WeightDevice len: 0, cap: 0, [],
+		BlkioDeviceReadBps: []*github.com/docker/cli/vendor/github.com/docker/docker/api/types/blkiodev.ThrottleDevice len: 0, cap: 0, nil,
+		BlkioDeviceWriteBps: []*github.com/docker/cli/vendor/github.com/docker/docker/api/types/blkiodev.ThrottleDevice len: 0, cap: 0, nil,
+		BlkioDeviceReadIOps: []*github.com/docker/cli/vendor/github.com/docker/docker/api/types/blkiodev.ThrottleDevice len: 0, cap: 0, nil,
+		BlkioDeviceWriteIOps: []*github.com/docker/cli/vendor/github.com/docker/docker/api/types/blkiodev.ThrottleDevice len: 0, cap: 0, nil,
+		CPUPeriod: 0,
+		CPUQuota: 0,
+		CPURealtimePeriod: 0,
+		CPURealtimeRuntime: 0,
+		CpusetCpus: "",
+		CpusetMems: "",
+		Devices: []github.com/docker/cli/vendor/github.com/docker/docker/api/types/container.DeviceMapping len: 0, cap: 0, [],
+		DeviceCgroupRules: []string len: 0, cap: 0, nil,
+		DeviceRequests: []github.com/docker/cli/vendor/github.com/docker/docker/api/types/container.DeviceRequest len: 0, cap: 0, nil,
+		KernelMemory: 0,
+		KernelMemoryTCP: 0,
+		MemoryReservation: 0,
+		MemorySwap: 0,
+		MemorySwappiness: *-1,
+		OomKillDisable: *false,
+		PidsLimit: *0,
+		Ulimits: []*github.com/docker/cli/vendor/github.com/docker/go-units.Ulimit len: 0, cap: 0, nil,
+		CPUCount: 0,
+		CPUPercent: 0,
+		IOMaximumIOps: 0,
+		IOMaximumBandwidth: 0,},
+	Mounts: []github.com/docker/cli/vendor/github.com/docker/docker/api/types/mount.Mount len: 0, cap: 0, nil,
+	MaskedPaths: []string len: 0, cap: 0, nil,
+	ReadonlyPaths: []string len: 0, cap: 0, nil,
+	Init: *bool nil,}
+
+networkingConfig:
+{
+EndpointsConfig: map[string]*github.com/docker/cli/vendor/github.com/docker/docker/api/types/network.EndpointSettings [],}
+</pre>
+
+<p>
+知道了请求体与路径来看一下在 dockerd 里做了什么事情
+在 cmd/dockerd/daemon.go L:478 initRouter 中可以看到,路由信息是如何被加载的
+在 api/server/router/container/container.go L:33 可以看到容器具体的路由信息
+router.NewPostRoute("/containers/create", r.postContainersCreate)
+</p>
+
+<p>
+在 api/server/router/container/container_routes.go L:460 可以看到 handler 的处理过程
+验证版本然后执行 s.backend.ContainerCreate
+</p>
+
+<p>
+整个时候有同学就要问了,这个 backend 是啥呢,又是哪里来的呢
+</p>
+
+<p>
+backend 的接口定义在 api/server/router/container/backend.go L:75 
+</p>
+
+<p>
+然后我们追根溯源,发现是 *Daemon 这个 struct 实现了 backend 这个接口
+</p>
+
+<p>
+在 daemon/create.go L:58 containerCreate 中可以看到具体实现
+在这里创建的过程同样是检查各种配置并且将信息组装成相应的结构然后调用
+daemon.newContainer 生成一个 container 的结构
+daemon/container.go L:126 
+newContainer 主要是生成 containerid hostname 然后填充成一个 container 结构体
+然后按照下面的流程
+1.确定是不是特权容器并检查相应的安全配置
+2.给容器创建一个新的读写层
+3.创建容器根目录与检查点的目录并改变所有者 chown
+4.挂载必要的卷
+5.更新容器的网络
+6.将容器创建好的容器加入到存储当中便与查询
+</p>
+
+<p>
+那么问题来了 cgroups 规则和 namespace 的配置呢,也没看到 containerd 的作用啊
+因为这里是 create 命令,一个 created 状态的容器其实只是一堆文件,进程都没有启动又谈何对进程的限制呢
+</p>
+
+<p>
+docker run 的本质是先 create 然后再 start
+所以回到 cli 的 runContainer cli/command/container/run.go L:127 
+createContainer 已经创建成功, attach 的部分先暂时不看,来看 L:167 client.ContainerStart 
+</p>
+
+<p>
+有了上面寻找 dockerd 中 create 实现的经验,我们可以很容易的找到 start 的实现
+docker daemon/start.go L:101 containerStart
+</p>
+
+<p>
+启动容器的主要流程
+</p>
+<ol class="org-ol">
+<li>检查容器是否在运行或者是已经死亡</li>
+<li>启动一个 goroutine 来处理错误并进行清理</li>
+<li>挂载必要的卷</li>
+<li>给容器分配网络地址</li>
+<li>创建 Container runtime spec 并填充信息</li>
+<li>更改 apparmor 的配置</li>
+<li>填充 containerd 所需的信息然后将请求发送给 containerd,此时发送给 containerd 的是 create 请求</li>
+</ol>
+<p>
+在 create 结束后会在发送一个 start 请求
+</p>
+
+<p>
+<del>鲁迅曾经说过:计算机科学领域的任何问题都可以通过增加一个间接的中间层来解决</del>
+</p>
+
+<p>
+上面说到 dockerd 要将请求发送给 containerd, 于是在 Daemon 的结构体中有这样的两个属性
+</p>
+<pre class="example">
+type Daemon struct {
+...
+containerdCli *contained.Client
+containerd libcontainerdtypes.Client
+}
+</pre>
+<p>
+第一个很好理解是 containerd 仓库的 Client
+第二个是 dockerd 内部 libcontainerd/types/types.go L:50 定义的一套接口
+这个接口的实现在 libcontainerd/remote/client.go L:59 
+直接到 L:130 来看 Create 函数的实现, 将已有信息包装好然后通过 containerd 的 client 发送出去
+Start 也是一样的逻辑,于是现在的问题就变成了到 containerd 中看 NewContainer 与 task start 的逻辑
+</p>
+
+
+<p>
+containerd client.go L:270 NewContainer
+记住这里个的 runtime 是默认的 "io.containerd.runc.v2"
+</p>
+
+<p>
+client 通过 grpc 来访问 containerd 的 service
+具体的实现在 api/services/containers/v1/containers.pb.go L:729
+看到 pb.go 就懂了这肯定是 protobuf 生成出来的,那直接看 proto 文件就好了
+就在同级目录下的 containers.proto 
+</p>
+
+<p>
+接下来直接去找 grpc server 
+</p>
+
+<p>
+containerd 的功能大多以插件的形式存在,暂且不管。在 services/containers/service.go 中可以看到
+containers grpc 插件的注册。
+</p>
+
+<p>
+在 L:63 可以看到调用了相同的 pb.go 文件, 完成了 grpc service 的注册
+</p>
+
+<p>
+在 L:99 看到 create 的实现是调用了 s.local.Create 
+</p>
+
+<p>
+在 services/containers/local.go L:111 可以看到 Create 的实现
+</p>
+
+<ol class="org-ol">
+<li>先将 cotainer 放入到本地存储当中</li>
+<li>然后发送一个 containerCreate 的事件到 /containers/create 这个 topic</li>
+</ol>
+
+<p>
+这个存储有时哪里来的呢,存储也是插件,在 services/containers/local.go L:54 中可以看到 NewContainerStore
+接下来看 *containerStore 实现的 Create metadata/containers.go L:117
+</p>
+
+<ol class="org-ol">
+<li>确定 namespace 并对必要信息进行验证如 runtime id labels</li>
+<li>创建一个 ContainerBucket 并把容器的信息写入到这个 bucket 中, 至于为什么要建一个桶请去看 bbolt <a href="https://github.com/etcd-io/bbolt">https://github.com/etcd-io/bbolt</a></li>
+</ol>
+
+<p>
+那么接下来看一个 container create 的事件注册之前,要简单的看一下 containerd 中的事件机制
+在 services/server/server.go L:132 中创建一个默认的 exchange struct
+然后在 L:149 将值赋给了 initContext 用来传递插件公用的一些配置
+</p>
+
+<p>
+在 events/exchange/exchange.go L:82 来看 Publish 的运行流程
+</p>
+<ol class="org-ol">
+<li>从 context 中拿到 namespace</li>
+<li>将接收的事件 encode, 包装成一个 envelop 的结构体</li>
+<li>通过 broadcaster.Write 发送</li>
+</ol>
+
+<pre class="example">
+type Envelope struct {
+Timestamp time.Time
+Namespace string
+Topic string
+Event *types.Any
+}
+</pre>
+
+<p>
+这个 broadcaster 又是一个什么东西呢, 一个事件分发的一个包 <a href="https://github.com/docker/go-events">https://github.com/docker/go-events</a>
+</p>
+
+<p>
+然后就结束了可以返回了 
+</p>
+
+<p>
+上面说到 create 之后 dockerd 还会发送一个 start 请求
+</p>
+
+<p>
+在 docker libcontainerd/remote/client.go L:157 看一下 dockerd 封装的 start 有哪些流程
+</p>
+<ol class="org-ol">
+<li>通过传递的 container id 获取到容器的基本信息</li>
+<li>通过 spec 获取到 userid 与 groupid</li>
+<li>通过 containerd 的接口创建一个 task</li>
+</ol>
+
+<pre class="example">
+fifos := newFIFOSet(bundle, libcontainerdtypes.InitProcessName, withStdin, spec.Process.Terminal)
+
+rio, err = c.createIO(fifos, id, libcontainerdtypes.InitProcessName, stdinCloseSync, attachStdio)
+</pre>
+<p>
+这里的 fifoset 是一组用来给 task 传递 io 流的文件路径
+rio 用来创建一个给进程使用的 io
+</p>
+<ol class="org-ol">
+<li>启动这个 task</li>
+<li>返回 task 的 pid</li>
+</ol>
+
+<p>
+回到 containerd container.go L:210 中 NewTask
+</p>
+
+<p>
+NewTask 会向 taskService 发送一个 create 请求 containers.go L:298
+同样的上面第 4 步中的 start 也是向 taskService 发送一个 start 请求
+</p>
+
+<p>
+services/tasks/local.go L:141 来看 Create 做了什么事情
+</p>
+<ol class="org-ol">
+<li>通过请求中的 container id 获取到容器的信息</li>
+<li>检查 container runtime 的名字,并确定要使用哪种 runtime</li>
+<li>通过 container id 确定容器在 runtime 级别不存在 记得在上面让你记住的一个默认值吗? io.containerd.runc.v2</li>
+<li>通过 runtime 的接口创建容器 L:210</li>
+<li>启动一个监视器来观察容器</li>
+<li>返回结果</li>
+</ol>
+
+<p>
+在 runtime/v2/manager.go L:121 中看 Create 的流程,这个地方是用来启动 shim 的, 也就是鲁迅先生说的中间层
+<del>接下来终于要揭开容器创建的底裤了</del>,别眨眼
+</p>
+<ol class="org-ol">
+<li>通过 NewBundle 给容器创建一个根路径, 格式为 rootfs/namespace/containerid  使用了默认的 state 即 /run/containerd</li>
+<li>启动用一个 shim startShim</li>
+<li>通过 shim 调用 taskservice, 给 task 列表加一个 task; s.task.Create</li>
+</ol>
+
+
+<p>
+L:154 看 startShim 的流程
+</p>
+<ol class="org-ol">
+<li>获取到 namespace 与 启动配置</li>
+<li>创建一个 Binary 结构体</li>
+<li>然后做这个 shim 的初始化工作: 根据 runtime 找到对应的二进制并设定参数、执行路径、环境变量等信息;打开日志文件;然后执行
+这里就是在执行 /usr/bin/containerd-shim-runc-v2 -namespace moby -id c2557da27872a239ac6231419c411cbf18777cb58fa97376d2c65b7f52a3d63f -address /run/containerd/containerd.sock
+执行完毕之后就合并输出,整理格式
+我们会在下面再来看 containerd-shim-runc-v2 的详细逻辑,还是回来看 containerd 的代码</li>
+</ol>
+
+
+<p>
+在 runtime/v2/runc/v2/service.go L:331 中来看  s.task.Create 流程
+</p>
+<ol class="org-ol">
+<li>给整个 service 加一把锁,因为这里的容器信息是通过一个 map 存的</li>
+<li>通过 NewContainer 创建一个容器</li>
+<li>发送一个 taskCreate 的事件</li>
+<li>返回容器的 pid</li>
+</ol>
+
+
+<p>
+runtime/v2/runc/container.go L:45 NewContainer
+</p>
+<ol class="org-ol">
+<li>获取 context 中传递的 namespace 信息</li>
+<li>从 request 中的 Rootfs 获取需要绑定的目录</li>
+<li>如果有需要挂载的目录,就创建一个路径, 也就是 根路径/rootfs,写入一些配置文件</li>
+<li>挂载目录, 这里用的是系统命令,具体的代码在 mount/mouont_linux.go L:45 简单来说就是把指定的目录挂载到 rootfs 下</li>
+<li>初始化进程并使用 runc 来创建容器 pkg/process/init.go L:145 这里也是直接通过二进制的方式进行调用,调用成功后返回 pid; 这里 runc create &#x2013;bundle {rootfs} c2557da27</li>
+<li>这里接着设置 cgroup 的版本, 然后返回 container 结构体</li>
+</ol>
+
+<p>
+到目前为止还有两个疑惑, containerd-shim-runc-v2 做了什么? runc 又做了什么
+</p>
+
+<p>
+cotainerd-shim-runc-v2
+</p>
+
+<p>
+在 runtime/v2/shim/shim.go L:167 看 shim 的启动
+然后到 L:245 发现 启动了一个 shim server
+</p>
+
+<p>
+runtime/v2/shim/shim.go L:294 
+将 api 注册到 ttrpc server
+</p>
+
+<p>
+runc 
+runc 仓库下 create.go L:54 可以看到 runc create 做了什么
+</p>
+<ol class="org-ol">
+<li>修改 pid 文件</li>
+<li>设置 spec, 因为这里指定了 bundle, 所以从 bundle 下的 config.json 读取; /run/containerd/io.containerd.runtime.v2.task/moby/51c62996a65594d7210f6ccaaf2b6ee8952f15e6c1dd53d8d97d406dabf4902c</li>
+<li>然后通过 utils_linux.go L:400 startContainer 启动容器
+这里主要分为两部分 1. 创建容器 2. 启动进程</li>
+</ol>
+
+<p>
+创建容器的过程 libcontainer/factroy_linux.go L:252
+</p>
+<ol class="org-ol">
+<li>验证 id</li>
+<li>验证配置文件</li>
+<li>创建容器的根目录</li>
+<li>更改根目录的 uid 与 gid</li>
+<li>返回一个停止状态的容器</li>
+</ol>
+
+<p>
+启动进程 utils_linux.go L:265
+</p>
+<ol class="org-ol">
+<li>检查是否是 detach, 与 tty 会冲突</li>
+<li>将信息转换成一个 process 结构体</li>
+<li>关联 process 需要监听的 fd</li>
+<li>设置 tty</li>
+<li>因为传递的 action 是 CT_ACT_CREATE 于是 进入到 start 流程</li>
+</ol>
+
+<p>
+libcontainer/container_linux.go L:230
+</p>
+<ol class="org-ol">
+<li>加锁</li>
+<li>查看是否有需要特殊照顾的资源,根据配置文件跳过 cgroups 的限制</li>
+<li>在 utils_linux.go L:452 可以看到在 start container 时, init 为 true, 所以会创建一个 execfifo 文件</li>
+<li>然后使用 start 启动这个 process</li>
+</ol>
+
+<p>
+这里分成两部分
+创建 execfifo 文件
+</p>
+<ol class="org-ol">
+<li>获取到 uid 与 gid</li>
+<li>在容器根目录下创建一个 exec.fifo 的文件</li>
+<li>使用系统调用创建 FIFO 文件</li>
+<li>更改 fifo 文件的所有者</li>
+</ol>
+
+<p>
+启动 process 整体流程较为复杂, 我们会将代码整体性的说完而不像上面一样拆成多部份
+启动 process L:338
+</p>
+<ol class="org-ol">
+<li>libcontainer/container_linux.go L:449 创建一个 sock 对,用来在 parent 进程与 child 进程之间传递信息</li>
+<li>libcontainer/container_linux.go L:478 创建一个 go 的 cmd, 这个 cmd 就是 child 进程</li>
+<li>libcontainer/container_linux.go L:435 打开上面生成的 fifo 文件</li>
+<li>L:2011 创建 netlink 并写入配置信息</li>
+<li>判断是否需要写入 namespace 的信息</li>
+<li>写入 gid mapping</li>
+<li>读 log pipe 文件来获取日志</li>
+<li>libcontainer/process_linux.go L:325 首先启动 child 进程,也就是 2 中生成的 cmd</li>
+<li>关闭 child 端的所有 pipe</li>
+<li>启动一个 goroutine 用来从 1 中创建的 sock 对中读信息,然后返回一个 channel。</li>
+<li>启动一个 goroutine 用来处理 init 进程被 oom kill 的情况。主要做法就是统计次数然后清理 cgroups</li>
+<li>配置 cgroup 规则这里以 systemd v2 作为例子 libcontainer/cgroups/systemd/v2.go L:230</li>
+<li>检查是否需要使用 intel rdt</li>
+<li>把 bootstrap 的数据拷贝到 pipe 中</li>
+<li>确定 init 执行完毕</li>
+<li>libcontainer/process_linux.go L:288 通过系统调用找到 child 进程的 pid</li>
+<li>等待第一个 child 进程退出</li>
+<li>配置网络</li>
+<li>更新 spec 的状态</li>
+<li>把 config 通过上面创建的 sock 对发送给 child 进程</li>
+<li>通过 pipe 与 child 进程进行交互
+收到 procReady 时,调用 Set 在 cgroup 中添加资源限制 libcontainer/process_linux.go L:440
+收到 procHooks 时,先设置 cgroup 然后执行 config 中定义的 prestart 与 createRuntime hooks</li>
+<li>杀死 创建的 sock 对,断开与 parent 的交互</li>
+<li>返回, 创建过程结束</li>
+</ol>
+
+<p>
+这里看起来结束了,但是后面还有一些不那么明显的处理
+因为这个 parent 进程退出了, child 就成了孤儿进程,然后会被 1 号进程接管
+同时 exec.fifo 这个文件没有进程对他写,所以 child 侧的进程会被持续的阻塞(linux fifo 特性)
+</p>
+
+
+<p>
+接下来看 start 的流程
+libcontainer/container_linux.go L:250 
+会发现创建与启动都是使用了 start 这个函数,
+启动在创建之后又调用了一次 exec
+</p>
+
+<p>
+libcontainer/container_linux.go L:266
+exec 最大的用途就是打开了 exec.fifo 这个文件, child 进程的阻塞消失,继续运行
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2021-08-23 Mon 09:27</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
