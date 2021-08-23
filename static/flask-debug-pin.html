@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-08-23 Mon 09:27 -->
+<!-- 2021-08-23 Mon 15:54 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How the flask generate pin</title>
@@ -221,33 +221,33 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org4bd6157">1. Flask 的 debug 模式</a></li>
-<li><a href="#org731da54">2. PIN 的产生</a>
+<li><a href="#org734f649">1. Flask 的 debug 模式</a></li>
+<li><a href="#org1ba6ab6">2. PIN 的产生</a>
 <ul>
-<li><a href="#orgc5ba1e8">2.1. probably_public_bits</a>
+<li><a href="#org2fc1735">2.1. probably_public_bits</a>
 <ul>
-<li><a href="#org069766e">2.1.1. username</a></li>
-<li><a href="#org8f49bc8">2.1.2. modname</a></li>
-<li><a href="#orgb2b2bfb">2.1.3. app class name</a></li>
-<li><a href="#org0f395c9">2.1.4. file path</a></li>
+<li><a href="#org9a8e933">2.1.1. username</a></li>
+<li><a href="#org8348d4b">2.1.2. modname</a></li>
+<li><a href="#orge033578">2.1.3. app class name</a></li>
+<li><a href="#org57554a3">2.1.4. file path</a></li>
 </ul>
 </li>
-<li><a href="#org377b2bd">2.2. private_bit</a>
+<li><a href="#orgecfd4bf">2.2. private_bit</a>
 <ul>
-<li><a href="#orgcb47097">2.2.1. uuid node</a></li>
-<li><a href="#org72231b6">2.2.2. machine id</a></li>
+<li><a href="#orgb04fcb1">2.2.1. uuid node</a></li>
+<li><a href="#org9b0fbb3">2.2.2. machine id</a></li>
 </ul>
 </li>
-<li><a href="#org4d1193a">2.3. cookie name</a></li>
-<li><a href="#org44d90e0">2.4. pin num</a></li>
+<li><a href="#orgce03b79">2.3. cookie name</a></li>
+<li><a href="#orge8f880f">2.4. pin num</a></li>
 </ul>
 </li>
-<li><a href="#org3087dbb">3. PIN 的存储与检查</a></li>
+<li><a href="#org08d745b">3. PIN 的存储与检查</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org4bd6157" class="outline-2">
-<h2 id="org4bd6157"><span class="section-number-2">1.</span> Flask 的 debug 模式</h2>
+<div id="outline-container-org734f649" class="outline-2">
+<h2 id="org734f649"><span class="section-number-2">1.</span> Flask 的 debug 模式</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 写过 Flask 的人都知道，只要在 run 的参数中增加一个 debug=True 的参数就可以打开 Flask 的 debug 模式
@@ -263,8 +263,8 @@ debug 模式下出现错误会返回一个错误界面，在这里可以输入�
 </div>
 </div>
 
-<div id="outline-container-org731da54" class="outline-2">
-<h2 id="org731da54"><span class="section-number-2">2.</span> PIN 的产生</h2>
+<div id="outline-container-org1ba6ab6" class="outline-2">
+<h2 id="org1ba6ab6"><span class="section-number-2">2.</span> PIN 的产生</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 注意: 本文内容仅对 linux 环境负责
@@ -288,16 +288,16 @@ PIN 是将几个数值拼接在一起然后做一次 md5
 </p>
 </div>
 
-<div id="outline-container-orgc5ba1e8" class="outline-3">
-<h3 id="orgc5ba1e8"><span class="section-number-3">2.1.</span> probably_public_bits</h3>
+<div id="outline-container-org2fc1735" class="outline-3">
+<h3 id="org2fc1735"><span class="section-number-3">2.1.</span> probably_public_bits</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 这几个个信息为了保证 cookie 的可靠
 </p>
 </div>
 
-<div id="outline-container-org069766e" class="outline-4">
-<h4 id="org069766e"><span class="section-number-4">2.1.1.</span> username</h4>
+<div id="outline-container-org9a8e933" class="outline-4">
+<h4 id="org9a8e933"><span class="section-number-4">2.1.1.</span> username</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <p>
 username 使用了 getpass.getuser()
@@ -313,8 +313,8 @@ getuser 会从 LOGNAME USER LNAME USERNAME 这个几个环境变量中依次选�
 </div>
 </div>
 
-<div id="outline-container-org8f49bc8" class="outline-4">
-<h4 id="org8f49bc8"><span class="section-number-4">2.1.2.</span> modname</h4>
+<div id="outline-container-org8348d4b" class="outline-4">
+<h4 id="org8348d4b"><span class="section-number-4">2.1.2.</span> modname</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <p>
 modname 十分简单
@@ -330,8 +330,8 @@ getattr(app, "__module__", app.__class__.__module__)
 </div>
 </div>
 
-<div id="outline-container-orgb2b2bfb" class="outline-4">
-<h4 id="orgb2b2bfb"><span class="section-number-4">2.1.3.</span> app class name</h4>
+<div id="outline-container-orge033578" class="outline-4">
+<h4 id="orge033578"><span class="section-number-4">2.1.3.</span> app class name</h4>
 <div class="outline-text-4" id="text-2-1-3">
 <pre class="example">
 getattr(app, "__name__", app.__class__.__name__)
@@ -339,8 +339,8 @@ getattr(app, "__name__", app.__class__.__name__)
 </div>
 </div>
 
-<div id="outline-container-org0f395c9" class="outline-4">
-<h4 id="org0f395c9"><span class="section-number-4">2.1.4.</span> file path</h4>
+<div id="outline-container-org57554a3" class="outline-4">
+<h4 id="org57554a3"><span class="section-number-4">2.1.4.</span> file path</h4>
 <div class="outline-text-4" id="text-2-1-4">
 <pre class="example">
 mod = sys.modules.get(modname)
@@ -350,16 +350,16 @@ getattr(mod, "__file__", None)
 </div>
 </div>
 
-<div id="outline-container-org377b2bd" class="outline-3">
-<h3 id="org377b2bd"><span class="section-number-3">2.2.</span> private_bit</h3>
+<div id="outline-container-orgecfd4bf" class="outline-3">
+<h3 id="orgecfd4bf"><span class="section-number-3">2.2.</span> private_bit</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 这个两个值为了保证安全
 </p>
 </div>
 
-<div id="outline-container-orgcb47097" class="outline-4">
-<h4 id="orgcb47097"><span class="section-number-4">2.2.1.</span> uuid node</h4>
+<div id="outline-container-orgb04fcb1" class="outline-4">
+<h4 id="orgb04fcb1"><span class="section-number-4">2.2.1.</span> uuid node</h4>
 <div class="outline-text-4" id="text-2-2-1">
 <pre class="example">
 uuid.getnode()
@@ -383,8 +383,8 @@ getnode 通过硬件地址来生成一个 48 bit 的整数
 </div>
 </div>
 
-<div id="outline-container-org72231b6" class="outline-4">
-<h4 id="org72231b6"><span class="section-number-4">2.2.2.</span> machine id</h4>
+<div id="outline-container-org9b0fbb3" class="outline-4">
+<h4 id="org9b0fbb3"><span class="section-number-4">2.2.2.</span> machine id</h4>
 <div class="outline-text-4" id="text-2-2-2">
 <p>
 machine id 分为 boot 信息与 cgroup 信息
@@ -415,8 +415,8 @@ f.readline().strip().rpartition(b"/")[2]
 </div>
 </div>
 </div>
-<div id="outline-container-org4d1193a" class="outline-3">
-<h3 id="org4d1193a"><span class="section-number-3">2.3.</span> cookie name</h3>
+<div id="outline-container-orgce03b79" class="outline-3">
+<h3 id="orgce03b79"><span class="section-number-3">2.3.</span> cookie name</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 将拿到的 6 个信息依次进行拼接然后在尾部再拼接一个 b"cookiesalt" 进行一次 md5 后取 16 进制的前 20 位
@@ -428,8 +428,8 @@ f.readline().strip().rpartition(b"/")[2]
 </div>
 </div>
 
-<div id="outline-container-org44d90e0" class="outline-3">
-<h3 id="org44d90e0"><span class="section-number-3">2.4.</span> pin num</h3>
+<div id="outline-container-orge8f880f" class="outline-3">
+<h3 id="orge8f880f"><span class="section-number-3">2.4.</span> pin num</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 将上一步生成的字符串(没有 __wzd)后拼接 b"pinsalt" 后做一次 md5 
@@ -442,8 +442,8 @@ f.readline().strip().rpartition(b"/")[2]
 </div>
 </div>
 
-<div id="outline-container-org3087dbb" class="outline-2">
-<h2 id="org3087dbb"><span class="section-number-2">3.</span> PIN 的存储与检查</h2>
+<div id="outline-container-org08d745b" class="outline-2">
+<h2 id="org08d745b"><span class="section-number-2">3.</span> PIN 的存储与检查</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 PIN 值存储到 cookie 中又经过了一点处理，总不能明文保存
@@ -475,7 +475,7 @@ PIN 值存储到 cookie 中又经过了一点处理，总不能明文保存
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-08-23 Mon 09:27</p>
+<p class="date">Created: 2021-08-23 Mon 15:54</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

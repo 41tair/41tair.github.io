@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-08-23 Mon 09:27 -->
+<!-- 2021-08-23 Mon 15:54 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>How to write a simple k8s operator</title>
@@ -221,20 +221,20 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org85c69b7">1. 写在前面</a></li>
-<li><a href="#orgee4794e">2. CustomResource 与 Operator</a>
+<li><a href="#orgf5de1e6">1. 写在前面</a></li>
+<li><a href="#org60f91b3">2. CustomResource 与 Operator</a>
 <ul>
-<li><a href="#orgc1f1ab7">2.1. 为什么 Operator 离不开 CustomResource</a></li>
+<li><a href="#org6e218ae">2.1. 为什么 Operator 离不开 CustomResource</a></li>
 </ul>
 </li>
-<li><a href="#orga775814">3. 如何实现一个自定义的资源</a>
+<li><a href="#org8dad72b">3. 如何实现一个自定义的资源</a>
 <ul>
-<li><a href="#orgbeabead">3.1. CRD</a></li>
-<li><a href="#org6094984">3.2. AA (Aggregated API)</a></li>
+<li><a href="#orge6a62e6">3.1. CRD</a></li>
+<li><a href="#org9a8501e">3.2. AA (Aggregated API)</a></li>
 </ul>
 </li>
-<li><a href="#org14a374e">4. 在集群中创建一个 milvus</a></li>
-<li><a href="#orgdd101a8">5. 如何实现一个 Operator</a></li>
+<li><a href="#org8f93b48">4. 在集群中创建一个 milvus</a></li>
+<li><a href="#orgf973c56">5. 如何实现一个 Operator</a></li>
 </ul>
 </div>
 </div>
@@ -242,8 +242,8 @@
 本文参照 k8s 版本为 v.1.18
 </pre>
 
-<div id="outline-container-org85c69b7" class="outline-2">
-<h2 id="org85c69b7"><span class="section-number-2">1.</span> 写在前面</h2>
+<div id="outline-container-orgf5de1e6" class="outline-2">
+<h2 id="orgf5de1e6"><span class="section-number-2">1.</span> 写在前面</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 关于 operator 几年前已经在一篇博客中批判过了，但是到了如今 Operator 可以称的上百花齐放，脚手架都开始整上了。
@@ -275,8 +275,8 @@
 </div>
 </div>
 
-<div id="outline-container-orgee4794e" class="outline-2">
-<h2 id="orgee4794e"><span class="section-number-2">2.</span> CustomResource 与 Operator</h2>
+<div id="outline-container-org60f91b3" class="outline-2">
+<h2 id="org60f91b3"><span class="section-number-2">2.</span> CustomResource 与 Operator</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 自定义资源是 k8s API 的扩展，通过自定义资源可以使用 k8s api 来控制自己的服务
@@ -287,8 +287,8 @@ Operator 最早是 coreOS 提出的一种模式，通过代码的方式来简单
 </p>
 </div>
 
-<div id="outline-container-orgc1f1ab7" class="outline-3">
-<h3 id="orgc1f1ab7"><span class="section-number-3">2.1.</span> 为什么 Operator 离不开 CustomResource</h3>
+<div id="outline-container-org6e218ae" class="outline-3">
+<h3 id="org6e218ae"><span class="section-number-3">2.1.</span> 为什么 Operator 离不开 CustomResource</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Operators are software extensions to Kubernetes that make use of custom resources to manage applications and their components.
@@ -301,15 +301,15 @@ CustomResource 是 Operator 用来与 k8s 沟通的桥梁
 </div>
 </div>
 
-<div id="outline-container-orga775814" class="outline-2">
-<h2 id="orga775814"><span class="section-number-2">3.</span> 如何实现一个自定义的资源</h2>
+<div id="outline-container-org8dad72b" class="outline-2">
+<h2 id="org8dad72b"><span class="section-number-2">3.</span> 如何实现一个自定义的资源</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 实现一个自定义的资源有两种方式
 </p>
 </div>
-<div id="outline-container-orgbeabead" class="outline-3">
-<h3 id="orgbeabead"><span class="section-number-3">3.1.</span> CRD</h3>
+<div id="outline-container-orge6a62e6" class="outline-3">
+<h3 id="orge6a62e6"><span class="section-number-3">3.1.</span> CRD</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 下方是通过 yaml 创建的 CRD 
@@ -360,8 +360,8 @@ spec:
 </div>
 </div>
 </div>
-<div id="outline-container-org6094984" class="outline-3">
-<h3 id="org6094984"><span class="section-number-3">3.2.</span> AA (Aggregated API)</h3>
+<div id="outline-container-org9a8501e" class="outline-3">
+<h3 id="org9a8501e"><span class="section-number-3">3.2.</span> AA (Aggregated API)</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 CRD 是将资源注册到 k8s 当中，AA 则是将自定义的资源放到自己实现的 API Server 中
@@ -377,8 +377,8 @@ AA 可以提供更丰富的功能，可以看作独立实现的 API 服务，提
 </div>
 </div>
 </div>
-<div id="outline-container-org14a374e" class="outline-2">
-<h2 id="org14a374e"><span class="section-number-2">4.</span> 在集群中创建一个 milvus</h2>
+<div id="outline-container-org8f93b48" class="outline-2">
+<h2 id="org8f93b48"><span class="section-number-2">4.</span> 在集群中创建一个 milvus</h2>
 <div class="outline-text-2" id="text-4">
 <div class="org-src-container">
 <pre class="src src-yaml">apiVersion: "zilliz.com/v1"
@@ -393,8 +393,8 @@ spec:
 </div>
 </div>
 
-<div id="outline-container-orgdd101a8" class="outline-2">
-<h2 id="orgdd101a8"><span class="section-number-2">5.</span> 如何实现一个 Operator</h2>
+<div id="outline-container-orgf973c56" class="outline-2">
+<h2 id="orgf973c56"><span class="section-number-2">5.</span> 如何实现一个 Operator</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 在实现一个 operator 之前先想一个问题，这个 operator 的功能，这一次我们要做的是最简单的一个功能
@@ -483,7 +483,7 @@ func milvusList(client dynamic.Interface) []unstructured.Unstructured{
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-08-23 Mon 09:27</p>
+<p class="date">Created: 2021-08-23 Mon 15:54</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
