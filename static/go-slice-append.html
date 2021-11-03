@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-09-01 Wed 06:27 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2021-11-03 Wed 03:02 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>append to a slice in go</title>
-<meta name="generator" content="Org mode">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -28,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -38,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -188,51 +189,28 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 </head>
 <body>
-<div id="content">
+<div id="content" class="content">
 <h1 class="title">append to a slice in go</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgaab4776">1. 一段非常简单的代码</a></li>
-<li><a href="#org4b35f37">2. 在 append 之前先来看看 slice 本来面目</a></li>
-<li><a href="#orgf7be749">3. append 究竟做了什么</a></li>
-<li><a href="#org933ad46">4. 一句话讲完系列</a></li>
+<li><a href="#org24d95af">1. 一段非常简单的代码</a></li>
+<li><a href="#org34af694">2. 在 append 之前先来看看 slice 本来面目</a></li>
+<li><a href="#orgbb8cccf">3. append 究竟做了什么</a></li>
+<li><a href="#org9035029">4. 一句话讲完系列</a></li>
 </ul>
 </div>
 </div>
 <pre class="example">
 本文操作 go 版本为 1.15.1
 </pre>
-<div id="outline-container-orgaab4776" class="outline-2">
-<h2 id="orgaab4776"><span class="section-number-2">1.</span> 一段非常简单的代码</h2>
+<div id="outline-container-org24d95af" class="outline-2">
+<h2 id="org24d95af"><span class="section-number-2">1.</span> 一段非常简单的代码</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 <img src="https://live.staticflickr.com/65535/50586599808_4cbf6ba699_h.jpg" alt="50586599808_4cbf6ba699_h.jpg">
@@ -240,7 +218,7 @@
 </p>
 
 
-<div id="org3c45cdb" class="figure">
+<div id="org587031c" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50587343766_ac6a85c7ca_h.jpg" alt="50587343766_ac6a85c7ca_h.jpg">
 </p>
 </div>
@@ -251,11 +229,11 @@
 </div>
 </div>
 
-<div id="outline-container-org4b35f37" class="outline-2">
-<h2 id="org4b35f37"><span class="section-number-2">2.</span> 在 append 之前先来看看 slice 本来面目</h2>
+<div id="outline-container-org34af694" class="outline-2">
+<h2 id="org34af694"><span class="section-number-2">2.</span> 在 append 之前先来看看 slice 本来面目</h2>
 <div class="outline-text-2" id="text-2">
 
-<div id="org4869eda" class="figure">
+<div id="org85f97f3" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50586599823_6fab39125a.jpg" alt="50586599823_6fab39125a.jpg">
 </p>
 </div>
@@ -273,15 +251,15 @@ cap 是 slice 容量
 </p>
 
 
-<div id="orgde6c2fc" class="figure">
+<div id="orgd62c632" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50587464757_648e3d8086_h.jpg" alt="50587464757_648e3d8086_h.jpg">
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgf7be749" class="outline-2">
-<h2 id="orgf7be749"><span class="section-number-2">3.</span> append 究竟做了什么</h2>
+<div id="outline-container-orgbb8cccf" class="outline-2">
+<h2 id="orgbb8cccf"><span class="section-number-2">3.</span> append 究竟做了什么</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 先看看 append 做了什么事情
@@ -352,8 +330,8 @@ append 的实现在<a href="https://github.com/golang/go/blob/1c7650aa93bd53b7df
 </p>
 </div>
 </div>
-<div id="outline-container-org933ad46" class="outline-2">
-<h2 id="org933ad46"><span class="section-number-2">4.</span> 一句话讲完系列</h2>
+<div id="outline-container-org9035029" class="outline-2">
+<h2 id="org9035029"><span class="section-number-2">4.</span> 一句话讲完系列</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 append 有点坑，并不是真的向尾添加，而是根据当前的指针移动位置，改写底层数组的下标
@@ -362,7 +340,7 @@ append 有点坑，并不是真的向尾添加，而是根据当前的指针移�
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-09-01 Wed 06:27</p>
+<p class="date">Created: 2021-11-03 Wed 03:02</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

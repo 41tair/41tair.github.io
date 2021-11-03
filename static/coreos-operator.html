@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-09-01 Wed 06:26 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2021-11-03 Wed 03:01 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Coreos Operator</title>
-<meta name="generator" content="Org mode">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -28,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -38,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -188,53 +189,30 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 </head>
 <body>
-<div id="content">
+<div id="content" class="content">
 <h1 class="title">Coreos Operator</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgc288712">1. 零</a></li>
-<li><a href="#orge5a4850">2. 一</a></li>
-<li><a href="#org7937130">3. 二</a></li>
-<li><a href="#org970ca9e">4. 三</a></li>
-<li><a href="#orgb2473e8">5. 四</a></li>
-<li><a href="#org47ee423">6. 五</a></li>
-<li><a href="#org35a6487">7. 六</a></li>
-<li><a href="#org8797877">8. 七</a></li>
-<li><a href="#org303ba5d">9. 参考资料</a></li>
+<li><a href="#orga7b33be">1. 零</a></li>
+<li><a href="#org8834e37">2. 一</a></li>
+<li><a href="#org5c25e21">3. 二</a></li>
+<li><a href="#orgfed6623">4. 三</a></li>
+<li><a href="#org080f7dd">5. 四</a></li>
+<li><a href="#orgf42a9e1">6. 五</a></li>
+<li><a href="#org28289de">7. 六</a></li>
+<li><a href="#orge8646ce">8. 七</a></li>
+<li><a href="#org33532af">9. 参考资料</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc288712" class="outline-2">
-<h2 id="orgc288712"><span class="section-number-2">1.</span> 零</h2>
+<div id="outline-container-orga7b33be" class="outline-2">
+<h2 id="orga7b33be"><span class="section-number-2">1.</span> 零</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Operator 是什么?
@@ -245,8 +223,8 @@ Operator 是什么?
 </p>
 </div>
 </div>
-<div id="outline-container-orge5a4850" class="outline-2">
-<h2 id="orge5a4850"><span class="section-number-2">2.</span> 一</h2>
+<div id="outline-container-org8834e37" class="outline-2">
+<h2 id="org8834e37"><span class="section-number-2">2.</span> 一</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 目前的 operator 是一个处于实验性、尚不成熟的运维经验流程化的方法论
@@ -254,8 +232,8 @@ Operator 是什么?
 </div>
 </div>
 
-<div id="outline-container-org7937130" class="outline-2">
-<h2 id="org7937130"><span class="section-number-2">3.</span> 二</h2>
+<div id="outline-container-org5c25e21" class="outline-2">
+<h2 id="org5c25e21"><span class="section-number-2">3.</span> 二</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 operator 在文档中描述的能力:
@@ -274,8 +252,8 @@ operator 在文档中描述的能力:
 </div>
 </div>
 
-<div id="outline-container-org970ca9e" class="outline-2">
-<h2 id="org970ca9e"><span class="section-number-2">4.</span> 三</h2>
+<div id="outline-container-orgfed6623" class="outline-2">
+<h2 id="orgfed6623"><span class="section-number-2">4.</span> 三</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 拿 etcd-operator 来说，他实际上做了什么呢
@@ -331,8 +309,8 @@ operator 在文档中描述的能力:
 </div>
 </div>
 
-<div id="outline-container-orgb2473e8" class="outline-2">
-<h2 id="orgb2473e8"><span class="section-number-2">5.</span> 四</h2>
+<div id="outline-container-org080f7dd" class="outline-2">
+<h2 id="org080f7dd"><span class="section-number-2">5.</span> 四</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 可能会有人认为,太多的自定义需求只要实现一个符合自己需求的 operator 不就可以了吗？
@@ -356,8 +334,8 @@ operator 在文档中描述的能力:
 </div>
 </div>
 
-<div id="outline-container-org47ee423" class="outline-2">
-<h2 id="org47ee423"><span class="section-number-2">6.</span> 五</h2>
+<div id="outline-container-orgf42a9e1" class="outline-2">
+<h2 id="orgf42a9e1"><span class="section-number-2">6.</span> 五</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 假设有这样一个人，有着丰富的运维经验，又愿意遵循着这样的规范来完成一个 operator
@@ -389,8 +367,8 @@ B.你要先明白这个服务的配置文件该怎么写
 </div>
 </div>
 
-<div id="outline-container-org35a6487" class="outline-2">
-<h2 id="org35a6487"><span class="section-number-2">7.</span> 六</h2>
+<div id="outline-container-org28289de" class="outline-2">
+<h2 id="org28289de"><span class="section-number-2">7.</span> 六</h2>
 <div class="outline-text-2" id="text-7">
 <p>
 operator 最大的矛盾是减少运维学习成本与保障服务稳定必须足够了解之间的矛盾
@@ -426,8 +404,8 @@ operator 在以一种开发人员的视角做运维人员的工具
 </div>
 </div>
 
-<div id="outline-container-org8797877" class="outline-2">
-<h2 id="org8797877"><span class="section-number-2">8.</span> 七</h2>
+<div id="outline-container-orge8646ce" class="outline-2">
+<h2 id="orge8646ce"><span class="section-number-2">8.</span> 七</h2>
 <div class="outline-text-2" id="text-8">
 <p>
 有时间搞这些有的没的，不如多加两个监控告警实在
@@ -435,8 +413,8 @@ operator 在以一种开发人员的视角做运维人员的工具
 </div>
 </div>
 
-<div id="outline-container-org303ba5d" class="outline-2">
-<h2 id="org303ba5d"><span class="section-number-2">9.</span> 参考资料</h2>
+<div id="outline-container-org33532af" class="outline-2">
+<h2 id="org33532af"><span class="section-number-2">9.</span> 参考资料</h2>
 <div class="outline-text-2" id="text-9">
 <p>
 <a href="https://coreos.com/operators/">https://coreos.com/operators/</a>
@@ -477,7 +455,7 @@ operator 在以一种开发人员的视角做运维人员的工具
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-09-01 Wed 06:26</p>
+<p class="date">Created: 2021-11-03 Wed 03:01</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-09-01 Wed 06:26 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Docker source code(0)</title>
-<meta name="generator" content="Org mode">
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<!-- 2021-11-03 Wed 03:01 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Docker source code(0) &#x2013; overview</title>
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -28,8 +28,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -38,21 +39,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
   pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -188,48 +189,25 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:1f739d935676111cfff4b4693e3816e664797050&amp;dn=gpl-3.0.txt GPL-v3-or-Later
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
 </head>
 <body>
-<div id="content">
-<h1 class="title">Docker source code(0)</h1>
-<div id="table-of-contents">
+<div id="content" class="content">
+<h1 class="title">Docker source code(0) &#x2013; overview</h1>
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgd6fd26a">1. 概述</a></li>
-<li><a href="#org63d51d6">2. 基础知识</a></li>
-<li><a href="#orgba0433b">3. 目录</a></li>
+<li><a href="#org93fb89c">1. 概述</a></li>
+<li><a href="#orga41e209">2. 基础知识</a></li>
+<li><a href="#org3976ea2">3. 目录</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgd6fd26a" class="outline-2">
-<h2 id="orgd6fd26a"><span class="section-number-2">1.</span> 概述</h2>
+<div id="outline-container-org93fb89c" class="outline-2">
+<h2 id="org93fb89c"><span class="section-number-2">1.</span> 概述</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 由于种种原因 Docker 的代码被放在不同的仓库中,看 Docker 代码第一件事情就是要找对仓库, 才能顺藤摸瓜把代码看完
@@ -282,8 +260,8 @@
 </div>
 
 
-<div id="outline-container-org63d51d6" class="outline-2">
-<h2 id="org63d51d6"><span class="section-number-2">2.</span> 基础知识</h2>
+<div id="outline-container-orga41e209" class="outline-2">
+<h2 id="orga41e209"><span class="section-number-2">2.</span> 基础知识</h2>
 <div class="outline-text-2" id="text-2">
 <ol class="org-ol">
 <li>go 基础语法</li>
@@ -294,8 +272,8 @@
 </div>
 
 
-<div id="outline-container-orgba0433b" class="outline-2">
-<h2 id="orgba0433b"><span class="section-number-2">3.</span> 目录</h2>
+<div id="outline-container-org3976ea2" class="outline-2">
+<h2 id="org3976ea2"><span class="section-number-2">3.</span> 目录</h2>
 <div class="outline-text-2" id="text-3">
 <ol class="org-ol">
 <li>Container</li>
@@ -309,7 +287,7 @@
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-09-01 Wed 06:26</p>
+<p class="date">Created: 2021-11-03 Wed 03:01</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
