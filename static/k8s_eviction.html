@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-11-03 Wed 03:02 -->
+<!-- 2022-01-06 Thu 02:51 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>kubernetes eviction</title>
@@ -199,19 +199,19 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org31ae811">1. 前言</a></li>
-<li><a href="#orgbd87990">2. 资料</a></li>
-<li><a href="#org5738ced">3. 代码详解</a>
+<li><a href="#orgdc2145e">1. 前言</a></li>
+<li><a href="#orgc3d4f04">2. 资料</a></li>
+<li><a href="#org95f0c5a">3. 代码详解</a>
 <ul>
-<li><a href="#org71f5a49">3.1. 代码参考</a></li>
-<li><a href="#org34439dc">3.2. 详解</a></li>
+<li><a href="#org459bb78">3.1. 代码参考</a></li>
+<li><a href="#org72a5362">3.2. 详解</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org31ae811" class="outline-2">
-<h2 id="org31ae811"><span class="section-number-2">1.</span> 前言</h2>
+<div id="outline-container-orgdc2145e" class="outline-2">
+<h2 id="orgdc2145e"><span class="section-number-2">1.</span> 前言</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 在某些情况下 k8s 会出现 evicted 的 pod, 然而这并不在 <a href="https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/">pod 的生命周期</a>中.这就是 k8s 的驱逐机制。
@@ -223,8 +223,8 @@
 </div>
 </div>
 
-<div id="outline-container-orgbd87990" class="outline-2">
-<h2 id="orgbd87990"><span class="section-number-2">2.</span> 资料</h2>
+<div id="outline-container-orgc3d4f04" class="outline-2">
+<h2 id="orgc3d4f04"><span class="section-number-2">2.</span> 资料</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 可以在 <a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/">这里看到相关资料</a>
@@ -236,12 +236,12 @@
 </div>
 </div>
 
-<div id="outline-container-org5738ced" class="outline-2">
-<h2 id="org5738ced"><span class="section-number-2">3.</span> 代码详解</h2>
+<div id="outline-container-org95f0c5a" class="outline-2">
+<h2 id="org95f0c5a"><span class="section-number-2">3.</span> 代码详解</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org71f5a49" class="outline-3">
-<h3 id="org71f5a49"><span class="section-number-3">3.1.</span> 代码参考</h3>
+<div id="outline-container-org459bb78" class="outline-3">
+<h3 id="org459bb78"><span class="section-number-3">3.1.</span> 代码参考</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 <a href="https://github.com/kubernetes/kubernetes/tree/release-1.10">kubernetes release-1.10</a>
@@ -249,15 +249,15 @@
 </div>
 </div>
 
-<div id="outline-container-org34439dc" class="outline-3">
-<h3 id="org34439dc"><span class="section-number-3">3.2.</span> 详解</h3>
+<div id="outline-container-org72a5362" class="outline-3">
+<h3 id="org72a5362"><span class="section-number-3">3.2.</span> 详解</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 pkg/kubelet/apis/kubeletconfig/v1beta/default.go 
 </p>
 
 
-<div id="orgc510dc6" class="figure">
+<div id="org0cd846d" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7908/32722122718_1572e6d5f8_b.jpg" alt="32722122718_1572e6d5f8_b.jpg">
 </p>
 </div>
@@ -271,7 +271,7 @@ pkg/kubelet/kubelet.go
 </p>
 
 
-<div id="orgf5a33ec" class="figure">
+<div id="orge299cfa" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7841/45682032475_c351bb5a24_b.jpg" alt="45682032475_c351bb5a24_b.jpg">
 </p>
 </div>
@@ -289,7 +289,7 @@ kubelte 初始化了 eviction manager
 </p>
 
 
-<div id="orgc797bc7" class="figure">
+<div id="orgc9df109" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4911/46544499692_f17b40623e_b.jpg" alt="46544499692_f17b40623e_b.jpg">
 </p>
 </div>
@@ -312,7 +312,7 @@ pkg/kubelet/eviction/eviction<sub>manager.go</sub>
 </p>
 
 
-<div id="orga2dd1b8" class="figure">
+<div id="orgc42f2c2" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4833/45682035215_2626ecb6e8_b.jpg" alt="45682035215_2626ecb6e8_b.jpg">
 </p>
 </div>
@@ -342,7 +342,7 @@ synchronize 中仅用到了 HasDedicatedImageFs
 </p>
 
 
-<div id="orgac80421" class="figure">
+<div id="org731e087" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7904/45682036895_fecd046501_b.jpg" alt="45682036895_fecd046501_b.jpg">
 </p>
 </div>
@@ -352,7 +352,7 @@ podFunc 用来获取一个待检查的 pod 列表，实际函数在  pkg/kubelet
 </p>
 
 
-<div id="org1d26a35" class="figure">
+<div id="orga149601" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4882/45682037835_a61dbf97f4_z.jpg" alt="45682037835_a61dbf97f4_z.jpg">
 </p>
 </div>
@@ -366,7 +366,7 @@ podFunc 用来获取一个待检查的 pod 列表，实际函数在  pkg/kubelet
 </p>
 
 
-<div id="orgb398cac" class="figure">
+<div id="org4f1252c" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7916/45682038825_801ed86d5b_b.jpg" alt="45682038825_801ed86d5b_b.jpg">
 </p>
 </div>
@@ -376,7 +376,7 @@ summaryProvider 的实际函数在 /pkg/kubelet/server/stats/summary.go
 </p>
 
 
-<div id="org1026601" class="figure">
+<div id="org5bdc45b" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7912/45682039865_44700d76bc_b.jpg" alt="45682039865_44700d76bc_b.jpg">
 </p>
 </div>
@@ -386,7 +386,7 @@ summaryProvider 的实际函数在 /pkg/kubelet/server/stats/summary.go
 </p>
 
 
-<div id="org3f4b6e4" class="figure">
+<div id="orgf9baebe" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7897/45682040825_feceda2ba5_b.jpg" alt="45682040825_feceda2ba5_b.jpg">
 </p>
 </div>
@@ -400,13 +400,13 @@ summaryProvider 的实际函数在 /pkg/kubelet/server/stats/summary.go
 </p>
 
 
-<div id="org215465f" class="figure">
+<div id="orgb2b1678" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7867/44778622920_332cbcf3bc_b.jpg" alt="44778622920_332cbcf3bc_b.jpg">
 </p>
 </div>
 
 
-<div id="orgfa50c9d" class="figure">
+<div id="org3c3584a" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7841/44778624040_7edf283c68_b.jpg" alt="44778624040_7edf283c68_b.jpg">
 </p>
 </div>
@@ -416,7 +416,7 @@ summaryProvider 的实际函数在 /pkg/kubelet/server/stats/summary.go
 </p>
 
 
-<div id="org24451cb" class="figure">
+<div id="org71ebd45" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4888/44778625000_42d002c4c0_b.jpg" alt="44778625000_42d002c4c0_b.jpg">
 </p>
 </div>
@@ -431,13 +431,13 @@ summaryProvider 的实际函数在 /pkg/kubelet/server/stats/summary.go
 
 
 
-<div id="orgf5f3f4a" class="figure">
+<div id="org2f2d7de" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4817/45682044695_544c531a82_b.jpg" alt="45682044695_544c531a82_b.jpg">
 </p>
 </div>
 
 
-<div id="org4c5c5f6" class="figure">
+<div id="orgf2689e9" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7839/45872227604_35e54ffcd8_b.jpg" alt="45872227604_35e54ffcd8_b.jpg">
 </p>
 </div>
@@ -448,7 +448,7 @@ summaryProvider 的实际函数在 /pkg/kubelet/server/stats/summary.go
 </p>
 
 
-<div id="org117109d" class="figure">
+<div id="orgcda1b64" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7914/45872228614_39e7c7b276_b.jpg" alt="45872228614_39e7c7b276_b.jpg">
 </p>
 </div>
@@ -459,7 +459,7 @@ summaryProvider 的实际函数在 /pkg/kubelet/server/stats/summary.go
 </p>
 
 
-<div id="orge3833ee" class="figure">
+<div id="orgb3033cd" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7868/32722130918_16e98fe221_b.jpg" alt="32722130918_16e98fe221_b.jpg">
 </p>
 </div>
@@ -473,7 +473,7 @@ summaryProvider 的实际函数在 /pkg/kubelet/server/stats/summary.go
 </p>
 
 
-<div id="orgd90c301" class="figure">
+<div id="org4c4bf81" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7860/32722131298_ce32ac6e3e_b.jpg" alt="32722131298_ce32ac6e3e_b.jpg">
 </p>
 </div>
@@ -494,7 +494,7 @@ summaryProvider 的实际函数在 /pkg/kubelet/server/stats/summary.go
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2021-11-03 Wed 03:02</p>
+<p class="date">Created: 2022-01-06 Thu 02:51</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

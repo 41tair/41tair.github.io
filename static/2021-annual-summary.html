@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-06 Thu 02:51 -->
+<!-- 2022-01-06 Thu 02:50 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Prometheus Node Exporter</title>
+<title>2021 Annual Summary</title>
 <meta name="generator" content="Org Mode" />
 <style>
   #content { max-width: 60em; margin: auto; }
@@ -194,80 +194,133 @@
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Prometheus Node Exporter</h1>
+<h1 class="title">2021 Annual Summary</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgabf71da">1. Prometheus Node Exporter</a></li>
-<li><a href="#orgb71c325">2. Collector 的工作原理</a></li>
-<li><a href="#org9bb866a">3. Node Exporter 对照表</a></li>
+<li><a href="#org28d76aa">1. 2021 年度总结</a></li>
+<li><a href="#orgda77160">2. 焦虑的来源</a></li>
+<li><a href="#org4a2a322">3. 沟通不畅</a></li>
+<li><a href="#orgc81050c">4. 业余爱好</a></li>
+<li><a href="#orgc3d329b">5. 2022?</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgabf71da" class="outline-2">
-<h2 id="orgabf71da"><span class="section-number-2">1.</span> Prometheus Node Exporter</h2>
+
+<div id="outline-container-org28d76aa" class="outline-2">
+<h2 id="org28d76aa"><span class="section-number-2">1.</span> 2021 年度总结</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-本文使用代码: 83dd27b
+2021 是荒废的一年,总的来说 2021 在温水里泡着,持续性的懒惰与间接性的发奋图强。
 </p>
 
 <p>
-node exporter 的启动参数有很多,都是在启动时注入进去,方便控制哪些 collector 启用,哪些 collector 不启用.
-主要逻辑在 collector.go L:60  registerCollector 这个函数中
+一年下来好像没正经的看过几本书,倒是欠了好几本
 </p>
 
-<div class="org-src-container">
-<pre class="src src-go">func registerCollector(collector string, isDefaultEnabled bool, factory func(logger log.Logger) (Collector, error)) {
-	var helpDefaultState string
-	if isDefaultEnabled {
-		helpDefaultState = "enabled"
-	} else {
-		helpDefaultState = "disabled"
-	}
+<p>
+TCP/IP 详解卷一 看了两章，linux 汇编也是开了个头。
+</p>
 
-	flagName := fmt.Sprintf("collector.%s", collector)
-	flagHelp := fmt.Sprintf("Enable the %s collector (default: %s).", collector, helpDefaultState)
-	defaultValue := fmt.Sprintf("%v", isDefaultEnabled)
+<p>
+刷 NGA 的时间都比看书时间多,不得不让人反思,时间这么重要的资源为什么会被轻易的浪费。
+</p>
 
-	flag := kingpin.Flag(flagName, flagHelp).Default(defaultValue).Action(collectorFlagAction(collector)).Bool()
-	collectorState[collector] = flag
+<p>
+还是在温水里泡的太久,整个人都是懒洋洋的状态,似乎生活就和情景剧一样一集又一集的过去,然后屁用没有。
+</p>
 
-	factories[collector] = factory
-}
-</pre>
-</div>
+<p>
+现在想起老金说的可以钱多但是不能事少,确实还是十分有道理的。
+</p>
 </div>
 </div>
 
-<div id="outline-container-orgb71c325" class="outline-2">
-<h2 id="orgb71c325"><span class="section-number-2">2.</span> Collector 的工作原理</h2>
+<div id="outline-container-orgda77160" class="outline-2">
+<h2 id="orgda77160"><span class="section-number-2">2.</span> 焦虑的来源</h2>
 <div class="outline-text-2" id="text-2">
 <p>
-collector 通过读系统中的信息来然后包装成 prometheus 可以读的格式.所以本质上就是一个读文件然后接受请求的 web server
+一切的恐惧都来源于火力不足,反思了一下自己焦虑的主要来源无外乎一下几点
+</p>
+
+<ul class="org-ul">
+<li>缺少存款</li>
+<li>浪费了时间</li>
+<li>看不到未来</li>
+</ul>
+
+<p>
+更多的焦虑是来自于内心,对前途未知的恐慌。不清楚做的事情是否有意义,不愿意为了一件事情去投入巨大的时间并承受伴生的痛苦。
 </p>
 
 <p>
-主要是读取 /proc 与 /sys 下的信息
-</p>
-
-<p>
-总的来说 node exporter 是一个功能很简单同时也很稳定的程序
+简单来说: 又当又立
 </p>
 </div>
 </div>
 
-<div id="outline-container-org9bb866a" class="outline-2">
-<h2 id="org9bb866a"><span class="section-number-2">3.</span> Node Exporter 对照表</h2>
+<div id="outline-container-org4a2a322" class="outline-2">
+<h2 id="org4a2a322"><span class="section-number-2">3.</span> 沟通不畅</h2>
 <div class="outline-text-2" id="text-3">
 <p>
-<a href="https://songjiayang.gitbooks.io/prometheus/content/exporter/nodeexporter.html">直接看这个</a>
+人和人的差距有时候比人和猴子还大,都不谈高效沟通,有效的沟通都很难得。要么是单方面输出,要么是各执一词,沟通真是一个费力的事情。
+</p>
+
+<p>
+今年碰到沟通不畅的问题大多数时是转身就走,但是好像也没有想象中的那么开心。
+</p>
+
+<p>
+拒绝沟通多了,总有一天要爆发出来,得像个办法疏解一下。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc81050c" class="outline-2">
+<h2 id="orgc81050c"><span class="section-number-2">4.</span> 业余爱好</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+如果有什么事情可以把我七点钟从周末的床上拽起来,那么只有烤肉了。
+</p>
+
+<p>
+今年开始玩美式烤肉,主要是低温慢烤和烟熏.羊排、羊腿、战斧、牛排、猪肋、五花、整鸡、鸡翅都烤了一遍。现在对温度、炭、烟熏木都有了一定的心得。
+</p>
+
+<p>
+这应该算是今年为数不多可以让自己感受到快乐的东西了。
+</p>
+
+<p>
+因为自己烤还去了几家美式 BBQ 的店,每次都是乘兴而来,败兴而归。唯一的感受就是 up 主说的话真的不能信太多。
+</p>
+
+<p>
+2021 也没什么好玩的游戏, LGD 成功获得 TI10 亚军。这个 2021 我是一天都不想呆了,到了 2022 还不是一样？
+</p>
+
+<p>
+这样的庆祝度过了某段特定时间的节日真的不是为了摸鱼强行创造的？
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc3d329b" class="outline-2">
+<h2 id="orgc3d329b"><span class="section-number-2">5.</span> 2022?</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+狗日的 2022 还是别来了。
+</p>
+
+<p>
+来都来了, 希望今年可以多干点有意思的事情吧。
 </p>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2022-01-06 Thu 02:51</p>
+<p class="date">Created: 2022-01-06 Thu 02:50</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
