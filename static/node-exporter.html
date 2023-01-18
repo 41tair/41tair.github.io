@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-06 Thu 02:51 -->
+<!-- 2023-01-18 Wed 11:02 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Prometheus Node Exporter</title>
@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
 </head>
@@ -199,14 +199,14 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgabf71da">1. Prometheus Node Exporter</a></li>
-<li><a href="#orgb71c325">2. Collector 的工作原理</a></li>
-<li><a href="#org9bb866a">3. Node Exporter 对照表</a></li>
+<li><a href="#org4cec428">1. Prometheus Node Exporter</a></li>
+<li><a href="#orgd4cf2a8">2. Collector 的工作原理</a></li>
+<li><a href="#org287db87">3. Node Exporter 对照表</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgabf71da" class="outline-2">
-<h2 id="orgabf71da"><span class="section-number-2">1.</span> Prometheus Node Exporter</h2>
+<div id="outline-container-org4cec428" class="outline-2">
+<h2 id="org4cec428"><span class="section-number-2">1.</span> Prometheus Node Exporter</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 本文使用代码: 83dd27b
@@ -240,8 +240,8 @@ node exporter 的启动参数有很多,都是在启动时注入进去,方便控�
 </div>
 </div>
 
-<div id="outline-container-orgb71c325" class="outline-2">
-<h2 id="orgb71c325"><span class="section-number-2">2.</span> Collector 的工作原理</h2>
+<div id="outline-container-orgd4cf2a8" class="outline-2">
+<h2 id="orgd4cf2a8"><span class="section-number-2">2.</span> Collector 的工作原理</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 collector 通过读系统中的信息来然后包装成 prometheus 可以读的格式.所以本质上就是一个读文件然后接受请求的 web server
@@ -257,8 +257,8 @@ collector 通过读系统中的信息来然后包装成 prometheus 可以读的�
 </div>
 </div>
 
-<div id="outline-container-org9bb866a" class="outline-2">
-<h2 id="org9bb866a"><span class="section-number-2">3.</span> Node Exporter 对照表</h2>
+<div id="outline-container-org287db87" class="outline-2">
+<h2 id="org287db87"><span class="section-number-2">3.</span> Node Exporter 对照表</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 <a href="https://songjiayang.gitbooks.io/prometheus/content/exporter/nodeexporter.html">直接看这个</a>
@@ -267,7 +267,7 @@ collector 通过读系统中的信息来然后包装成 prometheus 可以读的�
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2022-01-06 Thu 02:51</p>
+<p class="date">Created: 2023-01-18 Wed 11:02</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

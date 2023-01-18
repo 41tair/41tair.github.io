@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-06 Thu 02:51 -->
+<!-- 2023-01-18 Wed 11:02 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>kubernetes cloud controller manager</title>
@@ -188,7 +188,7 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
 </head>
@@ -199,24 +199,24 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org272ecd7">1. 什么是 cloud controller manager(ccm)</a></li>
-<li><a href="#orgcd02f03">2. 能用 ccm 干什么</a>
+<li><a href="#org5f30efc">1. 什么是 cloud controller manager(ccm)</a></li>
+<li><a href="#org03956d1">2. 能用 ccm 干什么</a>
 <ul>
-<li><a href="#orgbe9226b">2.1. 现有的 ccm</a>
+<li><a href="#org4db04ed">2.1. 现有的 ccm</a>
 <ul>
-<li><a href="#orgd58fea5">2.1.1. In Tree</a></li>
-<li><a href="#orgc089847">2.1.2. Out of Tree</a></li>
+<li><a href="#org1f24333">2.1.1. In Tree</a></li>
+<li><a href="#org72ee33a">2.1.2. Out of Tree</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org4f4e70c">3. 如何实现一个 ccm</a></li>
-<li><a href="#org9e64c07">4. ccm 背后的秘密</a>
+<li><a href="#orgdcecda2">3. 如何实现一个 ccm</a></li>
+<li><a href="#orgd6e5810">4. ccm 背后的秘密</a>
 <ul>
-<li><a href="#org97dfa88">4.1. Out of Tree ccm 如何工作</a></li>
+<li><a href="#org7b2d914">4.1. Out of Tree ccm 如何工作</a></li>
 </ul>
 </li>
-<li><a href="#orgfbcd98a">5. 参考链接</a></li>
+<li><a href="#orge9180f8">5. 参考链接</a></li>
 </ul>
 </div>
 </div>
@@ -224,8 +224,8 @@
 本文所有代码基于 1.16.0-alpha.2 commit: bdde11a664
 所以引用文档版本为 1.15.0
 </pre>
-<div id="outline-container-org272ecd7" class="outline-2">
-<h2 id="org272ecd7"><span class="section-number-2">1.</span> 什么是 cloud controller manager(ccm)</h2>
+<div id="outline-container-org5f30efc" class="outline-2">
+<h2 id="org5f30efc"><span class="section-number-2">1.</span> 什么是 cloud controller manager(ccm)</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 在说 ccm 之前要了解一个 ccm 的前身 &#x2013; cloud provider
@@ -244,8 +244,8 @@ cloud provider 是为了 k8s 更加容易在公有云环境下而提出的一个
 </p>
 </div>
 </div>
-<div id="outline-container-orgcd02f03" class="outline-2">
-<h2 id="orgcd02f03"><span class="section-number-2">2.</span> 能用 ccm 干什么</h2>
+<div id="outline-container-org03956d1" class="outline-2">
+<h2 id="org03956d1"><span class="section-number-2">2.</span> 能用 ccm 干什么</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 在思索 ccm 可以做什么时，要思考一个问题：kubernetes 的核心价值在于哪里?
@@ -304,15 +304,15 @@ HasClusterID() bool
 每当用户通过 k8s 创建一个资源的时候，可以同时对云主机运行的实例进行相应更改
 </p>
 </div>
-<div id="outline-container-orgbe9226b" class="outline-3">
-<h3 id="orgbe9226b"><span class="section-number-3">2.1.</span> 现有的 ccm</h3>
+<div id="outline-container-org4db04ed" class="outline-3">
+<h3 id="org4db04ed"><span class="section-number-3">2.1.</span> 现有的 ccm</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 ccm 目前被分为两种类型: In Tree/Out of Tree
 </p>
 </div>
-<div id="outline-container-orgd58fea5" class="outline-4">
-<h4 id="orgd58fea5"><span class="section-number-4">2.1.1.</span> In Tree</h4>
+<div id="outline-container-org1f24333" class="outline-4">
+<h4 id="org1f24333"><span class="section-number-4">2.1.1.</span> In Tree</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <p>
 In Tree 指的是在包含在 kubernetes 代码中的 cloud provider
@@ -340,35 +340,35 @@ In Tree 的代表厂商
 </div>
 
 <ol class="org-ol">
-<li><a id="org95cbf35"></a>AWS<br>
+<li><a id="org461758c"></a>AWS<br>
 <div class="outline-text-5" id="text-2-1-1-1">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-aws">https://github.com/kubernetes/cloud-provider-aws</a>
 </p>
 </div>
 </li>
-<li><a id="orga4e8a7e"></a>GCE<br>
+<li><a id="org0c9da39"></a>GCE<br>
 <div class="outline-text-5" id="text-2-1-1-2">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-gcp">https://github.com/kubernetes/cloud-provider-gcp</a>
 </p>
 </div>
 </li>
-<li><a id="orgebb4a19"></a>OpenStack<br>
+<li><a id="org15ab7ad"></a>OpenStack<br>
 <div class="outline-text-5" id="text-2-1-1-3">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-openstack">https://github.com/kubernetes/cloud-provider-openstack</a>
 </p>
 </div>
 </li>
-<li><a id="org429e6eb"></a>Azure<br>
+<li><a id="orgaf00853"></a>Azure<br>
 <div class="outline-text-5" id="text-2-1-1-4">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-azure">https://github.com/kubernetes/cloud-provider-azure</a>
 </p>
 </div>
 </li>
-<li><a id="orgdf42a14"></a>vSphere<br>
+<li><a id="org5d018fd"></a>vSphere<br>
 <div class="outline-text-5" id="text-2-1-1-5">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-vsphere">https://github.com/kubernetes/cloud-provider-vsphere</a>
@@ -377,8 +377,8 @@ In Tree 的代表厂商
 </li>
 </ol>
 </div>
-<div id="outline-container-orgc089847" class="outline-4">
-<h4 id="orgc089847"><span class="section-number-4">2.1.2.</span> Out of Tree</h4>
+<div id="outline-container-org72ee33a" class="outline-4">
+<h4 id="org72ee33a"><span class="section-number-4">2.1.2.</span> Out of Tree</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <p>
 Out of Tree 指的就是那些不在 kubernetes 代码当中的(没赶上车或社区内的方案)
@@ -393,21 +393,21 @@ Out of Tree 的代表
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org43403dc"></a>DigitalOcean<br>
+<li><a id="org2cb829d"></a>DigitalOcean<br>
 <div class="outline-text-5" id="text-2-1-2-1">
 <p>
 <a href="https://github.com/digitalocean/digitalocean-cloud-controller-manager">https://github.com/digitalocean/digitalocean-cloud-controller-manager</a>
 </p>
 </div>
 </li>
-<li><a id="org99e8cba"></a>Oracle Cloud Infrastructure<br>
+<li><a id="orgc855d86"></a>Oracle Cloud Infrastructure<br>
 <div class="outline-text-5" id="text-2-1-2-2">
 <p>
 <a href="https://github.com/oracle/oci-cloud-controller-manager">https://github.com/oracle/oci-cloud-controller-manager</a>
 </p>
 </div>
 </li>
-<li><a id="org93c5b3a"></a>Rancher<br>
+<li><a id="orge9511c5"></a>Rancher<br>
 <div class="outline-text-5" id="text-2-1-2-3">
 <p>
 <a href="https://github.com/rancher/rancher-cloud-controller-manager">https://github.com/rancher/rancher-cloud-controller-manager</a>
@@ -418,8 +418,8 @@ Out of Tree 的代表
 </div>
 </div>
 </div>
-<div id="outline-container-org4f4e70c" class="outline-2">
-<h2 id="org4f4e70c"><span class="section-number-2">3.</span> 如何实现一个 ccm</h2>
+<div id="outline-container-orgdcecda2" class="outline-2">
+<h2 id="orgdcecda2"><span class="section-number-2">3.</span> 如何实现一个 ccm</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 实现一个简单的 ccm 十分的简单
@@ -430,12 +430,12 @@ Out of Tree 的代表
 </p>
 </div>
 </div>
-<div id="outline-container-org9e64c07" class="outline-2">
-<h2 id="org9e64c07"><span class="section-number-2">4.</span> ccm 背后的秘密</h2>
+<div id="outline-container-orgd6e5810" class="outline-2">
+<h2 id="orgd6e5810"><span class="section-number-2">4.</span> ccm 背后的秘密</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-org97dfa88" class="outline-3">
-<h3 id="org97dfa88"><span class="section-number-3">4.1.</span> Out of Tree ccm 如何工作</h3>
+<div id="outline-container-org7b2d914" class="outline-3">
+<h3 id="org7b2d914"><span class="section-number-3">4.1.</span> Out of Tree ccm 如何工作</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 1.在 kubelet 启动时会检查启动参数中是否有 "&#x2013;cloud-provider=external"
@@ -894,8 +894,8 @@ if !c.ComponentConfig.Generic.LeaderElection.LeaderElect {
 </div>
 </div>
 </div>
-<div id="outline-container-orgfbcd98a" class="outline-2">
-<h2 id="orgfbcd98a"><span class="section-number-2">5.</span> 参考链接</h2>
+<div id="outline-container-orge9180f8" class="outline-2">
+<h2 id="orge9180f8"><span class="section-number-2">5.</span> 参考链接</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 <a href="https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/">https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/</a>
@@ -906,7 +906,7 @@ if !c.ComponentConfig.Generic.LeaderElection.LeaderElect {
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2022-01-06 Thu 02:51</p>
+<p class="date">Created: 2023-01-18 Wed 11:02</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

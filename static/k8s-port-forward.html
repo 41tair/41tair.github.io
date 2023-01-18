@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2023-01-18 Wed 11:02 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>K8s port forward</title>
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
+<link rel="stylesheet" type="text/css" href="https://gongzhitaao.org/orgcss/org.css"/>
+</head>
+<body>
+<div id="content" class="content">
+<h1 class="title">K8s port forward</h1>
+<div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#orgef54fdd">1. How to use</a></li>
+<li><a href="#orgbcfd556">2. User manual</a></li>
+<li><a href="#org04b6e7e">3. How it works</a>
+<ul>
+<li><a href="#org90d7e2b">3.1. Client</a></li>
+<li><a href="#orgb50f78f">3.2. Source</a>
+<ul>
+<li><a href="#org0f74246">3.2.1. 从 kubelet 开始</a></li>
+<li><a href="#orgfe75879">3.2.2. Containerd 中的实现</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-orgef54fdd" class="outline-2">
+<h2 id="orgef54fdd"><span class="section-number-2">1.</span> How to use</h2>
+<div class="outline-text-2" id="text-1">
+<div class="org-src-container">
+<pre class="src src-sh">kubectl port-forward postgresql-0 15432:5432 --address=<span style="font-style: italic;">"0.0.0.0"</span>
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbcfd556" class="outline-2">
+<h2 id="orgbcfd556"><span class="section-number-2">2.</span> User manual</h2>
+<div class="outline-text-2" id="text-2">
+<div class="org-src-container">
+<pre class="src src-sh">kubectl port-forward --help
+
+Forward one or more local ports to a pod. This command requires the node to have <span style="font-style: italic;">'socat'</span> installed.
+
+ Use resource type/name such as deployment/mydeployment to select a pod. Resource type defaults to <span style="font-style: italic;">'pod'</span> if omitted.
+
+ If there are multiple pods matching the criteria, a pod will be selected automatically. The forwarding session ends
+when the selected pod terminates, and rerun of the command is needed to resume forwarding.
+
+Examples:
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Listen on ports 5000 and 6000 locally, forwarding data to/from ports 5000 and 6000 in the pod</span>
+  kubectl port-forward pod/mypod 5000 6000
+
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Listen on ports 5000 and 6000 locally, forwarding data to/from ports 5000 and 6000 in a pod selected by the</span>
+deployment
+  kubectl port-forward deployment/mydeployment 5000 6000
+
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Listen on ports 5000 and 6000 locally, forwarding data to/from ports 5000 and 6000 in a pod selected by the service</span>
+  kubectl port-forward service/myservice 5000 6000
+
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Listen on port 8888 locally, forwarding to 5000 in the pod</span>
+  kubectl port-forward pod/mypod 8888:5000
+
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Listen on port 8888 on all addresses, forwarding to 5000 in the pod</span>
+  kubectl port-forward --address 0.0.0.0 pod/mypod 8888:5000
+
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Listen on port 8888 on localhost and selected IP, forwarding to 5000 in the pod</span>
+  kubectl port-forward --address localhost,10.19.21.23 pod/mypod 8888:5000
+
+  <span style="font-weight: bold; font-style: italic;"># </span><span style="font-weight: bold; font-style: italic;">Listen on a random port locally, forwarding to 5000 in the pod</span>
+  kubectl port-forward pod/mypod :5000
+
+Options:
+      --address=[localhost]: Addresses to listen on (comma separated). Only accepts IP addresses or localhost as a
+value. When localhost is supplied, kubectl will try to bind on both 127.0.0.1 and ::1 and will fail if neither of these
+addresses are available to bind.
+      --pod-running-timeout=1m0s: The length of time (like 5s, 2m, or 3h, higher than zero) to wait until at least one
+pod is running
+
+Usage:
+  kubectl port-forward TYPE/NAME [options] [LOCAL_PORT:]REMOTE_PORT [...[LOCAL_PORT_N:]REMOTE_PORT_N]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org04b6e7e" class="outline-2">
+<h2 id="org04b6e7e"><span class="section-number-2">3.</span> How it works</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-org90d7e2b" class="outline-3">
+<h3 id="org90d7e2b"><span class="section-number-3">3.1.</span> Client</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+当执行 kubectl port forward 时向如下的两个 URL 发送请求
+</p>
+<div class="org-src-container">
+<pre class="src src-sh">GET https://10.10.16.36:16443/api/v1/namespaces/default/pods/postgresql-0
+POST https://10.10.16.36:16443/api/v1/namespaces/default/pods/postgresql-0/portforward
+</pre>
+</div>
+
+<p>
+kubectl 部分代码可以自行查看:kubernetes/staging/src/k8s.io/kubectl/pkg/cmd/portforward
+</p>
+
+<p>
+本文主要讲 server 端实现
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgb50f78f" class="outline-3">
+<h3 id="orgb50f78f"><span class="section-number-3">3.2.</span> Source</h3>
+<div class="outline-text-3" id="text-3-2">
+<pre class="example">
+
+</pre>
+</div>
+<div id="outline-container-org0f74246" class="outline-4">
+<h4 id="org0f74246"><span class="section-number-4">3.2.1.</span> 从 kubelet 开始</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+cmd/kubelet/app/server.go L:489 开始的 run 函数中进行了对 CRI 的初始化
+</p>
+<div class="org-src-container">
+<pre class="src src-go">func run(ctx context.Context, s *options.KubeletServer, kubeDeps *kubelet.Dependencies, featureGate featuregate.FeatureGate) (err error) {
+...
+err = kubelet.PreInitRuntimeService(&amp;s.KubeletConfiguration, kubeDeps)
+...
+}
+</pre>
+</div>
+
+<p>
+pkg/kubelet/kubelet.go L305 中可以看到实际的初始化逻辑
+</p>
+<div class="org-src-container">
+<pre class="src src-go">func PreInitRuntimeService(kubeCfg *kubeletconfiginternal.KubeletConfiguration, kubeDeps *Dependencies) error {
+	remoteImageEndpoint := kubeCfg.ImageServiceEndpoint
+	if remoteImageEndpoint == "" &amp;&amp; kubeCfg.ContainerRuntimeEndpoint != "" {
+		remoteImageEndpoint = kubeCfg.ContainerRuntimeEndpoint
+	}
+	var err error
+	if kubeDeps.RemoteRuntimeService, err = remote.NewRemoteRuntimeService(kubeCfg.ContainerRuntimeEndpoint, kubeCfg.RuntimeRequestTimeout.Duration, kubeDeps.TracerProvider); err != nil {
+		return err
+	}
+	if kubeDeps.RemoteImageService, err = remote.NewRemoteImageService(remoteImageEndpoint, kubeCfg.RuntimeRequestTimeout.Duration, kubeDeps.TracerProvider); err != nil {
+		return err
+	}
+
+	kubeDeps.useLegacyCadvisorStats = cadvisor.UsingLegacyCadvisorStats(kubeCfg.ContainerRuntimeEndpoint)
+
+	return nil
+}
+
+</pre>
+</div>
+
+<p>
+pkg/kubelet/cri/remote/remote_runtime.go L:71
+</p>
+<div class="org-src-container">
+<pre class="src src-go">func NewRemoteRuntimeService(endpoint string, connectionTimeout time.Duration, tp trace.TracerProvider) (internalapi.RuntimeService, error) {
+
+</pre>
+</div>
+
+<p>
+这段初始化的代码的目的就是为了建立一个 grpc 的 ClientConn
+</p>
+
+<p>
+当发生 api 调用时会通过 grpc 访问到实际的 CRI 相应接口
+</p>
+
+<p>
+pkg/kubelet/cri/streaming/server.go L:221
+</p>
+<div class="org-src-container">
+<pre class="src src-go">func (s *server) GetPortForward(req *runtimeapi.PortForwardRequest) (*runtimeapi.PortForwardResponse, error) {
+	if req.PodSandboxId == "" {
+		return nil, status.Errorf(codes.InvalidArgument, "missing required pod_sandbox_id")
+	}
+	token, err := s.cache.Insert(req)
+	if err != nil {
+		return nil, err
+	}
+	return &amp;runtimeapi.PortForwardResponse{
+		Url: s.buildURL("portforward", token),
+	}, nil
+}
+</pre>
+</div>
+
+<p>
+要想获取到实际的 portforward 的逻辑需要到实际的 CRI 中阅读
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfe75879" class="outline-4">
+<h4 id="orgfe75879"><span class="section-number-4">3.2.2.</span> Containerd 中的实现</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+pkg/cri/server/sandbox_portforward_linux.go L:34
+</p>
+<div class="org-src-container">
+<pre class="src src-go">func (c *criService) portForward(ctx context.Context, id string, port int32, stream io.ReadWriteCloser) error {
+	s, err := c.sandboxStore.Get(id)
+	if err != nil {
+		return errors.Wrapf(err, "failed to find sandbox %q in store", id)
+	}
+
+	var netNSDo func(func(ns.NetNS) error) error
+	// netNSPath is the network namespace path for logging.
+	var netNSPath string
+	securityContext := s.Config.GetLinux().GetSecurityContext()
+	hostNet := securityContext.GetNamespaceOptions().GetNetwork() == runtime.NamespaceMode_NODE
+	if !hostNet {
+		if closed, err := s.NetNS.Closed(); err != nil {
+			return errors.Wrapf(err, "failed to check netwok namespace closed for sandbox %q", id)
+		} else if closed {
+			return errors.Errorf("network namespace for sandbox %q is closed", id)
+		}
+		netNSDo = s.NetNS.Do
+		netNSPath = s.NetNS.GetPath()
+	} else {
+		// Run the function directly for host network.
+		netNSDo = func(do func(_ ns.NetNS) error) error {
+			return do(nil)
+		}
+		netNSPath = "host"
+	}
+
+	log.G(ctx).Infof("Executing port forwarding in network namespace %q", netNSPath)
+	err = netNSDo(func(_ ns.NetNS) error {
+		defer stream.Close()
+		// localhost can resolve to both IPv4 and IPv6 addresses in dual-stack systems
+		// but the application can be listening in one of the IP families only.
+		// golang has enabled RFC 6555 Fast Fallback (aka HappyEyeballs) by default in 1.12
+		// It means that if a host resolves to both IPv6 and IPv4, it will try to connect to any
+		// of those addresses and use the working connection.
+		// However, the implementation uses go routines to start both connections in parallel,
+		// and this cases that the connection is done outside the namespace, so we try to connect
+		// serially.
+		// We try IPv4 first to keep current behavior and we fallback to IPv6 if the connection fails.
+		// xref https://github.com/golang/go/issues/44922
+		var conn net.Conn
+		conn, err := net.Dial("tcp4", fmt.Sprintf("localhost:%d", port))
+		if err != nil {
+			var errV6 error
+			conn, errV6 = net.Dial("tcp6", fmt.Sprintf("localhost:%d", port))
+			if errV6 != nil {
+				return fmt.Errorf("failed to connect to localhost:%d inside namespace %q, IPv4: %v IPv6 %v ", port, id, err, errV6)
+			}
+		}
+		defer conn.Close()
+
+		errCh := make(chan error, 2)
+		// Copy from the the namespace port connection to the client stream
+		go func() {
+			log.G(ctx).Debugf("PortForward copying data from namespace %q port %d to the client stream", id, port)
+			_, err := io.Copy(stream, conn)
+			errCh &lt;- err
+		}()
+
+		// Copy from the client stream to the namespace port connection
+		go func() {
+			log.G(ctx).Debugf("PortForward copying data from client stream to namespace %q port %d", id, port)
+			_, err := io.Copy(conn, stream)
+			errCh &lt;- err
+		}()
+
+		// Wait until the first error is returned by one of the connections
+		// we use errFwd to store the result of the port forwarding operation
+		// if the context is cancelled close everything and return
+		var errFwd error
+		select {
+		case errFwd = &lt;-errCh:
+			log.G(ctx).Debugf("PortForward stop forwarding in one direction in network namespace %q port %d: %v", id, port, errFwd)
+		case &lt;-ctx.Done():
+			log.G(ctx).Debugf("PortForward cancelled in network namespace %q port %d: %v", id, port, ctx.Err())
+			return ctx.Err()
+		}
+		// give a chance to terminate gracefully or timeout
+		// after 1s
+		// https://linux.die.net/man/1/socat
+		const timeout = time.Second
+		select {
+		case e := &lt;-errCh:
+			if errFwd == nil {
+				errFwd = e
+			}
+			log.G(ctx).Debugf("PortForward stopped forwarding in both directions in network namespace %q port %d: %v", id, port, e)
+		case &lt;-time.After(timeout):
+			log.G(ctx).Debugf("PortForward timed out waiting to close the connection in network namespace %q port %d", id, port)
+		case &lt;-ctx.Done():
+			log.G(ctx).Debugf("PortForward cancelled in network namespace %q port %d: %v", id, port, ctx.Err())
+			errFwd = ctx.Err()
+		}
+
+		return errFwd
+	})
+
+	if err != nil {
+		return errors.Wrapf(err, "failed to execute portforward in network namespace %q", netNSPath)
+	}
+	log.G(ctx).Infof("Finish port forwarding for %q port %d", id, port)
+
+	return nil
+}
+</pre>
+</div>
+
+<ol class="org-ol">
+<li>通过 ID 获取到 sanbox 结构体从而拿到 security context 与 namespace</li>
+<li>拿到 network namespace 信息判断是否是 host network.用来确定 network namespace path 和进入 namespace 的函数</li>
+<li>进入到相应的 namespace,监听端口并将新开的端口与传递的流打通,从而达到 proxy 的效果</li>
+</ol>
+
+<p>
+如果想知道进入 namespace 执行的逻辑可以看 openshitf 的库 containernetworking-plugins
+</p>
+
+<p>
+<a href="https://github.com/openshift/containernetworking-plugins/blob/master/pkg/ns/ns_linux.go#L170">https://github.com/openshift/containernetworking-plugins/blob/master/pkg/ns/ns_linux.go#L170</a>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2023-01-18 Wed 11:02</p>
+<p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
