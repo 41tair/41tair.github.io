@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-01-18 Wed 11:02 -->
+<!-- 2023-01-30 Mon 08:25 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>append to a slice in go</title>
@@ -199,18 +199,18 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgb147bd8">1. 一段非常简单的代码</a></li>
-<li><a href="#orgbde46c5">2. 在 append 之前先来看看 slice 本来面目</a></li>
-<li><a href="#orgdf23c98">3. append 究竟做了什么</a></li>
-<li><a href="#org8d1359b">4. 一句话讲完系列</a></li>
+<li><a href="#orgc1b34d2">1. 一段非常简单的代码</a></li>
+<li><a href="#orgd5910e3">2. 在 append 之前先来看看 slice 本来面目</a></li>
+<li><a href="#org2066d92">3. append 究竟做了什么</a></li>
+<li><a href="#org1eaa993">4. 一句话讲完系列</a></li>
 </ul>
 </div>
 </div>
 <pre class="example">
 本文操作 go 版本为 1.15.1
 </pre>
-<div id="outline-container-orgb147bd8" class="outline-2">
-<h2 id="orgb147bd8"><span class="section-number-2">1.</span> 一段非常简单的代码</h2>
+<div id="outline-container-orgc1b34d2" class="outline-2">
+<h2 id="orgc1b34d2"><span class="section-number-2">1.</span> 一段非常简单的代码</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 <img src="https://live.staticflickr.com/65535/50586599808_4cbf6ba699_h.jpg" alt="50586599808_4cbf6ba699_h.jpg">
@@ -218,7 +218,7 @@
 </p>
 
 
-<div id="orgb5119fd" class="figure">
+<div id="orgc8d98d3" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50587343766_ac6a85c7ca_h.jpg" alt="50587343766_ac6a85c7ca_h.jpg">
 </p>
 </div>
@@ -229,11 +229,11 @@
 </div>
 </div>
 
-<div id="outline-container-orgbde46c5" class="outline-2">
-<h2 id="orgbde46c5"><span class="section-number-2">2.</span> 在 append 之前先来看看 slice 本来面目</h2>
+<div id="outline-container-orgd5910e3" class="outline-2">
+<h2 id="orgd5910e3"><span class="section-number-2">2.</span> 在 append 之前先来看看 slice 本来面目</h2>
 <div class="outline-text-2" id="text-2">
 
-<div id="org3e8a24d" class="figure">
+<div id="org10a6993" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50586599823_6fab39125a.jpg" alt="50586599823_6fab39125a.jpg">
 </p>
 </div>
@@ -251,15 +251,15 @@ cap 是 slice 容量
 </p>
 
 
-<div id="orge4a9044" class="figure">
+<div id="orge517d7c" class="figure">
 <p><img src="https://live.staticflickr.com/65535/50587464757_648e3d8086_h.jpg" alt="50587464757_648e3d8086_h.jpg">
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgdf23c98" class="outline-2">
-<h2 id="orgdf23c98"><span class="section-number-2">3.</span> append 究竟做了什么</h2>
+<div id="outline-container-org2066d92" class="outline-2">
+<h2 id="org2066d92"><span class="section-number-2">3.</span> append 究竟做了什么</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 先看看 append 做了什么事情
@@ -330,8 +330,8 @@ append 的实现在<a href="https://github.com/golang/go/blob/1c7650aa93bd53b7df
 </p>
 </div>
 </div>
-<div id="outline-container-org8d1359b" class="outline-2">
-<h2 id="org8d1359b"><span class="section-number-2">4.</span> 一句话讲完系列</h2>
+<div id="outline-container-org1eaa993" class="outline-2">
+<h2 id="org1eaa993"><span class="section-number-2">4.</span> 一句话讲完系列</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 append 有点坑，并不是真的向尾添加，而是根据当前的指针移动位置，改写底层数组的下标
@@ -340,7 +340,7 @@ append 有点坑，并不是真的向尾添加，而是根据当前的指针移�
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-01-18 Wed 11:02</p>
+<p class="date">Created: 2023-01-30 Mon 08:25</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
