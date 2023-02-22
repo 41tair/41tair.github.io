@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-01-30 Mon 08:53 -->
+<!-- 2023-02-22 Wed 06:00 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>kubernetes garbage collection</title>
@@ -199,23 +199,23 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org651af80">1. 前言</a></li>
-<li><a href="#org21cd3f1">2. 代码参考</a></li>
-<li><a href="#org0d599df">3. 简要说明</a></li>
-<li><a href="#org9be333a">4. gc 设计文档</a></li>
-<li><a href="#org92d6172">5. gc 触发条件</a></li>
-<li><a href="#org6bf848c">6. 代码详解</a>
+<li><a href="#orgc648896">1. 前言</a></li>
+<li><a href="#orgdc79c7e">2. 代码参考</a></li>
+<li><a href="#orgc9c1991">3. 简要说明</a></li>
+<li><a href="#orga050e8c">4. gc 设计文档</a></li>
+<li><a href="#orgbfe221b">5. gc 触发条件</a></li>
+<li><a href="#orgbabed09">6. 代码详解</a>
 <ul>
-<li><a href="#org0ead1b7">6.1. pod 的删除</a></li>
-<li><a href="#org5d4a497">6.2. pod<sub>container</sub><sub>deletor</sub></a></li>
-<li><a href="#orgc341a7e">6.3. kuberuntime<sub>gc</sub></a></li>
+<li><a href="#orge65c24b">6.1. pod 的删除</a></li>
+<li><a href="#orgd07d47b">6.2. pod<sub>container</sub><sub>deletor</sub></a></li>
+<li><a href="#orge76cd8a">6.3. kuberuntime<sub>gc</sub></a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org651af80" class="outline-2">
-<h2 id="org651af80"><span class="section-number-2">1.</span> 前言</h2>
+<div id="outline-container-orgc648896" class="outline-2">
+<h2 id="orgc648896"><span class="section-number-2">1.</span> 前言</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 k8s 是一个异步的调度系统,当一个资源生命周期结束,内部的垃圾回收机制是如何运行的呢？
@@ -223,8 +223,8 @@ k8s 是一个异步的调度系统,当一个资源生命周期结束,内部的�
 </div>
 </div>
 
-<div id="outline-container-org21cd3f1" class="outline-2">
-<h2 id="org21cd3f1"><span class="section-number-2">2.</span> 代码参考</h2>
+<div id="outline-container-orgdc79c7e" class="outline-2">
+<h2 id="orgdc79c7e"><span class="section-number-2">2.</span> 代码参考</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 v1.14.0-alpha.3 
@@ -232,8 +232,8 @@ commitid: cd9e590178c9f3812e296484b587de1c79461033
 </p>
 </div>
 </div>
-<div id="outline-container-org0d599df" class="outline-2">
-<h2 id="org0d599df"><span class="section-number-2">3.</span> 简要说明</h2>
+<div id="outline-container-orgc9c1991" class="outline-2">
+<h2 id="orgc9c1991"><span class="section-number-2">3.</span> 简要说明</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 这里仅对 pod 以及 容器 的删除做了简要的说明
@@ -252,8 +252,8 @@ k8s 的垃圾回收机制逐渐向 evict 模块移动而不是直接放在 kubel
 </p>
 </div>
 </div>
-<div id="outline-container-org9be333a" class="outline-2">
-<h2 id="org9be333a"><span class="section-number-2">4.</span> gc 设计文档</h2>
+<div id="outline-container-orga050e8c" class="outline-2">
+<h2 id="orga050e8c"><span class="section-number-2">4.</span> gc 设计文档</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 k8s GC 设计文档可以参考下面链接
@@ -268,8 +268,8 @@ k8s GC 设计文档可以参考下面链接
 </p>
 </div>
 </div>
-<div id="outline-container-org92d6172" class="outline-2">
-<h2 id="org92d6172"><span class="section-number-2">5.</span> gc 触发条件</h2>
+<div id="outline-container-orgbfe221b" class="outline-2">
+<h2 id="orgbfe221b"><span class="section-number-2">5.</span> gc 触发条件</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 <a href="https://kubernetes.io/docs/concepts/cluster-administration/kubelet-garbage-collection/">https://kubernetes.io/docs/concepts/cluster-administration/kubelet-garbage-collection/</a>
@@ -280,18 +280,18 @@ k8s GC 设计文档可以参考下面链接
 </p>
 
 
-<div id="orgc7c6abd" class="figure">
+<div id="org98a27e8" class="figure">
 <p><img src="https://farm8.staticflickr.com/7879/32433802967_02cec4c8ea_b.jpg" alt="32433802967_02cec4c8ea_b.jpg">
 </p>
 </div>
 </div>
 </div>
-<div id="outline-container-org6bf848c" class="outline-2">
-<h2 id="org6bf848c"><span class="section-number-2">6.</span> 代码详解</h2>
+<div id="outline-container-orgbabed09" class="outline-2">
+<h2 id="orgbabed09"><span class="section-number-2">6.</span> 代码详解</h2>
 <div class="outline-text-2" id="text-6">
 </div>
-<div id="outline-container-org0ead1b7" class="outline-3">
-<h3 id="org0ead1b7"><span class="section-number-3">6.1.</span> pod 的删除</h3>
+<div id="outline-container-orge65c24b" class="outline-3">
+<h3 id="orge65c24b"><span class="section-number-3">6.1.</span> pod 的删除</h3>
 <div class="outline-text-3" id="text-6-1">
 <p>
 kubelet 启动时会启动 syncLoop 来处理 file、apiserver、http 这三个 channel 的变化
@@ -302,7 +302,7 @@ kubelet 启动时会启动 syncLoop 来处理 file、apiserver、http 这三个 
 </p>
 
 
-<div id="orgd5c97e1" class="figure">
+<div id="org43b7301" class="figure">
 <p><img src="https://farm8.staticflickr.com/7813/46652355984_cbdc25a632_b.jpg" alt="46652355984_cbdc25a632_b.jpg">
 </p>
 </div>
@@ -312,13 +312,13 @@ HandlePodRemoves 作为 SyncHandler 的回调,会调用 deletePod 来删除 pod
 </p>
 
 
-<div id="orgf676ef7" class="figure">
+<div id="org14619d2" class="figure">
 <p><img src="https://farm8.staticflickr.com/7884/46460484945_87762890bc_b.jpg" alt="46460484945_87762890bc_b.jpg">
 </p>
 </div>
 
 
-<div id="orgd4c4169" class="figure">
+<div id="org688efed" class="figure">
 <p><img src="https://farm8.staticflickr.com/7838/46652355044_391da5f7f0_b.jpg" alt="46652355044_391da5f7f0_b.jpg">
 </p>
 </div>
@@ -332,7 +332,7 @@ HandlePodRemoves 作为 SyncHandler 的回调,会调用 deletePod 来删除 pod
 </p>
 
 
-<div id="orge2de1de" class="figure">
+<div id="org31009f9" class="figure">
 <p><img src="https://farm8.staticflickr.com/7816/46652354244_bc15228405_b.jpg" alt="46652354244_bc15228405_b.jpg">
 </p>
 </div>
@@ -342,7 +342,7 @@ podKiller 运行了一个 goroutine 从 podKillch 中读取数据然后杀死 po
 </p>
 
 
-<div id="org98e4a96" class="figure">
+<div id="org909cf19" class="figure">
 <p><img src="https://farm5.staticflickr.com/4904/40410062263_c45668e5c7_b.jpg" alt="40410062263_c45668e5c7_b.jpg">
 </p>
 </div>
@@ -352,13 +352,13 @@ killPod 中调用了 controllerRuntime 中的 KillPod
 </p>
 
 
-<div id="org7c988f4" class="figure">
+<div id="org0c566bd" class="figure">
 <p><img src="https://farm8.staticflickr.com/7880/46460483455_4af6f90c77_b.jpg" alt="46460483455_4af6f90c77_b.jpg">
 </p>
 </div>
 
 
-<div id="org9af2b6c" class="figure">
+<div id="org11f6182" class="figure">
 <p><img src="https://farm8.staticflickr.com/7909/46652350224_a86023cd7b_b.jpg" alt="46652350224_a86023cd7b_b.jpg">
 </p>
 </div>
@@ -368,7 +368,7 @@ KillPod 会调用 runtime 中的 KillContainer 来尝试删除容器
 </p>
 
 
-<div id="org47dd65d" class="figure">
+<div id="orgdcb8a2a" class="figure">
 <p><img src="https://farm8.staticflickr.com/7817/47322699852_12a80766db_b.jpg" alt="47322699852_12a80766db_b.jpg">
 </p>
 </div>
@@ -378,7 +378,7 @@ KillPod 会调用 runtime 中的 KillContainer 来尝试删除容器
 </p>
 
 
-<div id="orgd0e9d50" class="figure">
+<div id="orgfcbaa2d" class="figure">
 <p><img src="https://farm8.staticflickr.com/7895/46460479795_95338376c9_b.jpg" alt="46460479795_95338376c9_b.jpg">
 </p>
 </div>
@@ -388,7 +388,7 @@ KillPod 会调用 runtime 中的 KillContainer 来尝试删除容器
 </p>
 
 
-<div id="orgaea12b2" class="figure">
+<div id="org061f216" class="figure">
 <p><img src="https://farm8.staticflickr.com/7867/46460479755_75d546ff74_b.jpg" alt="46460479755_75d546ff74_b.jpg">
 </p>
 </div>
@@ -398,8 +398,8 @@ KillPod 会调用 runtime 中的 KillContainer 来尝试删除容器
 </p>
 </div>
 </div>
-<div id="outline-container-org5d4a497" class="outline-3">
-<h3 id="org5d4a497"><span class="section-number-3">6.2.</span> pod<sub>container</sub><sub>deletor</sub></h3>
+<div id="outline-container-orgd07d47b" class="outline-3">
+<h3 id="orgd07d47b"><span class="section-number-3">6.2.</span> pod<sub>container</sub><sub>deletor</sub></h3>
 <div class="outline-text-3" id="text-6-2">
 <p>
 kubelet/pod<sub>container</sub><sub>deletor.go</sub>
@@ -410,13 +410,13 @@ kubelet/pod<sub>container</sub><sub>deletor.go</sub>
 </p>
 
 
-<div id="org0a62e65" class="figure">
+<div id="orga908dbb" class="figure">
 <p><img src="https://farm8.staticflickr.com/7842/47322697572_d69f84d0a2_b.jpg" alt="47322697572_d69f84d0a2_b.jpg">
 </p>
 </div>
 
 
-<div id="org3930413" class="figure">
+<div id="orga0361be" class="figure">
 <p><img src="https://farm8.staticflickr.com/7915/46460479735_570bbdf0a5_b.jpg" alt="46460479735_570bbdf0a5_b.jpg">
 </p>
 </div>
@@ -426,8 +426,8 @@ kubelet/pod<sub>container</sub><sub>deletor.go</sub>
 </p>
 </div>
 </div>
-<div id="outline-container-orgc341a7e" class="outline-3">
-<h3 id="orgc341a7e"><span class="section-number-3">6.3.</span> kuberuntime<sub>gc</sub></h3>
+<div id="outline-container-orge76cd8a" class="outline-3">
+<h3 id="orge76cd8a"><span class="section-number-3">6.3.</span> kuberuntime<sub>gc</sub></h3>
 <div class="outline-text-3" id="text-6-3">
 <p>
 kubelet/kuberuntime/kuberuntime<sub>gc.go</sub>
@@ -438,7 +438,7 @@ kubelet/kuberuntime/kuberuntime<sub>gc.go</sub>
 </p>
 
 
-<div id="org10ff1b6" class="figure">
+<div id="orga310aec" class="figure">
 <p><img src="https://farm8.staticflickr.com/7822/47375539501_bf6be2efb6_b.jpg" alt="47375539501_bf6be2efb6_b.jpg">
 </p>
 </div>
@@ -456,7 +456,7 @@ kubelet 在 Bootstrap 时会启动一个垃圾回收线程
 </p>
 
 
-<div id="org82a7efa" class="figure">
+<div id="orgfe5797c" class="figure">
 <p><img src="https://farm8.staticflickr.com/7832/46460479695_9489ab772c_b.jpg" alt="46460479695_9489ab772c_b.jpg">
 </p>
 </div>
@@ -466,7 +466,7 @@ kubelet 在 Bootstrap 时会启动一个垃圾回收线程
 </p>
 
 
-<div id="org5aa94aa" class="figure">
+<div id="org2cedadf" class="figure">
 <p><img src="https://farm8.staticflickr.com/7851/47322697422_8622386c72_b.jpg" alt="47322697422_8622386c72_b.jpg">
 </p>
 </div>
@@ -476,7 +476,7 @@ kubelet 在 Bootstrap 时会启动一个垃圾回收线程
 </p>
 
 
-<div id="org34f46c2" class="figure">
+<div id="org1bb7ada" class="figure">
 <p><img src="https://farm8.staticflickr.com/7888/46460479575_f90f83f0dd_b.jpg" alt="46460479575_f90f83f0dd_b.jpg">
 </p>
 </div>
@@ -494,7 +494,7 @@ kubelet 在 Bootstrap 时会启动一个垃圾回收线程
 </p>
 
 
-<div id="org434b4ff" class="figure">
+<div id="org46acf8f" class="figure">
 <p><img src="https://farm8.staticflickr.com/7867/47322697172_da82ec4c74_b.jpg" alt="47322697172_da82ec4c74_b.jpg">
 </p>
 </div>
@@ -508,7 +508,7 @@ kubelet 在 Bootstrap 时会启动一个垃圾回收线程
 </p>
 
 
-<div id="org63797a9" class="figure">
+<div id="org8d4e454" class="figure">
 <p><img src="https://farm8.staticflickr.com/7818/47375551361_03e590e742_n.jpg" alt="47375551361_03e590e742_n.jpg">
 </p>
 </div>
@@ -518,7 +518,7 @@ kubelet 在 Bootstrap 时会启动一个垃圾回收线程
 </p>
 
 
-<div id="orgac88855" class="figure">
+<div id="org929c242" class="figure">
 <p><img src="https://farm8.staticflickr.com/7875/46460479375_5b1cacaa3c_b.jpg" alt="46460479375_5b1cacaa3c_b.jpg">
 </p>
 </div>
@@ -527,7 +527,7 @@ kubelet 在 Bootstrap 时会启动一个垃圾回收线程
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-01-30 Mon 08:53</p>
+<p class="date">Created: 2023-02-22 Wed 06:00</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

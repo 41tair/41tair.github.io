@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-01-30 Mon 08:53 -->
+<!-- 2023-02-22 Wed 06:00 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Docker source code(2) &#x2013; docker rm</title>
@@ -199,15 +199,15 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org638f97b">1. Overview</a></li>
-<li><a href="#org6d6e21b">2. Code</a>
+<li><a href="#org6711522">1. Overview</a></li>
+<li><a href="#org0a149d4">2. Code</a>
 <ul>
-<li><a href="#orgce11fca">2.1. docker rm</a>
+<li><a href="#org5d13610">2.1. docker rm</a>
 <ul>
-<li><a href="#org1f40ac1">2.1.1. docker cli</a></li>
-<li><a href="#org070fe97">2.1.2. dockerd</a></li>
-<li><a href="#org7639ee4">2.1.3. libcontainerd</a></li>
-<li><a href="#org1f8c686">2.1.4. containerd</a></li>
+<li><a href="#org06418b8">2.1.1. docker cli</a></li>
+<li><a href="#org1085d12">2.1.2. dockerd</a></li>
+<li><a href="#orge0722b4">2.1.3. libcontainerd</a></li>
+<li><a href="#org911ad98">2.1.4. containerd</a></li>
 </ul>
 </li>
 </ul>
@@ -216,8 +216,8 @@
 </div>
 </div>
 
-<div id="outline-container-org638f97b" class="outline-2">
-<h2 id="org638f97b"><span class="section-number-2">1.</span> Overview</h2>
+<div id="outline-container-org6711522" class="outline-2">
+<h2 id="org6711522"><span class="section-number-2">1.</span> Overview</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 在上一篇中写了 container 的创建与启动过程,这一篇写的是 docker rm
@@ -225,12 +225,12 @@
 </div>
 </div>
 
-<div id="outline-container-org6d6e21b" class="outline-2">
-<h2 id="org6d6e21b"><span class="section-number-2">2.</span> Code</h2>
+<div id="outline-container-org0a149d4" class="outline-2">
+<h2 id="org0a149d4"><span class="section-number-2">2.</span> Code</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgce11fca" class="outline-3">
-<h3 id="orgce11fca"><span class="section-number-3">2.1.</span> docker rm</h3>
+<div id="outline-container-org5d13610" class="outline-3">
+<h3 id="org5d13610"><span class="section-number-3">2.1.</span> docker rm</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 docker rm 的参数十分简单
@@ -255,8 +255,8 @@ Options:
 还是从 cli 开始
 </p>
 </div>
-<div id="outline-container-org1f40ac1" class="outline-4">
-<h4 id="org1f40ac1"><span class="section-number-4">2.1.1.</span> docker cli</h4>
+<div id="outline-container-org06418b8" class="outline-4">
+<h4 id="org06418b8"><span class="section-number-4">2.1.1.</span> docker cli</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <p>
 cli/command/container/rm.go L:25 看到 rm 的参数
@@ -290,8 +290,8 @@ dockerCli.Client().ContainerRemove(ctx, container, options)
 </div>
 </div>
 
-<div id="outline-container-org070fe97" class="outline-4">
-<h4 id="org070fe97"><span class="section-number-4">2.1.2.</span> dockerd</h4>
+<div id="outline-container-org1085d12" class="outline-4">
+<h4 id="org1085d12"><span class="section-number-4">2.1.2.</span> dockerd</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <p>
 来到 client/container_remove.go L:11 可以看到将参数拼成了请求体然后发送给 dockerd, 关于 dockerd 的路由处理在上一篇中讲过,之后不再赘述
@@ -338,7 +338,7 @@ cleanupContainer 的定义在 daemon/delete.go L:80
 </div>
 
 <ol class="org-ol">
-<li><a id="org123cfe6"></a>daemon.Kill daemon/kill.go L:135<br>
+<li><a id="org0d45c76"></a>daemon.Kill daemon/kill.go L:135<br>
 <div class="outline-text-5" id="text-2-1-2-1">
 <ol class="org-ol">
 <li>通过 daemon.killPossiblyDeadProcess 发送 SIGKILL 信号</li>
@@ -352,8 +352,8 @@ cleanupContainer 的定义在 daemon/delete.go L:80
 </ol>
 </div>
 
-<div id="outline-container-org7639ee4" class="outline-4">
-<h4 id="org7639ee4"><span class="section-number-4">2.1.3.</span> libcontainerd</h4>
+<div id="outline-container-orge0722b4" class="outline-4">
+<h4 id="orge0722b4"><span class="section-number-4">2.1.3.</span> libcontainerd</h4>
 <div class="outline-text-4" id="text-2-1-3">
 <p>
 SingalProcess 的定义在 libcontainerd/remote/client.go L:336 
@@ -413,8 +413,8 @@ containerd.Process 是一个 interface
 </div>
 </div>
 
-<div id="outline-container-org1f8c686" class="outline-4">
-<h4 id="org1f8c686"><span class="section-number-4">2.1.4.</span> containerd</h4>
+<div id="outline-container-org911ad98" class="outline-4">
+<h4 id="org911ad98"><span class="section-number-4">2.1.4.</span> containerd</h4>
 <div class="outline-text-4" id="text-2-1-4">
 <p>
 LoadProcess 的实现在 task.go L:546
@@ -481,7 +481,7 @@ pkg/process/exec.go L:144 中可以看到实际杀死容器的逻辑
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-01-30 Mon 08:53</p>
+<p class="date">Created: 2023-02-22 Wed 06:00</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-01-30 Mon 08:53 -->
+<!-- 2023-02-22 Wed 06:00 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GO Faiss Library</title>
@@ -199,30 +199,30 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org1c52715">1. Faiss</a></li>
-<li><a href="#org87961fc">2. 安装与编译 Faiss</a></li>
-<li><a href="#orga13ed6e">3. 使用 Go 操作 Faiss</a>
+<li><a href="#org8b6c76b">1. Faiss</a></li>
+<li><a href="#orgd61e184">2. 安装与编译 Faiss</a></li>
+<li><a href="#org4e3d022">3. 使用 Go 操作 Faiss</a>
 <ul>
-<li><a href="#org1087ed5">3.1. 生成向量</a></li>
-<li><a href="#orgf4beff4">3.2. 创建索引</a></li>
-<li><a href="#org3ae7f2f">3.3. 将向量插入到索引中</a></li>
-<li><a href="#org8b2cea2">3.4. 生成搜索用的向量并进行查找</a></li>
+<li><a href="#org04f0eb2">3.1. 生成向量</a></li>
+<li><a href="#org1f98056">3.2. 创建索引</a></li>
+<li><a href="#orgf8516c2">3.3. 将向量插入到索引中</a></li>
+<li><a href="#org1cb2010">3.4. 生成搜索用的向量并进行查找</a></li>
 </ul>
 </li>
-<li><a href="#org015e4b2">4. go-faiss 原理</a></li>
+<li><a href="#org07b3812">4. go-faiss 原理</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org1c52715" class="outline-2">
-<h2 id="org1c52715"><span class="section-number-2">1.</span> Faiss</h2>
+<div id="outline-container-org8b6c76b" class="outline-2">
+<h2 id="org8b6c76b"><span class="section-number-2">1.</span> Faiss</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Faiss 是一个用来做做向量聚类与相似性搜索的 C++ 的库,官方有 C++ 与 Python 两种使用方式
 </p>
 </div>
 </div>
-<div id="outline-container-org87961fc" class="outline-2">
-<h2 id="org87961fc"><span class="section-number-2">2.</span> 安装与编译 Faiss</h2>
+<div id="outline-container-orgd61e184" class="outline-2">
+<h2 id="orgd61e184"><span class="section-number-2">2.</span> 安装与编译 Faiss</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-sh">git clone https://github.com/facebookresearch/faiss.git &amp;&amp; checkout -b v1.6.3
@@ -234,16 +234,16 @@ mv libfaiss_c.so /usr/local/bin
 </div>
 </div>
 
-<div id="outline-container-orga13ed6e" class="outline-2">
-<h2 id="orga13ed6e"><span class="section-number-2">3.</span> 使用 Go 操作 Faiss</h2>
+<div id="outline-container-org4e3d022" class="outline-2">
+<h2 id="org4e3d022"><span class="section-number-2">3.</span> 使用 Go 操作 Faiss</h2>
 <div class="outline-text-2" id="text-3">
 <div class="org-src-container">
 <pre class="src src-go">import "github.com/41tair/go-faiss/faiss"
 </pre>
 </div>
 </div>
-<div id="outline-container-org1087ed5" class="outline-3">
-<h3 id="org1087ed5"><span class="section-number-3">3.1.</span> 生成向量</h3>
+<div id="outline-container-org04f0eb2" class="outline-3">
+<h3 id="org04f0eb2"><span class="section-number-3">3.1.</span> 生成向量</h3>
 <div class="outline-text-3" id="text-3-1">
 <div class="org-src-container">
 <pre class="src src-go">dimension := 128
@@ -253,8 +253,8 @@ v := faiss.GenVectors(datasize, dimension)
 </div>
 </div>
 </div>
-<div id="outline-container-orgf4beff4" class="outline-3">
-<h3 id="orgf4beff4"><span class="section-number-3">3.2.</span> 创建索引</h3>
+<div id="outline-container-org1f98056" class="outline-3">
+<h3 id="org1f98056"><span class="section-number-3">3.2.</span> 创建索引</h3>
 <div class="outline-text-3" id="text-3-2">
 <div class="org-src-container">
 <pre class="src src-go">index := &amp;faiss.Index{
@@ -267,8 +267,8 @@ i, _ := index.Create()
 </div>
 </div>
 </div>
-<div id="outline-container-org3ae7f2f" class="outline-3">
-<h3 id="org3ae7f2f"><span class="section-number-3">3.3.</span> 将向量插入到索引中</h3>
+<div id="outline-container-orgf8516c2" class="outline-3">
+<h3 id="orgf8516c2"><span class="section-number-3">3.3.</span> 将向量插入到索引中</h3>
 <div class="outline-text-3" id="text-3-3">
 <div class="org-src-container">
 <pre class="src src-go">ids := faiss.GenIDs(datasize)
@@ -280,8 +280,8 @@ if err != nil {
 </div>
 </div>
 </div>
-<div id="outline-container-org8b2cea2" class="outline-3">
-<h3 id="org8b2cea2"><span class="section-number-3">3.4.</span> 生成搜索用的向量并进行查找</h3>
+<div id="outline-container-org1cb2010" class="outline-3">
+<h3 id="org1cb2010"><span class="section-number-3">3.4.</span> 生成搜索用的向量并进行查找</h3>
 <div class="outline-text-3" id="text-3-4">
 <div class="org-src-container">
 <pre class="src src-go">v2 := faiss.GenVectors(10, dimension)
@@ -297,8 +297,8 @@ for _, v := range res {
 </div>
 </div>
 
-<div id="outline-container-org015e4b2" class="outline-2">
-<h2 id="org015e4b2"><span class="section-number-2">4.</span> go-faiss 原理</h2>
+<div id="outline-container-org07b3812" class="outline-2">
+<h2 id="org07b3812"><span class="section-number-2">4.</span> go-faiss 原理</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 go -&gt; cgo -&gt; *.h -&gt; *.c -&gt; *.so
@@ -307,7 +307,7 @@ go -&gt; cgo -&gt; *.h -&gt; *.c -&gt; *.so
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-01-30 Mon 08:53</p>
+<p class="date">Created: 2023-02-22 Wed 06:00</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-01-30 Mon 08:53 -->
+<!-- 2023-02-22 Wed 06:00 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>kubernetes cloud controller manager</title>
@@ -199,24 +199,24 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org0d89399">1. 什么是 cloud controller manager(ccm)</a></li>
-<li><a href="#org140c2aa">2. 能用 ccm 干什么</a>
+<li><a href="#org0c20f9b">1. 什么是 cloud controller manager(ccm)</a></li>
+<li><a href="#org9047269">2. 能用 ccm 干什么</a>
 <ul>
-<li><a href="#orgd9981b9">2.1. 现有的 ccm</a>
+<li><a href="#orgb874cfe">2.1. 现有的 ccm</a>
 <ul>
-<li><a href="#org3d3b50f">2.1.1. In Tree</a></li>
-<li><a href="#org92d3a0e">2.1.2. Out of Tree</a></li>
+<li><a href="#org51abb08">2.1.1. In Tree</a></li>
+<li><a href="#org3c30e6d">2.1.2. Out of Tree</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org32dd921">3. 如何实现一个 ccm</a></li>
-<li><a href="#orga90d72e">4. ccm 背后的秘密</a>
+<li><a href="#org3edbe0b">3. 如何实现一个 ccm</a></li>
+<li><a href="#org4576f7f">4. ccm 背后的秘密</a>
 <ul>
-<li><a href="#orgcc66dd7">4.1. Out of Tree ccm 如何工作</a></li>
+<li><a href="#org4ee4032">4.1. Out of Tree ccm 如何工作</a></li>
 </ul>
 </li>
-<li><a href="#orgb66d727">5. 参考链接</a></li>
+<li><a href="#org8d44411">5. 参考链接</a></li>
 </ul>
 </div>
 </div>
@@ -224,8 +224,8 @@
 本文所有代码基于 1.16.0-alpha.2 commit: bdde11a664
 所以引用文档版本为 1.15.0
 </pre>
-<div id="outline-container-org0d89399" class="outline-2">
-<h2 id="org0d89399"><span class="section-number-2">1.</span> 什么是 cloud controller manager(ccm)</h2>
+<div id="outline-container-org0c20f9b" class="outline-2">
+<h2 id="org0c20f9b"><span class="section-number-2">1.</span> 什么是 cloud controller manager(ccm)</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 在说 ccm 之前要了解一个 ccm 的前身 &#x2013; cloud provider
@@ -244,8 +244,8 @@ cloud provider 是为了 k8s 更加容易在公有云环境下而提出的一个
 </p>
 </div>
 </div>
-<div id="outline-container-org140c2aa" class="outline-2">
-<h2 id="org140c2aa"><span class="section-number-2">2.</span> 能用 ccm 干什么</h2>
+<div id="outline-container-org9047269" class="outline-2">
+<h2 id="org9047269"><span class="section-number-2">2.</span> 能用 ccm 干什么</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 在思索 ccm 可以做什么时，要思考一个问题：kubernetes 的核心价值在于哪里?
@@ -304,15 +304,15 @@ HasClusterID() bool
 每当用户通过 k8s 创建一个资源的时候，可以同时对云主机运行的实例进行相应更改
 </p>
 </div>
-<div id="outline-container-orgd9981b9" class="outline-3">
-<h3 id="orgd9981b9"><span class="section-number-3">2.1.</span> 现有的 ccm</h3>
+<div id="outline-container-orgb874cfe" class="outline-3">
+<h3 id="orgb874cfe"><span class="section-number-3">2.1.</span> 现有的 ccm</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 ccm 目前被分为两种类型: In Tree/Out of Tree
 </p>
 </div>
-<div id="outline-container-org3d3b50f" class="outline-4">
-<h4 id="org3d3b50f"><span class="section-number-4">2.1.1.</span> In Tree</h4>
+<div id="outline-container-org51abb08" class="outline-4">
+<h4 id="org51abb08"><span class="section-number-4">2.1.1.</span> In Tree</h4>
 <div class="outline-text-4" id="text-2-1-1">
 <p>
 In Tree 指的是在包含在 kubernetes 代码中的 cloud provider
@@ -340,35 +340,35 @@ In Tree 的代表厂商
 </div>
 
 <ol class="org-ol">
-<li><a id="org5723c9a"></a>AWS<br>
+<li><a id="org295a460"></a>AWS<br>
 <div class="outline-text-5" id="text-2-1-1-1">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-aws">https://github.com/kubernetes/cloud-provider-aws</a>
 </p>
 </div>
 </li>
-<li><a id="org4aebd29"></a>GCE<br>
+<li><a id="org53816e7"></a>GCE<br>
 <div class="outline-text-5" id="text-2-1-1-2">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-gcp">https://github.com/kubernetes/cloud-provider-gcp</a>
 </p>
 </div>
 </li>
-<li><a id="orgc1bc919"></a>OpenStack<br>
+<li><a id="org90c987d"></a>OpenStack<br>
 <div class="outline-text-5" id="text-2-1-1-3">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-openstack">https://github.com/kubernetes/cloud-provider-openstack</a>
 </p>
 </div>
 </li>
-<li><a id="org1e7a73c"></a>Azure<br>
+<li><a id="org827677a"></a>Azure<br>
 <div class="outline-text-5" id="text-2-1-1-4">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-azure">https://github.com/kubernetes/cloud-provider-azure</a>
 </p>
 </div>
 </li>
-<li><a id="orgebacb50"></a>vSphere<br>
+<li><a id="orgd39ffc2"></a>vSphere<br>
 <div class="outline-text-5" id="text-2-1-1-5">
 <p>
 <a href="https://github.com/kubernetes/cloud-provider-vsphere">https://github.com/kubernetes/cloud-provider-vsphere</a>
@@ -377,8 +377,8 @@ In Tree 的代表厂商
 </li>
 </ol>
 </div>
-<div id="outline-container-org92d3a0e" class="outline-4">
-<h4 id="org92d3a0e"><span class="section-number-4">2.1.2.</span> Out of Tree</h4>
+<div id="outline-container-org3c30e6d" class="outline-4">
+<h4 id="org3c30e6d"><span class="section-number-4">2.1.2.</span> Out of Tree</h4>
 <div class="outline-text-4" id="text-2-1-2">
 <p>
 Out of Tree 指的就是那些不在 kubernetes 代码当中的(没赶上车或社区内的方案)
@@ -393,21 +393,21 @@ Out of Tree 的代表
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org699adb1"></a>DigitalOcean<br>
+<li><a id="org040f50f"></a>DigitalOcean<br>
 <div class="outline-text-5" id="text-2-1-2-1">
 <p>
 <a href="https://github.com/digitalocean/digitalocean-cloud-controller-manager">https://github.com/digitalocean/digitalocean-cloud-controller-manager</a>
 </p>
 </div>
 </li>
-<li><a id="orgcfb92a4"></a>Oracle Cloud Infrastructure<br>
+<li><a id="org867db16"></a>Oracle Cloud Infrastructure<br>
 <div class="outline-text-5" id="text-2-1-2-2">
 <p>
 <a href="https://github.com/oracle/oci-cloud-controller-manager">https://github.com/oracle/oci-cloud-controller-manager</a>
 </p>
 </div>
 </li>
-<li><a id="org410f29c"></a>Rancher<br>
+<li><a id="orgdbe486b"></a>Rancher<br>
 <div class="outline-text-5" id="text-2-1-2-3">
 <p>
 <a href="https://github.com/rancher/rancher-cloud-controller-manager">https://github.com/rancher/rancher-cloud-controller-manager</a>
@@ -418,8 +418,8 @@ Out of Tree 的代表
 </div>
 </div>
 </div>
-<div id="outline-container-org32dd921" class="outline-2">
-<h2 id="org32dd921"><span class="section-number-2">3.</span> 如何实现一个 ccm</h2>
+<div id="outline-container-org3edbe0b" class="outline-2">
+<h2 id="org3edbe0b"><span class="section-number-2">3.</span> 如何实现一个 ccm</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 实现一个简单的 ccm 十分的简单
@@ -430,12 +430,12 @@ Out of Tree 的代表
 </p>
 </div>
 </div>
-<div id="outline-container-orga90d72e" class="outline-2">
-<h2 id="orga90d72e"><span class="section-number-2">4.</span> ccm 背后的秘密</h2>
+<div id="outline-container-org4576f7f" class="outline-2">
+<h2 id="org4576f7f"><span class="section-number-2">4.</span> ccm 背后的秘密</h2>
 <div class="outline-text-2" id="text-4">
 </div>
-<div id="outline-container-orgcc66dd7" class="outline-3">
-<h3 id="orgcc66dd7"><span class="section-number-3">4.1.</span> Out of Tree ccm 如何工作</h3>
+<div id="outline-container-org4ee4032" class="outline-3">
+<h3 id="org4ee4032"><span class="section-number-3">4.1.</span> Out of Tree ccm 如何工作</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 1.在 kubelet 启动时会检查启动参数中是否有 "&#x2013;cloud-provider=external"
@@ -894,8 +894,8 @@ if !c.ComponentConfig.Generic.LeaderElection.LeaderElect {
 </div>
 </div>
 </div>
-<div id="outline-container-orgb66d727" class="outline-2">
-<h2 id="orgb66d727"><span class="section-number-2">5.</span> 参考链接</h2>
+<div id="outline-container-org8d44411" class="outline-2">
+<h2 id="org8d44411"><span class="section-number-2">5.</span> 参考链接</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 <a href="https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/">https://kubernetes.io/docs/tasks/administer-cluster/running-cloud-controller/</a>
@@ -906,7 +906,7 @@ if !c.ComponentConfig.Generic.LeaderElection.LeaderElect {
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-01-30 Mon 08:53</p>
+<p class="date">Created: 2023-02-22 Wed 06:00</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

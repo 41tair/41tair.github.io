@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-01-30 Mon 08:53 -->
+<!-- 2023-02-22 Wed 06:00 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>kubernetes eventf</title>
@@ -199,20 +199,20 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org0dfdf92">1. 前言</a></li>
-<li><a href="#org85c089a">2. 代码参考</a></li>
-<li><a href="#org28531b3">3. 代码详解</a>
+<li><a href="#org6b84e9b">1. 前言</a></li>
+<li><a href="#org4efb836">2. 代码参考</a></li>
+<li><a href="#org651e678">3. 代码详解</a>
 <ul>
-<li><a href="#orgeb568b5">3.1. 结构定义</a></li>
-<li><a href="#orgac39499">3.2. 实际使用时的流程</a></li>
-<li><a href="#org690d3ca">3.3. Event 在 kubelet 内部的工作流程</a></li>
+<li><a href="#org9670a05">3.1. 结构定义</a></li>
+<li><a href="#orga00a64d">3.2. 实际使用时的流程</a></li>
+<li><a href="#org9c4556b">3.3. Event 在 kubelet 内部的工作流程</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org0dfdf92" class="outline-2">
-<h2 id="org0dfdf92"><span class="section-number-2">1.</span> 前言</h2>
+<div id="outline-container-org6b84e9b" class="outline-2">
+<h2 id="org6b84e9b"><span class="section-number-2">1.</span> 前言</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 k8s 是如何记录事件的
@@ -224,8 +224,8 @@ k8s 是如何记录事件的
 </div>
 </div>
 
-<div id="outline-container-org85c089a" class="outline-2">
-<h2 id="org85c089a"><span class="section-number-2">2.</span> 代码参考</h2>
+<div id="outline-container-org4efb836" class="outline-2">
+<h2 id="org4efb836"><span class="section-number-2">2.</span> 代码参考</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 v1.14-alpha.2
@@ -234,19 +234,19 @@ k8s.io/kubernetes/staging/src/k8s.io/client-go/tools/record/
 </div>
 </div>
 
-<div id="outline-container-org28531b3" class="outline-2">
-<h2 id="org28531b3"><span class="section-number-2">3.</span> 代码详解</h2>
+<div id="outline-container-org651e678" class="outline-2">
+<h2 id="org651e678"><span class="section-number-2">3.</span> 代码详解</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgeb568b5" class="outline-3">
-<h3 id="orgeb568b5"><span class="section-number-3">3.1.</span> 结构定义</h3>
+<div id="outline-container-org9670a05" class="outline-3">
+<h3 id="org9670a05"><span class="section-number-3">3.1.</span> 结构定义</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 在 event.go 中定义了 Eventsink EventRecorder EventBroadcaster 这三个接口
 </p>
 
 
-<div id="org5ab7377" class="figure">
+<div id="org7970b00" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4877/46069316025_23614aab6f_b.jpg" alt="46069316025_23614aab6f_b.jpg">
 </p>
 </div>
@@ -265,7 +265,7 @@ eventBroadcasterImpl 和 recorderImpl 这两个结构体
 </p>
 
 
-<div id="org1143675" class="figure">
+<div id="org88439c4" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7812/46983275531_452a0d2cc4_b.jpg" alt="46983275531_452a0d2cc4_b.jpg">
 </p>
 </div>
@@ -275,15 +275,15 @@ eventBroadcasterImpl 和 recorderImpl 这两个结构体
 </p>
 
 
-<div id="org5a34799" class="figure">
+<div id="org075137b" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7905/46983276761_dd2c85dc18_b.jpg" alt="46983276761_dd2c85dc18_b.jpg">
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgac39499" class="outline-3">
-<h3 id="orgac39499"><span class="section-number-3">3.2.</span> 实际使用时的流程</h3>
+<div id="outline-container-orga00a64d" class="outline-3">
+<h3 id="orga00a64d"><span class="section-number-3">3.2.</span> 实际使用时的流程</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 在 kubelet 启动时逐层调用 
@@ -306,7 +306,7 @@ Newkubeletcommand =&gt; Run =&gt; run
 </p>
 
 
-<div id="orgcb3f66d" class="figure">
+<div id="orgdd59d27" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7808/46983277121_0963f0632e_b.jpg" alt="46983277121_0963f0632e_b.jpg">
 </p>
 </div>
@@ -324,15 +324,15 @@ Newkubeletcommand =&gt; Run =&gt; run
 </p>
 
 
-<div id="org727ad1e" class="figure">
+<div id="org290bbef" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7891/46983277591_248991453b_b.jpg" alt="46983277591_248991453b_b.jpg">
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org690d3ca" class="outline-3">
-<h3 id="org690d3ca"><span class="section-number-3">3.3.</span> Event 在 kubelet 内部的工作流程</h3>
+<div id="outline-container-org9c4556b" class="outline-3">
+<h3 id="org9c4556b"><span class="section-number-3">3.3.</span> Event 在 kubelet 内部的工作流程</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 内部的工作流程发生在初始化 eventBroadcasterImpl 的时候
@@ -363,7 +363,7 @@ Broadcaster 开了一个 goroutine 用来将对应的所有的 Broadcasterwatche
 </p>
 
 
-<div id="orgbdc63ba" class="figure">
+<div id="org125832f" class="figure">
 <p><img src="https://c1.staticflickr.com/8/7915/46983278181_d6ff5f4bee_b.jpg" alt="46983278181_d6ff5f4bee_b.jpg">
 </p>
 </div>
@@ -373,7 +373,7 @@ m.loop  m.distribute 定义如下
 </p>
 
 
-<div id="org55e8798" class="figure">
+<div id="org882e9a7" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4841/46983278471_2d7df634ce_b.jpg" alt="46983278471_2d7df634ce_b.jpg">
 </p>
 </div>
@@ -383,7 +383,7 @@ m.distributing.Add 定义如下
 </p>
 
 
-<div id="orgc987daf" class="figure">
+<div id="org3188903" class="figure">
 <p><img src="https://c1.staticflickr.com/5/4861/46983278741_6109587fb3_b.jpg" alt="46983278741_6109587fb3_b.jpg">
 </p>
 </div>
@@ -404,7 +404,7 @@ m.distributing.Add 用于将 Broadcaster 加入到队列当中
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-01-30 Mon 08:53</p>
+<p class="date">Created: 2023-02-22 Wed 06:00</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

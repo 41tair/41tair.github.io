@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-01-30 Mon 08:53 -->
+<!-- 2023-02-22 Wed 06:00 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>K8s port forward</title>
@@ -199,15 +199,15 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org969a592">1. How to use</a></li>
-<li><a href="#orga5f3641">2. User manual</a></li>
-<li><a href="#orgb227ed6">3. How it works</a>
+<li><a href="#orgbb808da">1. How to use</a></li>
+<li><a href="#org205f26f">2. User manual</a></li>
+<li><a href="#org7447a73">3. How it works</a>
 <ul>
-<li><a href="#org433d5df">3.1. Client</a></li>
-<li><a href="#org9159a9b">3.2. Source</a>
+<li><a href="#org6fb1afe">3.1. Client</a></li>
+<li><a href="#orgeeb1651">3.2. Source</a>
 <ul>
-<li><a href="#orgf9abed1">3.2.1. 从 kubelet 开始</a></li>
-<li><a href="#org440768e">3.2.2. Containerd 中的实现</a></li>
+<li><a href="#org0b67996">3.2.1. 从 kubelet 开始</a></li>
+<li><a href="#orgb5efcce">3.2.2. Containerd 中的实现</a></li>
 </ul>
 </li>
 </ul>
@@ -215,8 +215,8 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org969a592" class="outline-2">
-<h2 id="org969a592"><span class="section-number-2">1.</span> How to use</h2>
+<div id="outline-container-orgbb808da" class="outline-2">
+<h2 id="orgbb808da"><span class="section-number-2">1.</span> How to use</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-sh">kubectl port-forward postgresql-0 15432:5432 --address=<span style="font-style: italic;">"0.0.0.0"</span>
@@ -224,8 +224,8 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga5f3641" class="outline-2">
-<h2 id="orga5f3641"><span class="section-number-2">2.</span> User manual</h2>
+<div id="outline-container-org205f26f" class="outline-2">
+<h2 id="org205f26f"><span class="section-number-2">2.</span> User manual</h2>
 <div class="outline-text-2" id="text-2">
 <div class="org-src-container">
 <pre class="src src-sh">kubectl port-forward --help
@@ -274,12 +274,12 @@ Usage:
 </div>
 </div>
 
-<div id="outline-container-orgb227ed6" class="outline-2">
-<h2 id="orgb227ed6"><span class="section-number-2">3.</span> How it works</h2>
+<div id="outline-container-org7447a73" class="outline-2">
+<h2 id="org7447a73"><span class="section-number-2">3.</span> How it works</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-org433d5df" class="outline-3">
-<h3 id="org433d5df"><span class="section-number-3">3.1.</span> Client</h3>
+<div id="outline-container-org6fb1afe" class="outline-3">
+<h3 id="org6fb1afe"><span class="section-number-3">3.1.</span> Client</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 当执行 kubectl port forward 时向如下的两个 URL 发送请求
@@ -300,15 +300,15 @@ kubectl 部分代码可以自行查看:kubernetes/staging/src/k8s.io/kubectl/pkg
 </div>
 </div>
 
-<div id="outline-container-org9159a9b" class="outline-3">
-<h3 id="org9159a9b"><span class="section-number-3">3.2.</span> Source</h3>
+<div id="outline-container-orgeeb1651" class="outline-3">
+<h3 id="orgeeb1651"><span class="section-number-3">3.2.</span> Source</h3>
 <div class="outline-text-3" id="text-3-2">
 <pre class="example">
 
 </pre>
 </div>
-<div id="outline-container-orgf9abed1" class="outline-4">
-<h4 id="orgf9abed1"><span class="section-number-4">3.2.1.</span> 从 kubelet 开始</h4>
+<div id="outline-container-org0b67996" class="outline-4">
+<h4 id="org0b67996"><span class="section-number-4">3.2.1.</span> 从 kubelet 开始</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <p>
 cmd/kubelet/app/server.go L:489 开始的 run 函数中进行了对 CRI 的初始化
@@ -389,8 +389,8 @@ pkg/kubelet/cri/streaming/server.go L:221
 </div>
 </div>
 
-<div id="outline-container-org440768e" class="outline-4">
-<h4 id="org440768e"><span class="section-number-4">3.2.2.</span> Containerd 中的实现</h4>
+<div id="outline-container-orgb5efcce" class="outline-4">
+<h4 id="orgb5efcce"><span class="section-number-4">3.2.2.</span> Containerd 中的实现</h4>
 <div class="outline-text-4" id="text-3-2-2">
 <p>
 pkg/cri/server/sandbox_portforward_linux.go L:34
@@ -522,7 +522,7 @@ pkg/cri/server/sandbox_portforward_linux.go L:34
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-01-30 Mon 08:53</p>
+<p class="date">Created: 2023-02-22 Wed 06:00</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
