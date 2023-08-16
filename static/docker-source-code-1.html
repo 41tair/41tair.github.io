@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-02-22 Wed 06:00 -->
+<!-- 2023-08-16 Wed 07:10 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Docker source code(1) &#x2013; docker run</title>
@@ -199,25 +199,25 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgfe9832c">1. Container</a>
+<li><a href="#org1a4a2af">1. Container</a>
 <ul>
-<li><a href="#orga883c93">1.1. Overview</a></li>
+<li><a href="#org395ce57">1.1. Overview</a></li>
 </ul>
 </li>
-<li><a href="#orgca9ace2">2. Code</a>
+<li><a href="#orgf1f44aa">2. Code</a>
 <ul>
-<li><a href="#org2d587e2">2.1. Docker run</a></li>
-<li><a href="#org3ae1573">2.2. Docker cli</a></li>
-<li><a href="#org265417d">2.3. Docker daemon</a></li>
-<li><a href="#org3e20a8f">2.4. Containerd</a></li>
-<li><a href="#org4e4af76">2.5. runc</a></li>
+<li><a href="#orge7f4f24">2.1. Docker run</a></li>
+<li><a href="#orgcf7ac2c">2.2. Docker cli</a></li>
+<li><a href="#org7a6e988">2.3. Docker daemon</a></li>
+<li><a href="#org446cf86">2.4. Containerd</a></li>
+<li><a href="#org045358c">2.5. runc</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgfe9832c" class="outline-2">
-<h2 id="orgfe9832c"><span class="section-number-2">1.</span> Container</h2>
+<div id="outline-container-org1a4a2af" class="outline-2">
+<h2 id="org1a4a2af"><span class="section-number-2">1.</span> Container</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 这里我们说的 container 特指 docker container
@@ -227,8 +227,8 @@
 而不是 <b>容器技术</b>, container 是 docker 中最基础也是最重要的部分
 </p>
 </div>
-<div id="outline-container-orga883c93" class="outline-3">
-<h3 id="orga883c93"><span class="section-number-3">1.1.</span> Overview</h3>
+<div id="outline-container-org395ce57" class="outline-3">
+<h3 id="org395ce57"><span class="section-number-3">1.1.</span> Overview</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 在看代码之前先思考一个问题，容器的本质是什么？
@@ -619,12 +619,12 @@ chroot 说完了那 cgroup 的信息在哪?
 </div>
 </div>
 
-<div id="outline-container-orgca9ace2" class="outline-2">
-<h2 id="orgca9ace2"><span class="section-number-2">2.</span> Code</h2>
+<div id="outline-container-orgf1f44aa" class="outline-2">
+<h2 id="orgf1f44aa"><span class="section-number-2">2.</span> Code</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-org2d587e2" class="outline-3">
-<h3 id="org2d587e2"><span class="section-number-3">2.1.</span> Docker run</h3>
+<div id="outline-container-orge7f4f24" class="outline-3">
+<h3 id="orge7f4f24"><span class="section-number-3">2.1.</span> Docker run</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 我们以最简单的启动命令为例 docker run busybox 为例
@@ -640,8 +640,8 @@ docker run 相当于先 docker create 然后再 docker start
 </p>
 </div>
 </div>
-<div id="outline-container-org3ae1573" class="outline-3">
-<h3 id="org3ae1573"><span class="section-number-3">2.2.</span> Docker cli</h3>
+<div id="outline-container-orgcf7ac2c" class="outline-3">
+<h3 id="orgcf7ac2c"><span class="section-number-3">2.2.</span> Docker cli</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 cli/command/container/run.go
@@ -814,8 +814,8 @@ networkingConfig:
 </div>
 </div>
 </div>
-<div id="outline-container-org265417d" class="outline-3">
-<h3 id="org265417d"><span class="section-number-3">2.3.</span> Docker daemon</h3>
+<div id="outline-container-org7a6e988" class="outline-3">
+<h3 id="org7a6e988"><span class="section-number-3">2.3.</span> Docker daemon</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 知道了请求体与路径来看一下在 dockerd 里做了什么事情
@@ -932,8 +932,8 @@ docker daemon/start.go L:101 containerStart
 </div>
 </div>
 
-<div id="outline-container-org3e20a8f" class="outline-3">
-<h3 id="org3e20a8f"><span class="section-number-3">2.4.</span> Containerd</h3>
+<div id="outline-container-org446cf86" class="outline-3">
+<h3 id="org446cf86"><span class="section-number-3">2.4.</span> Containerd</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 <del>鲁迅曾经说过:计算机科学领域的任何问题都可以通过增加一个间接的中间层来解决</del>
@@ -1184,8 +1184,8 @@ runtime/v2/shim/shim.go L:294 将 api 注册到 ttrpc server
 </div>
 </div>
 
-<div id="outline-container-org4e4af76" class="outline-3">
-<h3 id="org4e4af76"><span class="section-number-3">2.5.</span> runc</h3>
+<div id="outline-container-org045358c" class="outline-3">
+<h3 id="org045358c"><span class="section-number-3">2.5.</span> runc</h3>
 <div class="outline-text-3" id="text-2-5">
 <p>
 runc 仓库下 create.go L:54 可以看到 runc create 做了什么
@@ -1315,7 +1315,7 @@ exec 最大的用途就是打开了 exec.fifo 这个文件, child 进程的阻�
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-02-22 Wed 06:00</p>
+<p class="date">Created: 2023-08-16 Wed 07:10</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
