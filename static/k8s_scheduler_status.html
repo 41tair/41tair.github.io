@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-08-16 Wed 07:11 -->
+<!-- 2023-11-22 Wed 13:58 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>kubernetes scheduler status</title>
@@ -199,21 +199,21 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgcd9bce5">1. 前言</a></li>
-<li><a href="#org08fffd1">2. Success</a></li>
-<li><a href="#org91a544c">3. Error</a>
+<li><a href="#orgaafaa4b">1. 前言</a></li>
+<li><a href="#org50da698">2. Success</a></li>
+<li><a href="#org20d4cca">3. Error</a>
 <ul>
-<li><a href="#orgc2be2a7">3.1. Prefilter 返回 Error</a></li>
-<li><a href="#orgd2251e0">3.2. Prefilter 返回 Unschedulable 或 UnschedulableAndUnresolvable</a></li>
-<li><a href="#org53e86cc">3.3. handleSchedulingFailure</a></li>
-<li><a href="#orga9623d7">3.4. 简单的结论</a></li>
+<li><a href="#org9ec621f">3.1. Prefilter 返回 Error</a></li>
+<li><a href="#org6f1e5d9">3.2. Prefilter 返回 Unschedulable 或 UnschedulableAndUnresolvable</a></li>
+<li><a href="#org634f3d9">3.3. handleSchedulingFailure</a></li>
+<li><a href="#org55bebbb">3.4. 简单的结论</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgcd9bce5" class="outline-2">
-<h2 id="orgcd9bce5"><span class="section-number-2">1.</span> 前言</h2>
+<div id="outline-container-orgaafaa4b" class="outline-2">
+<h2 id="orgaafaa4b"><span class="section-number-2">1.</span> 前言</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 众所周知 k8s 调度器中有 6 个状态，Success Error Unschedulable UnschedulableAndUnresolvable Wait Skip
@@ -223,8 +223,8 @@
 </div>
 </div>
 
-<div id="outline-container-org08fffd1" class="outline-2">
-<h2 id="org08fffd1"><span class="section-number-2">2.</span> Success</h2>
+<div id="outline-container-org50da698" class="outline-2">
+<h2 id="org50da698"><span class="section-number-2">2.</span> Success</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 success 没什么好说的，通过没问题就是 Success, 返回一个空指针也会被当作 success
@@ -232,8 +232,8 @@ success 没什么好说的，通过没问题就是 Success, 返回一个空指�
 </div>
 </div>
 
-<div id="outline-container-org91a544c" class="outline-2">
-<h2 id="org91a544c"><span class="section-number-2">3.</span> Error</h2>
+<div id="outline-container-org20d4cca" class="outline-2">
+<h2 id="org20d4cca"><span class="section-number-2">3.</span> Error</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 代码中的注释是这样的:
@@ -244,8 +244,8 @@ Error is used for internal plugin errors, unexpected input, etc.
 </pre>
 </div>
 
-<div id="outline-container-orgc2be2a7" class="outline-3">
-<h3 id="orgc2be2a7"><span class="section-number-3">3.1.</span> Prefilter 返回 Error</h3>
+<div id="outline-container-org9ec621f" class="outline-3">
+<h3 id="org9ec621f"><span class="section-number-3">3.1.</span> Prefilter 返回 Error</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 以 Prefilter 为例，当 Prefilter  返回 Error 时, 会直接返回一个空的节点列表与 error 
@@ -300,8 +300,8 @@ handleSchedulingFailure 在 schedule<sub>one.go</sub>:L935 这里简述三种状
 </div>
 </div>
 
-<div id="outline-container-orgd2251e0" class="outline-3">
-<h3 id="orgd2251e0"><span class="section-number-3">3.2.</span> Prefilter 返回 Unschedulable 或 UnschedulableAndUnresolvable</h3>
+<div id="outline-container-org6f1e5d9" class="outline-3">
+<h3 id="org6f1e5d9"><span class="section-number-3">3.2.</span> Prefilter 返回 Unschedulable 或 UnschedulableAndUnresolvable</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 从状态中拿一下消息然后打个日志，然后向上一层返回 nil, diagnosis, nil 这意味着不是 err 是 nil，node 也是 nil 而 diagnosis 中只有 prefilter 插件返回来的消息 (diagnosis 结构，在哪用的 怎么读)
@@ -311,8 +311,8 @@ handleSchedulingFailure 在 schedule<sub>one.go</sub>:L935 这里简述三种状
 </div>
 
 
-<div id="outline-container-org53e86cc" class="outline-3">
-<h3 id="org53e86cc"><span class="section-number-3">3.3.</span> handleSchedulingFailure</h3>
+<div id="outline-container-org634f3d9" class="outline-3">
+<h3 id="org634f3d9"><span class="section-number-3">3.3.</span> handleSchedulingFailure</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 metrics 记录 （为什么要记，在哪用，怎么实现的）
@@ -352,8 +352,8 @@ event 增加一个 v1.EventTypeWarning FailedScheduling 的事件
 </div>
 </div>
 
-<div id="outline-container-orga9623d7" class="outline-3">
-<h3 id="orga9623d7"><span class="section-number-3">3.4.</span> 简单的结论</h3>
+<div id="outline-container-org55bebbb" class="outline-3">
+<h3 id="org55bebbb"><span class="section-number-3">3.4.</span> 简单的结论</h3>
 <div class="outline-text-3" id="text-3-4">
 <p>
 所以在 schedulingCycle 这里错误处理写的不是很好
@@ -390,7 +390,7 @@ event 增加一个 v1.EventTypeWarning FailedScheduling 的事件
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-08-16 Wed 07:11</p>
+<p class="date">Created: 2023-11-22 Wed 13:58</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

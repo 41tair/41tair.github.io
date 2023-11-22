@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-08-16 Wed 07:11 -->
+<!-- 2023-11-22 Wed 13:58 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>LSF + Docker</title>
@@ -199,16 +199,16 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org8d2c92d">1. 环境信息</a></li>
-<li><a href="#org1ec01ae">2. 修改配置文件在 lsf 上启用 docker</a></li>
-<li><a href="#org9c14ca4">3. 验证</a></li>
-<li><a href="#org073137f">4. 部署常见问题</a></li>
-<li><a href="#org44fddd2">5. 部署参考链接</a></li>
+<li><a href="#org9887009">1. 环境信息</a></li>
+<li><a href="#org2948f23">2. 修改配置文件在 lsf 上启用 docker</a></li>
+<li><a href="#orgb29c041">3. 验证</a></li>
+<li><a href="#org3f0c511">4. 部署常见问题</a></li>
+<li><a href="#org37c020b">5. 部署参考链接</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org8d2c92d" class="outline-2">
-<h2 id="org8d2c92d"><span class="section-number-2">1.</span> 环境信息</h2>
+<div id="outline-container-org9887009" class="outline-2">
+<h2 id="org9887009"><span class="section-number-2">1.</span> 环境信息</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 docker 18.09.5
@@ -227,8 +227,8 @@ OS  CentOs 7.6.1810
 </p>
 </div>
 </div>
-<div id="outline-container-org1ec01ae" class="outline-2">
-<h2 id="org1ec01ae"><span class="section-number-2">2.</span> 修改配置文件在 lsf 上启用 docker</h2>
+<div id="outline-container-org2948f23" class="outline-2">
+<h2 id="org2948f23"><span class="section-number-2">2.</span> 修改配置文件在 lsf 上启用 docker</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 1.conf/lsf.conf
@@ -295,8 +295,8 @@ End Application
 </div>
 </div>
 
-<div id="outline-container-org9c14ca4" class="outline-2">
-<h2 id="org9c14ca4"><span class="section-number-2">3.</span> 验证</h2>
+<div id="outline-container-orgb29c041" class="outline-2">
+<h2 id="orgb29c041"><span class="section-number-2">3.</span> 验证</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 在非 root 用户下, bsub -app app1 -I cat /etc/lsb-release
@@ -311,8 +311,8 @@ DISTRIB_DESCRIPTION="Ubuntu 18.04.2 LTS"
 </div>
 </div>
 
-<div id="outline-container-org073137f" class="outline-2">
-<h2 id="org073137f"><span class="section-number-2">4.</span> 部署常见问题</h2>
+<div id="outline-container-org3f0c511" class="outline-2">
+<h2 id="org3f0c511"><span class="section-number-2">4.</span> 部署常见问题</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 1.badmin reconfig 出现 bad keyword CONTAINER: 
@@ -336,8 +336,8 @@ DISTRIB_DESCRIPTION="Ubuntu 18.04.2 LTS"
 </div>
 </div>
 
-<div id="outline-container-org44fddd2" class="outline-2">
-<h2 id="org44fddd2"><span class="section-number-2">5.</span> 部署参考链接</h2>
+<div id="outline-container-org37c020b" class="outline-2">
+<h2 id="org37c020b"><span class="section-number-2">5.</span> 部署参考链接</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 <a href="https://www.ibm.com/support/knowledgecenter/SSWRJV_10.1.0/lsf_config_ref/lsb.applications.5.html?view=embed#lsb_applications_exec_driver">https://www.ibm.com/support/knowledgecenter/SSWRJV_10.1.0/lsf_config_ref/lsb.applications.5.html?view=embed#lsb_applications_exec_driver</a>
@@ -350,7 +350,7 @@ DISTRIB_DESCRIPTION="Ubuntu 18.04.2 LTS"
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2023-08-16 Wed 07:11</p>
+<p class="date">Created: 2023-11-22 Wed 13:58</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
